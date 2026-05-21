@@ -23,8 +23,46 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
-  title: "Quietly Human Studio | Emotional Wellness",
+  metadataBase: new URL('https://quietlyhumans.space'),
+  title: {
+    default: "Quietly Human Studio | Emotional Wellness",
+    template: "%s | Quietly Human"
+  },
   description: "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
+  keywords: ["emotional wellness", "overthinking", "soft living", "mental health", "journaling", "introverts"],
+  openGraph: {
+    title: "Quietly Human Studio",
+    description: "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
+    url: "https://quietlyhumans.space",
+    siteName: "Quietly Human",
+    images: [
+      {
+        url: "/og-image.jpg", // The user can upload this to the public folder later
+        width: 1200,
+        height: 630,
+        alt: "Quietly Human Studio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Quietly Human Studio",
+    description: "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
+    creator: "@quietlyhuman",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
