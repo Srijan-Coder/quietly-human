@@ -50,6 +50,10 @@ export default function Footer() {
           <a href="/terms" className="hover:text-brand-accent transition-colors">Terms</a>
         </div>
       </div>
+      
+      <div className="text-center mt-16 opacity-30 hover:opacity-100 transition-opacity duration-1000 text-[10px] tracking-[0.2em] uppercase cursor-default">
+        Take a deep breath before you close this tab.
+      </div>
     </footer>
   );
 }

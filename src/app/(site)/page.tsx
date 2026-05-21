@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import AmbientParticles from "@/components/3d/AmbientParticles";
 import Link from "next/link";
 import Image from "next/image";
+import { EmotionalPath } from "@/components/global/EmotionalPath";
 
 export default function Home() {
   const fadeUp = {
@@ -48,6 +49,9 @@ export default function Home() {
           <div className="w-[1px] h-12 bg-brand-text opacity-30 animate-pulse" />
         </motion.div>
       </section>
+
+      {/* 1.5 EMOTIONAL ONBOARDING */}
+      <EmotionalPath />
 
       {/* 2. SOFT INTRO */}
       <section className="w-full py-32 px-6 bg-brand-card">

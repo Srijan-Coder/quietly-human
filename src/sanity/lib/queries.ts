@@ -38,3 +38,44 @@ export const productBySlugQuery = groq`*[_type == "product" && slug.current == $
   whoItsFor,
   faq
 }`;
+
+export const guidesQuery = groq`*[_type == "guide"] | order(_createdAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  subtitle,
+  coverImage
+}`;
+
+export const guideBySlugQuery = groq`*[_type == "guide" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  subtitle,
+  coverImage,
+  content
+}`;
+
+export const lettersQuery = groq`*[_type == "letter"] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt
+}`;
+
+export const letterBySlugQuery = groq`*[_type == "letter" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  body
+}`;
+
+export const ebookBySlugQuery = groq`*[_type == "ebook" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  author,
+  coverImage,
+  chapters
+}`;
