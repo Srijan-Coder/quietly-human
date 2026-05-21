@@ -20,8 +20,41 @@ export function EbookReader({ ebook }: { ebook: any }) {
   };
 
   if (chapters.length === 0) {
+    if (ebook.fileUrl || ebook.notionUrl) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center text-center p-6 bg-brand-bg text-brand-text">
+          <h1 className="font-serif text-3xl mb-8">{ebook.title}</h1>
+          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm mx-auto">
+            {ebook.fileUrl && (
+              <a 
+                href={ebook.fileUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full py-4 border border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent transition-colors rounded-full text-xs tracking-widest uppercase text-center"
+              >
+                Download File
+              </a>
+            )}
+            {ebook.notionUrl && (
+              <a 
+                href={ebook.notionUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full py-4 border border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent transition-colors rounded-full text-xs tracking-widest uppercase text-center"
+              >
+                Read in Notion
+              </a>
+            )}
+          </div>
+          <Link href="/library" className="mt-12 text-xs uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity">
+            ← Back to Library
+          </Link>
+        </div>
+      );
+    }
+
     return (
-      <div className="min-h-screen flex items-center justify-center text-brand-soft italic">
+      <div className="min-h-screen flex items-center justify-center text-brand-soft italic bg-brand-bg">
         This book has no pages yet.
       </div>
     );

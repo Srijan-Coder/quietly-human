@@ -8,7 +8,9 @@ import {productType} from './productType'
 import {guideType} from './guideType'
 import {letterType} from './letterType'
 import {ebookType} from './ebookType'
+import {subscriberType} from './subscriberType'
+import {leadMagnetSettings} from './leadMagnetSettings'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [blockContentType, categoryType, postType, authorType, productType, guideType, letterType, ebookType],
+  types: [blockContentType, categoryType, postType, authorType, productType, guideType, letterType, ebookType, subscriberType, leadMagnetSettings],
 }

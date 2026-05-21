@@ -29,9 +29,23 @@ export const ebookType = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'ebookFile',
+      title: 'Upload Ebook File (PDF, DOC, EPUB)',
+      type: 'file',
+      description: 'Upload a direct file for the user to download or view.',
+      options: { storeOriginalFilename: true },
+    }),
+    defineField({
+      name: 'notionUrl',
+      title: 'Notion Embed URL',
+      type: 'url',
+      description: 'If you want to link out to a Notion page instead of a file or text.',
+    }),
+    defineField({
       name: 'chapters',
-      title: 'Chapters',
+      title: 'Text Chapters (Optional)',
       type: 'array',
+      description: 'If you want to use the built-in E-Reader, type the chapters here.',
       of: [
         defineArrayMember({
           type: 'object',

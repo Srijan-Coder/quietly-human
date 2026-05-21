@@ -77,5 +77,13 @@ export const ebookBySlugQuery = groq`*[_type == "ebook" && slug.current == $slug
   "slug": slug.current,
   author,
   coverImage,
+  "fileUrl": ebookFile.asset->url,
+  notionUrl,
   chapters
+}`;
+
+export const leadMagnetSettingsQuery = groq`*[_type == "leadMagnetSettings"][0] {
+  notionLink,
+  driveLink,
+  successMessage
 }`;
