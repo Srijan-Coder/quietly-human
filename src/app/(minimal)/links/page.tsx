@@ -21,7 +21,7 @@ export default function LinksPage() {
           <Link
             key={link.title}
             href={link.url}
-            className="w-full py-4 px-6 bg-brand-cream text-brand-charcoal hover:bg-brand-gold hover:text-brand-charcoal transition-all text-center rounded-sm font-medium tracking-wide"
+            className="w-full py-4 px-6 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-all text-center rounded-sm font-medium tracking-wide"
           >
             {link.title}
           </Link>

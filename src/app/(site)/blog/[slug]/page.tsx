@@ -7,16 +7,7 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
-export async function generateStaticParams() {
-  try {
-    const posts = await client.fetch(postsQuery);
-    return posts.map((post: any) => ({
-      slug: post.slug,
-    }));
-  } catch (error) {
-    return [];
-  }
-}
+
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   let post = null;
@@ -37,11 +28,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       </Link>
       
       <header className="mb-16">
-        <h1 className="text-4xl md:text-6xl font-serif text-brand-charcoal mb-8 text-balance">
+        <h1 className="text-4xl md:text-6xl font-serif text-brand-text mb-8 text-balance">
           {post.title}
         </h1>
         {post.mainImage && (
-          <div className="relative aspect-video w-full overflow-hidden bg-brand-charcoal/5 mb-12">
+          <div className="relative aspect-video w-full overflow-hidden bg-brand-card border border-brand-border rounded-xl mb-12">
             <img
               src={urlFor(post.mainImage)?.url()}
               alt={post.title}
@@ -51,7 +42,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         )}
       </header>
 
-      <div className="prose prose-lg prose-stone max-w-none font-sans text-brand-charcoal/80 prose-headings:font-serif prose-headings:text-brand-charcoal prose-headings:font-normal prose-a:text-brand-gold">
+      <div className="prose prose-lg prose-stone max-w-none font-sans text-brand-soft prose-headings:font-serif prose-headings:text-brand-text prose-headings:font-normal prose-a:text-brand-accent">
         {post.body ? <PortableText value={post.body} /> : <p>The thoughts are empty.</p>}
       </div>
     </article>
