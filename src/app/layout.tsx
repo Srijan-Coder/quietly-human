@@ -19,7 +19,7 @@ import CustomCursor from "@/components/global/CustomCursor";
 import SmoothScrolling from "@/components/global/SmoothScrolling";
 import { ThemeProvider } from "@/components/global/ThemeProvider";
 
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
