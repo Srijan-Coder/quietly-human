@@ -6,12 +6,45 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 
-const navLinks = [
-  { name: "Reset", path: "/reset" },
-  { name: "Books", path: "/books" },
-  { name: "Products", path: "/products" },
-  { name: "Blog", path: "/blog" },
+const mainNavLinks = [
+  { name: "Guides", path: "/guides" },
+  { name: "Letters", path: "/letters" },
   { name: "Library", path: "/library" },
+];
+
+const menuCategories = [
+  {
+    title: "Sanctuary",
+    links: [
+      { name: "The Breathe Room", path: "/breathe" },
+      { name: "7-Day Reset", path: "/reset" },
+      { name: "Quiet Words", path: "/quotes" },
+    ]
+  },
+  {
+    title: "Read",
+    links: [
+      { name: "Books & Journals", path: "/books" },
+      { name: "Pillar Guides", path: "/guides" },
+      { name: "Midnight Letters", path: "/letters" },
+      { name: "Quiet Thoughts", path: "/blog" },
+    ]
+  },
+  {
+    title: "Explore",
+    links: [
+      { name: "Digital Products", path: "/products" },
+      { name: "The Library", path: "/library" },
+    ]
+  },
+  {
+    title: "Connect",
+    links: [
+      { name: "About Srijan", path: "/about" },
+      { name: "Say Hello", path: "/contact" },
+      { name: "Social Links", path: "/links" },
+    ]
+  }
 ];
 
 export default function Navbar() {
@@ -31,8 +64,8 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-8 z-50 relative">
-          <nav className="hidden md:flex gap-8 items-center">
-            {navLinks.map((link) => (
+          <nav className="hidden lg:flex gap-8 items-center">
+            {mainNavLinks.map((link) => (
               <Link
                 key={link.path}
                 href={link.path}
@@ -47,17 +80,16 @@ export default function Navbar() {
 
           <ThemeToggle />
 
-          {/* Mobile Menu Button */}
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-sm uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity w-12 text-right"
+            className="text-sm uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity w-12 text-right"
           >
             {isOpen ? "Close" : "Menu"}
           </button>
         </div>
       </motion.header>
 
-      {/* Full Screen Mobile Overlay */}
+      {/* Full Screen Mega-Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -65,28 +97,35 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "-100%" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 bg-brand-bg flex flex-col justify-center items-center px-6"
+            className="fixed inset-0 z-40 bg-brand-bg px-6 pt-32 pb-12 overflow-y-auto flex flex-col md:justify-center"
           >
-            <nav className="flex flex-col gap-8 text-center">
-              {navLinks.map((link, i) => (
+            <div className="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-8">
+              {menuCategories.map((category, i) => (
                 <motion.div
-                  key={link.path}
+                  key={category.title}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 + i * 0.1 }}
+                  className="flex flex-col gap-6"
                 >
-                  <Link
-                    href={link.path}
-                    onClick={() => setIsOpen(false)}
-                    className={`font-serif text-4xl transition-colors duration-500 hover:text-brand-accent ${
-                      pathname === link.path ? "text-brand-accent" : "text-brand-text"
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
+                  <span className="text-xs tracking-widest uppercase opacity-40 border-b border-brand-border pb-4">{category.title}</span>
+                  <nav className="flex flex-col gap-4">
+                    {category.links.map((link) => (
+                      <Link
+                        key={link.path}
+                        href={link.path}
+                        onClick={() => setIsOpen(false)}
+                        className={`font-serif text-3xl md:text-2xl lg:text-3xl transition-colors duration-500 hover:text-brand-accent ${
+                          pathname === link.path ? "text-brand-accent italic" : "text-brand-text"
+                        }`}
+                      >
+                        {link.name}
+                      </Link>
+                    ))}
+                  </nav>
                 </motion.div>
               ))}
-            </nav>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -11,18 +11,20 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <span className="text-xs tracking-widest uppercase opacity-40">Navigate</span>
+          <span className="text-xs tracking-widest uppercase opacity-40">Ecosystem</span>
+          <a href="/guides" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Pillar Guides</a>
           <a href="/books" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Books & Journals</a>
           <a href="/products" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Digital Dashboard</a>
           <a href="/blog" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Thoughts</a>
-          <a href="/library" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Library</a>
+          <a href="/letters" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Midnight Letters</a>
         </div>
 
         <div className="flex flex-col gap-4">
           <span className="text-xs tracking-widest uppercase opacity-40">Connect</span>
-          <a href="https://instagram.com" target="_blank" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Instagram</a>
-          <a href="https://youtube.com" target="_blank" className="text-sm opacity-80 hover:text-brand-accent transition-colors">YouTube</a>
-          <a href="https://pinterest.com" target="_blank" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Pinterest</a>
+          <a href="/breathe" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Breathe Room</a>
+          <a href="/reset" className="text-sm opacity-80 hover:text-brand-accent transition-colors">7-Day Reset</a>
+          <a href="/quotes" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Words</a>
+          <a href="/about" className="text-sm opacity-80 hover:text-brand-accent transition-colors">About Srijan</a>
           <a href="/contact" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Contact</a>
         </div>
 
