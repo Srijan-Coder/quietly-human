@@ -12,7 +12,7 @@ export default function LinksPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center py-24 px-6 relative z-10">
       <div className="mb-12 text-center">
-        <h1 className="font-serif text-3xl mb-2">Quietly Human</h1>
+        <h1 className="font-serif text-3xl mb-2">Quietly Human Studio</h1>
         <p className="opacity-60 text-sm tracking-widest uppercase">A Digital Sanctuary</p>
       </div>
 

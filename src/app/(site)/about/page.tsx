@@ -10,7 +10,7 @@ export default function AboutPage() {
         <div className="w-24 h-[1px] bg-brand-charcoal/30 mx-auto mb-8"></div>
         <div className="prose prose-lg prose-stone max-w-none font-sans text-brand-charcoal/80 text-balance mx-auto">
           <p>
-            Quietly Human was founded by Srijan Pandey. It is an emotional wellness brand dedicated to those who overthink, those experiencing burnout, and those who feel a little behind in life.
+            Quietly Human Studio was founded by Srijan Pandey. It is an emotional wellness brand dedicated to those who overthink, those experiencing burnout, and those who feel a little behind in life.
           </p>
           <p>
             This space is a cinematic digital sanctuary. A place to reflect, heal, and learn to live a soft life in a loud world.

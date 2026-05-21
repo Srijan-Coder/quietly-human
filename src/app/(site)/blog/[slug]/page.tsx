@@ -1,6 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import { postBySlugQuery, postsQuery } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/image";
+import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -43,7 +43,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         {post.mainImage && (
           <div className="relative aspect-video w-full overflow-hidden bg-brand-charcoal/5 mb-12">
             <img
-              src={urlForImage(post.mainImage)?.url()}
+              src={urlFor(post.mainImage)?.url()}
               alt={post.title}
               className="object-cover w-full h-full"
             />

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const inter = Inter({
@@ -16,9 +17,10 @@ import Navbar from "@/components/global/Navbar";
 import Footer from "@/components/global/Footer";
 import CustomCursor from "@/components/global/CustomCursor";
 import SmoothScrolling from "@/components/global/SmoothScrolling";
+import { ThemeProvider } from "@/components/global/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "Quietly Human | Emotional Wellness",
+  title: "Quietly Human Studio | Emotional Wellness",
   description: "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
 };
 
@@ -30,10 +32,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${inter.variable} antialiased`}
+      className={`${cormorant.variable} ${inter.variable} antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col font-sans bg-brand-cream text-brand-charcoal selection:bg-brand-coffee/20 selection:text-brand-charcoal">
-        {children}
+      <body className="min-h-screen flex flex-col font-sans bg-brand-bg text-brand-text selection:bg-brand-accent/20 selection:text-brand-text transition-colors duration-1000">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType, defineArrayMember } from 'sanity'
 
 export const productType = defineType({
   name: 'product',
@@ -31,6 +31,36 @@ export const productType = defineType({
       title: 'Cover Image',
       type: 'image',
       options: { hotspot: true },
+    }),
+    defineField({
+      name: 'description',
+      title: 'Emotional Description',
+      type: 'text',
+    }),
+    defineField({
+      name: 'whatsIncluded',
+      title: 'What\'s Included',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string' })],
+    }),
+    defineField({
+      name: 'whoItsFor',
+      title: 'Who It\'s For',
+      type: 'text',
+    }),
+    defineField({
+      name: 'faq',
+      title: 'Frequently Asked Questions',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'question', type: 'string', title: 'Question' }),
+            defineField({ name: 'answer', type: 'text', title: 'Answer' }),
+          ],
+        }),
+      ],
     }),
   ],
 })
