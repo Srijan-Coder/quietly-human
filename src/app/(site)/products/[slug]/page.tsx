@@ -6,10 +6,11 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   let product = null;
   try {
-    product = await client.fetch(productBySlugQuery, { slug: params.slug });
+    product = await client.fetch(productBySlugQuery, { slug: resolvedParams.slug });
   } catch (error) {
     console.warn("Failed to fetch product from Sanity:", error);
   }

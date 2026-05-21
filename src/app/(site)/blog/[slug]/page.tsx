@@ -9,10 +9,11 @@ export const revalidate = 60;
 
 
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   let post = null;
   try {
-    post = await client.fetch(postBySlugQuery, { slug: params.slug });
+    post = await client.fetch(postBySlugQuery, { slug: resolvedParams.slug });
   } catch (error) {
     console.warn("Failed to fetch post from Sanity (likely missing projectId):", error);
   }
