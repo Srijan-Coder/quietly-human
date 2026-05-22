@@ -97,7 +97,6 @@ export default function CustomCursor() {
           width: 8,
           height: 8,
           backgroundColor: "var(--color-text)",
-          rotate: "45deg",
           boxShadow: "0 0 10px 2px var(--color-text)",
           willChange: "transform",
           transition: "background-color 0.2s, scale 0.2s",
@@ -128,7 +127,6 @@ export default function CustomCursor() {
             width: 6,
             height: 6,
             backgroundColor: "var(--color-accent)",
-            rotate: "45deg",
             boxShadow: "0 0 8px 1px var(--color-accent)",
             willChange: "transform, opacity",
           }}
