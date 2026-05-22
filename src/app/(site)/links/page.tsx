@@ -100,6 +100,19 @@ export default async function LinksPage() {
           ))}
         </div>
 
+        {/* Dedicated Social Icons */}
+        <div className="flex justify-center gap-6 mt-6">
+          <a href="https://instagram.com/quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="text-brand-soft hover:text-brand-accent transition-colors hover:scale-110 duration-300">
+            <span className="text-2xl">📷</span>
+          </a>
+          <a href="https://pinterest.com/quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="text-brand-soft hover:text-brand-accent transition-colors hover:scale-110 duration-300">
+            <span className="text-2xl">📌</span>
+          </a>
+          <a href="https://www.youtube.com/@quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="text-brand-soft hover:text-brand-accent transition-colors hover:scale-110 duration-300">
+            <span className="text-2xl">▶️</span>
+          </a>
+        </div>
+
         <p className="text-[10px] uppercase tracking-widest text-brand-soft mt-8 opacity-50">
           quietlyhumans.space
         </p>
