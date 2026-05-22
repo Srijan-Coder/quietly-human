@@ -18,12 +18,19 @@ export const letterType = defineType({
     }),
     defineField({
       name: 'publishedAt',
-      title: 'Published At',
+      title: 'Date Sent',
       type: 'datetime',
     }),
     defineField({
+      name: 'emotionTags',
+      title: 'Emotional Tags',
+      type: 'array',
+      description: 'Used for the Emotional Search Engine (e.g., "overthinking", "anxious", "behind")',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'body',
-      title: 'Letter Content',
+      title: 'Letter Body',
       type: 'blockContent',
     }),
   ],

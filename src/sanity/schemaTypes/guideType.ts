@@ -28,6 +28,13 @@ export const guideType = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'emotionTags',
+      title: 'Emotional Tags',
+      type: 'array',
+      description: 'Used for the Emotional Search Engine (e.g., "exhausted", "burnout", "lonely")',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'blockContent',

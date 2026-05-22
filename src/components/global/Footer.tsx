@@ -1,6 +1,12 @@
+"use client";
+
+import { useReadingMode } from "@/context/ReadingModeContext";
+
 export default function Footer() {
+  const { isReadingMode } = useReadingMode();
+
   return (
-    <footer className="mt-auto py-24 px-6 md:px-12 border-t border-brand-border bg-brand-bg text-brand-text">
+    <footer className={`mt-auto py-24 px-6 md:px-12 border-t border-brand-border bg-brand-bg text-brand-text transition-opacity duration-1000 ${isReadingMode ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
         
         <div className="flex flex-col gap-4 col-span-1 md:col-span-1">

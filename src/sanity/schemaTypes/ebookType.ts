@@ -29,6 +29,13 @@ export const ebookType = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'emotionTags',
+      title: 'Emotional Tags',
+      type: 'array',
+      description: 'Used for the Emotional Search Engine',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'ebookFile',
       title: 'Upload Ebook File (PDF, DOC, EPUB)',
       type: 'file',

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
+import { useReadingMode } from "@/context/ReadingModeContext";
 
 const mainNavLinks = [
   { name: "Guides", path: "/guides" },
@@ -50,13 +51,14 @@ const menuCategories = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { isReadingMode } = useReadingMode();
 
   return (
     <>
       <motion.header
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        animate={{ opacity: isReadingMode ? 0 : 1, y: isReadingMode ? -100 : 0 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0 }}
         className="fixed top-0 left-0 w-full z-50 px-6 py-8 md:px-12 flex justify-between items-center text-brand-text"
       >
         <Link href="/" className="font-serif text-2xl tracking-wide font-light z-50 relative">
