@@ -4,6 +4,7 @@ import CustomCursor from "@/components/global/CustomCursor";
 import SmoothScrolling from "@/components/global/SmoothScrolling";
 import { AudioPlayer } from "@/components/global/AudioPlayer";
 import QuizFloatingBar from "@/components/global/QuizFloatingBar";
+import SiteCompass from "@/components/global/SiteCompass";
 
 export default function SiteLayout({
   children,
@@ -19,6 +20,7 @@ export default function SiteLayout({
         <AudioPlayer />
         {children}
       </main>
+      <SiteCompass />
       <QuizFloatingBar />
       <Footer />
     </SmoothScrolling>
