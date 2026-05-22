@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import AmbientBackground from "@/components/global/AmbientBackground";
@@ -21,6 +22,28 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
     { title: "A Small Book for Tired Hearts", tag: "Exhausted" },
     { title: "I'm Tired of Being Okay", tag: "Burnout" },
   ];
+
+  const [headline, setHeadline] = useState("A quiet space for tired hearts.");
+
+  useEffect(() => {
+    const headlines = [
+      "A quiet space for tired hearts.",
+      "A digital sanctuary for overthinkers.",
+      "A gentle corner of the internet.",
+      "Words for those learning to live softly.",
+      "A resting place for anxious minds.",
+      "Permission to pause and breathe.",
+      "A soft landing for hard days.",
+      "Where quiet growth is celebrated.",
+      "A reminder that you are not behind.",
+      "An archive of late-night thoughts.",
+      "You don't have to have it all figured out.",
+      "For the ones tired of being strong.",
+      "A quiet space to unlearn the hustle.",
+      "A moment of stillness in a loud world."
+    ];
+    setHeadline(headlines[Math.floor(Math.random() * headlines.length)]);
+  }, []);
 
   return (
     <div className="relative overflow-hidden w-full bg-brand-bg">
@@ -54,7 +77,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
             transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] as [number,number,number,number], delay: 0.3 }}
             className="text-5xl md:text-7xl lg:text-8xl font-serif text-balance tracking-tight text-brand-text"
           >
-            A quiet space for tired hearts.
+            {headline}
           </motion.h1>
 
           <motion.p

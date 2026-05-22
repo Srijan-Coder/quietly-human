@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function AmbientBackground() {
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" style={{ willChange: "transform" }}>
       {/* Soft animated gradient blobs replacing the heavy 3D particles */}
       <motion.div
         animate={{
@@ -15,6 +15,7 @@ export default function AmbientBackground() {
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-brand-accent blur-[120px]"
+        style={{ willChange: "transform, opacity", transformOrigin: "center" }}
       />
       
       <motion.div
@@ -26,6 +27,7 @@ export default function AmbientBackground() {
         }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         className="absolute top-[40%] -right-[10%] w-[50%] h-[70%] rounded-full bg-brand-blue blur-[150px]"
+        style={{ willChange: "transform, opacity", transformOrigin: "center" }}
       />
       
       <motion.div
@@ -35,6 +37,7 @@ export default function AmbientBackground() {
         }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 5 }}
         className="absolute -bottom-[20%] left-[20%] w-[70%] h-[50%] rounded-full bg-brand-muted blur-[100px]"
+        style={{ willChange: "transform, opacity", transformOrigin: "center" }}
       />
     </div>
   );

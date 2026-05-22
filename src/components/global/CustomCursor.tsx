@@ -62,7 +62,8 @@ export default function CustomCursor() {
           translateY: "-50%",
           width: 40, 
           height: 40, 
-          opacity: 0.5 
+          opacity: 0.5,
+          willChange: "transform"
         }}
       />
 
@@ -86,6 +87,7 @@ export default function CustomCursor() {
           height: 8, 
           rotate: "45deg",
           boxShadow: "0 0 12px 2px var(--color-accent)",
+          willChange: "transform"
         }}
       />
     </div>
