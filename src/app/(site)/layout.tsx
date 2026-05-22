@@ -3,6 +3,7 @@ import Footer from "@/components/global/Footer";
 import CustomCursor from "@/components/global/CustomCursor";
 import SmoothScrolling from "@/components/global/SmoothScrolling";
 import { AudioPlayer } from "@/components/global/AudioPlayer";
+import QuizFloatingBar from "@/components/global/QuizFloatingBar";
 
 export default function SiteLayout({
   children,
@@ -18,6 +19,7 @@ export default function SiteLayout({
         <AudioPlayer />
         {children}
       </main>
+      <QuizFloatingBar />
       <Footer />
     </SmoothScrolling>
   );

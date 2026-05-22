@@ -1,0 +1,133 @@
+﻿
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\HomeContent.tsx
+    7:10  warning  'AudioPlayer' is defined but never used                          @typescript-eslint/no-unused-vars
+   10:71  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  125:20  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  305:13  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  306:94  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\about\page.tsx
+  1:8  warning  'Image' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\blog\[slug]\page.tsx
+   2:27  warning  'postsQuery' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  37:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\blog\page.tsx
+  41:30  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  41:60  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  45:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\books\page.tsx
+  1:10  warning  'client' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\feeling\[emotion]\page.tsx
+   4:8    warning  'Image' is defined but never used                                @typescript-eslint/no-unused-vars
+   5:10   warning  'urlFor' is defined but never used                               @typescript-eslint/no-unused-vars
+  11:13   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  14:12   warning  '_' is defined but never used                                    @typescript-eslint/no-unused-vars
+  24:13   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  34:12   warning  '_' is defined but never used                                    @typescript-eslint/no-unused-vars
+  52:100  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  52:121  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  60:47   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\guides\[slug]\page.tsx
+  7:10  warning  'SaveButton' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\guides\page.tsx
+  28:32  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  28:64  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  32:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\letters\page.tsx
+  27:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\links\page.tsx
+  15:14  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  16:16  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:12  warning  '_' is defined but never used             @typescript-eslint/no-unused-vars
+  71:32  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\page.tsx
+   6:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:12  warning  '_' is defined but never used             @typescript-eslint/no-unused-vars
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\products\[slug]\page.tsx
+   33:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   68:83  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+   89:85  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  101:38  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\products\page.tsx
+  26:36  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  26:72  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  34:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\quotes\page.tsx
+   9:15  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  14:12  warning  '_' is defined but never used             @typescript-eslint/no-unused-vars
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\reset\page.tsx
+  11:12  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\resources\page.tsx
+  10:18  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  15:12  warning  '_' is defined but never used             @typescript-eslint/no-unused-vars
+  46:29  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\series\[slug]\page.tsx
+  11:15  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  21:12  warning  '_' is defined but never used             @typescript-eslint/no-unused-vars
+  30:38  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  31:39  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:29  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\testimonials\page.tsx
+   8:21  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  11:12  warning  '_' is defined but never used                                    @typescript-eslint/no-unused-vars
+  26:33  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  29:17  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  29:27  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\toolkit\page.tsx
+    3:20  warning  'useRef' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   18:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\toolkit\page.tsx:18:5
+  16 |     if (!active) return;
+  17 |     const cfg = phaseConfig[phase];
+> 18 |     setSeconds(cfg.duration);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  19 |     const countdown = setInterval(() => setSeconds(s => s - 1), 1000);
+  20 |     const next = setTimeout(() => setPhase(phaseConfig[phase].next as any), cfg.duration * 1000);
+  21 |     return () => { clearInterval(countdown); clearTimeout(next); };  react-hooks/set-state-in-effect
+   20:71  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-explicit-any
+   22:6   warning  React Hook useEffect has a missing dependency: 'phaseConfig'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+   81:11  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react/no-unescaped-entities
+   81:28  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react/no-unescaped-entities
+  103:72  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-explicit-any
+  123:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-explicit-any
+  123:38  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\(site)\waitlist\[product]\page.tsx
+  46:68  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\api\subscribe\route.ts
+  32:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\app\layout.tsx
+  80:12  warning  '_' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Srijan\.gemini\antigravity\scratch\quietly-human\src\sanity\schemaTypes\guideType.ts
+  1:35  warning  'defineArrayMember' is defined but never used  @typescript-eslint/no-unused-vars
+
+Γ£û 69 problems (44 errors, 25 warnings)
+
