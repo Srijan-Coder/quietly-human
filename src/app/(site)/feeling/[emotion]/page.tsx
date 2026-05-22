@@ -27,10 +27,28 @@ export interface EmotionPageData {
 
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: { params: { emotion: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ emotion: string }> }) {
+  const resolvedParams = await params;
+  const emotion = resolvedParams.emotion;
+
   let page: EmotionPageData | null = null;
   try {
-    page = await client.fetch(groq`*[_type == "seoEmotionPage" && emotion == $emotion][0]{ headline, metaDescription }`, { emotion: params.emotion });
+    page = await client.fetch(groq`*[_type == "seoEmotionPage" && emotion == $emotion][0]{ headline, metaDescription }`, { emotion });
+    
+    if (!page) {
+      const dynamicData = await client.fetch(groq`{
+        "guides": *[_type == "guide" && $emotion in emotionTags]{_id},
+        "books": *[_type == "ebook" && $emotion in emotionTags]{_id},
+        "letters": *[_type == "letter" && $emotion in emotionTags]{_id}
+      }`, { emotion });
+      
+      if (dynamicData.guides.length > 0 || dynamicData.books.length > 0 || dynamicData.letters.length > 0) {
+        page = {
+          headline: `Resources for feeling ${emotion.replace(/-/g, ' ')}`,
+          metaDescription: `Explore curated resources, books, and guides to support you when feeling ${emotion.replace(/-/g, ' ')}.`
+        };
+      }
+    }
   } catch (error) { console.error(error); }
   
   if (!page) return { title: "Quietly Humans" };
@@ -40,7 +58,10 @@ export async function generateMetadata({ params }: { params: { emotion: string }
   };
 }
 
-export default async function SEOEmotionPage({ params }: { params: { emotion: string } }) {
+export default async function SEOEmotionPage({ params }: { params: Promise<{ emotion: string }> }) {
+  const resolvedParams = await params;
+  const emotion = resolvedParams.emotion;
+
   let page: EmotionPageData | null = null;
   try {
     page = await client.fetch(
@@ -49,8 +70,25 @@ export default async function SEOEmotionPage({ params }: { params: { emotion: st
         relatedGuides[]->{_id, title, slug, excerpt, mainImage},
         relatedBooks[]->{_id, title, slug, price, coverImage}
       }`,
-      { emotion: params.emotion }
+      { emotion }
     );
+
+    if (!page) {
+      const dynamicData = await client.fetch(groq`{
+        "relatedGuides": *[_type == "guide" && $emotion in emotionTags]{_id, title, slug, excerpt, mainImage},
+        "relatedBooks": *[_type == "ebook" && $emotion in emotionTags]{_id, title, slug, price, coverImage}
+      }`, { emotion });
+
+      if (dynamicData.relatedGuides.length > 0 || dynamicData.relatedBooks.length > 0) {
+        page = {
+          headline: `Resources for feeling ${emotion.replace(/-/g, ' ')}`,
+          subheadline: "You are not alone in this.",
+          openingParagraph: "We have gathered a collection of books, guides, and resources specifically designed for this feeling. Take your time, breathe, and explore gently.",
+          relatedGuides: dynamicData.relatedGuides,
+          relatedBooks: dynamicData.relatedBooks,
+        };
+      }
+    }
   } catch (error) { console.error(error); }
 
   if (!page) {
@@ -61,7 +99,7 @@ export default async function SEOEmotionPage({ params }: { params: { emotion: st
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-12">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-24">
-          <span className="text-xs uppercase tracking-widest text-brand-accent mb-4 block">You searched for: {params.emotion.replace(/-/g, ' ')}</span>
+          <span className="text-xs uppercase tracking-widest text-brand-accent mb-4 block">You searched for: {emotion.replace(/-/g, ' ')}</span>
           <h1 className="text-5xl md:text-7xl font-serif text-brand-text mb-6 text-balance leading-tight">{page.headline}</h1>
           {page.subheadline && <p className="text-xl md:text-2xl text-brand-soft font-serif italic mb-8">{page.subheadline}</p>}
           {page.openingParagraph && <p className="text-brand-text leading-relaxed max-w-2xl mx-auto">{page.openingParagraph}</p>}

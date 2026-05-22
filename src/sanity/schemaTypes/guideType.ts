@@ -36,6 +36,12 @@ export const guideType = defineType({
       options: { layout: 'tags' }
     }),
     defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'category' } }],
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'blockContent',

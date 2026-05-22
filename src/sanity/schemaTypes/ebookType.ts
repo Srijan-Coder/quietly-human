@@ -37,6 +37,12 @@ export const ebookType = defineType({
       options: { layout: 'tags' }
     }),
     defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [defineArrayMember({ type: 'reference', to: { type: 'category' } })],
+    }),
+    defineField({
       name: 'ebookFile',
       title: 'Upload Ebook File (PDF, DOC, EPUB)',
       type: 'file',

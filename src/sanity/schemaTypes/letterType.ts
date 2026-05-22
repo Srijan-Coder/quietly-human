@@ -30,6 +30,12 @@ export const letterType = defineType({
       options: { layout: 'tags' }
     }),
     defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'category' } }],
+    }),
+    defineField({
       name: 'body',
       title: 'Letter Body',
       type: 'blockContent',
