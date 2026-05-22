@@ -23,5 +23,16 @@ export default async function Home() {
     );
   } catch (error) { console.error(error); }
 
-  return <HomeContent testimonials={testimonials} ebooks={ebooks} />;
+  let products = [];
+  try {
+    products = await client.fetch(
+      groq`*[_type == "product"] | order(_createdAt desc)[0...1] {
+        title,
+        price,
+        "slug": slug.current
+      }`
+    );
+  } catch (error) { console.error(error); }
+
+  return <HomeContent testimonials={testimonials} ebooks={ebooks} product={products[0]} />;
 }

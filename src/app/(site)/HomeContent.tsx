@@ -7,7 +7,7 @@ import AmbientBackground from "@/components/global/AmbientBackground";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
 import { TestimonialCarousel, type Testimonial } from "@/components/global/TestimonialCarousel";
 
-export default function HomeContent({ testimonials, ebooks }: { testimonials: Testimonial[], ebooks?: any[] }) {
+export default function HomeContent({ testimonials, ebooks, product }: { testimonials: Testimonial[], ebooks?: any[], product?: any }) {
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -152,20 +152,23 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
         </motion.div>
       </section>
 
-      {/* ─── 3. FREE RESET ──────────────────────── */}
+      {/* ─── 3. RESOURCES & PRODUCTS ──────────────────────── */}
       <section className="w-full py-32 px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          custom={0}
-          variants={fadeUp}
-          className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16"
-        >
-          {/* 3D Float card mockup */}
-          <div className="flex-1 w-full">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+          
+          {/* FREE RESET (LEFT SIDE) */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            custom={0}
+            variants={fadeUp}
+            className="flex flex-col items-center text-center p-12 bg-brand-bg border border-brand-border rounded-3xl relative overflow-hidden group"
+          >
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-30" />
+            
             <motion.div
-              className="aspect-[4/5] w-full bg-brand-card rounded-2xl border border-brand-border flex flex-col items-center justify-center relative overflow-hidden shadow-2xl"
+              className="aspect-[4/5] w-full max-w-[280px] bg-brand-card rounded-2xl border border-brand-border flex flex-col items-center justify-center relative overflow-hidden shadow-xl mb-10"
               whileHover={{ rotateY: 5, rotateX: -3, scale: 1.02 }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
               style={{ transformStyle: "preserve-3d", perspective: 1000 }}
@@ -179,22 +182,66 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
               <span className="font-serif text-4xl text-brand-text italic relative z-10">7 🕯️</span>
               <span className="text-xs uppercase tracking-widest text-brand-soft mt-2 relative z-10">Day Reset</span>
             </motion.div>
-          </div>
 
-          <div className="flex-1 flex flex-col items-start text-left">
             <span className="text-xs tracking-widest uppercase text-brand-accent mb-4 block">Free Download</span>
-            <h2 className="font-serif text-4xl md:text-5xl text-brand-text mb-6">7-Day Emotional Reset 🕯️</h2>
-            <p className="text-brand-soft leading-relaxed mb-8">
-              A gentle week-long journey to help you release the pressure of having everything figured out. Daily soft prompts, phone wallpapers, and a quiet audio meditation.
+            <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">7-Day Emotional Reset</h2>
+            <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm">
+              A gentle week-long journey to help you release the pressure of having everything figured out.
             </p>
             <Link
               href="/reset"
-              className="border-b border-brand-text text-brand-text pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors uppercase tracking-widest text-sm"
+              className="px-8 py-4 bg-brand-card border border-brand-border hover:border-brand-accent text-brand-text hover:text-brand-accent transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
             >
               Get the free reset 💌
             </Link>
-          </div>
-        </motion.div>
+          </motion.div>
+
+          {/* PREMIUM PRODUCT (RIGHT SIDE) */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            custom={1}
+            variants={fadeUp}
+            className="flex flex-col items-center text-center p-12 bg-brand-card border border-brand-border rounded-3xl relative overflow-hidden"
+          >
+            {/* Subtle glow background */}
+            <div
+              className="absolute inset-0 opacity-10"
+              style={{
+                background: "radial-gradient(circle at 70% 30%, var(--color-accent), transparent 60%)",
+              }}
+            />
+            
+            <motion.div
+              className="aspect-[4/5] w-full max-w-[280px] bg-[#1A1A1A] dark:bg-[#111] rounded-2xl border border-[#333] flex flex-col items-center justify-center relative overflow-hidden shadow-2xl mb-10"
+              whileHover={{ rotateY: -5, rotateX: 3, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+            >
+               <span className="font-serif text-3xl text-[#E5E5E5] px-6 text-center text-balance leading-snug relative z-10">
+                 {/* @ts-ignore */}
+                 {product?.title || "The Overthinker's Journal"}
+               </span>
+               <span className="text-[10px] uppercase tracking-widest text-[#888] mt-4 relative z-10">Premium Guide</span>
+               <div className="absolute inset-0 border-[1px] border-white/5 rounded-2xl m-3 pointer-events-none" />
+            </motion.div>
+
+            <span className="text-xs tracking-widest uppercase text-brand-soft mb-4 block">Quietly Humans Studio</span>
+            {/* @ts-ignore */}
+            <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">{product?.title || "The Overthinker's Journal"}</h2>
+            <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm">
+              Premium resources, guided journals, and digital dashboards designed to help you live softly and intentionally.
+            </p>
+            <Link
+              href="/library"
+              className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
+            >
+              Explore the Studio ☕
+            </Link>
+          </motion.div>
+          
+        </div>
       </section>
 
       {/* ─── 4. BOOKS ───────────────────────────── */}
