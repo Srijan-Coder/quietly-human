@@ -17,7 +17,7 @@ const mainNavLinks = [
 
 const menuCategories = [
   {
-    title: "Sanctuary",
+    title: "Sanctuary 🌿",
     links: [
       { name: "The Breathe Room", path: "/breathe" },
       { name: "7-Day Reset", path: "/reset" },
@@ -26,7 +26,7 @@ const menuCategories = [
     ]
   },
   {
-    title: "Explore",
+    title: "Explore ☁️",
     links: [
       { name: "Emotional Search", path: "/search" },
       { name: "Quiet Thoughts (Blog)", path: "/blog" },
@@ -36,7 +36,7 @@ const menuCategories = [
     ]
   },
   {
-    title: "Library",
+    title: "Library 📖",
     links: [
       { name: "Pillar Guides", path: "/guides" },
       { name: "Midnight Letters", path: "/letters" },
@@ -45,7 +45,7 @@ const menuCategories = [
     ]
   },
   {
-    title: "Connect",
+    title: "Connect 💌",
     links: [
       { name: "Reader Notes", path: "/testimonials" },
       { name: "Link-in-Bio", path: "/links" },

@@ -15,10 +15,10 @@ export default function CollectionPage() {
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-24">
       <div className="mb-16">
-        <span className="text-xs uppercase tracking-widest text-brand-accent mb-6 block">Your Sanctuary</span>
-        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-6">My Quiet Collection</h1>
+        <span className="text-xs uppercase tracking-widest text-brand-accent mb-6 block">Your Sanctuary 🌿</span>
+        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-6">My Quiet Collection ☕</h1>
         <p className="text-brand-soft font-sans max-w-2xl leading-relaxed">
-          The pieces you have saved. Kept here locally on your device, just for you.
+          The pieces you have saved. Kept here locally on your device, just for you. 🤍
         </p>
       </div>
 

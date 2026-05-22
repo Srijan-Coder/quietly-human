@@ -25,7 +25,7 @@ export default async function GuidesIndex() {
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-24">
       <div className="mb-24 text-center">
         <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-4 text-balance">
-          Pillars of Rest
+          Pillars of Rest 🌿
         </h1>
         <p className="opacity-60 text-lg max-w-xl mx-auto text-balance">
           Deep, immersive guides into emotional wellness and the quiet life.

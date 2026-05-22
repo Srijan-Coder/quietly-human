@@ -31,7 +31,7 @@ export default function BreathePage() {
       </div>
 
       <Link href="/" className="absolute top-12 left-12 text-xs uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity z-20">
-        Leave Room
+        Leave Room 🚪
       </Link>
 
       <div className="z-10 flex flex-col items-center">
@@ -59,7 +59,7 @@ export default function BreathePage() {
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="font-serif text-2xl md:text-3xl text-balance tracking-wide mb-12"
         >
-          Inhale deeply... Exhale slowly.
+          Inhale deeply... Exhale slowly. 🌬️
         </motion.p>
 
         <button

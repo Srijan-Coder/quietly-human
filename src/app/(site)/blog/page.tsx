@@ -41,9 +41,9 @@ export default async function BlogPage(props: {
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-24">
       <div className="mb-12">
-        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-4">Quiet Thoughts</h1>
+        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-4">Quiet Thoughts ☕</h1>
         <p className="text-brand-soft text-lg max-w-xl text-balance">
-          Words for overthinkers, tired hearts, and those learning to live softly.
+          Words for overthinkers, tired hearts, and those learning to live softly. ☁️
         </p>
       </div>
 

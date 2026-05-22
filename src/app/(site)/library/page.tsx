@@ -17,9 +17,9 @@ export default function LibraryPage() {
         variants={fadeUp}
         className="mb-20 text-center"
       >
-        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-6">The Library</h1>
+        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-6">The Library 📖</h1>
         <p className="text-brand-soft font-sans max-w-2xl mx-auto leading-relaxed">
-          An archive of digital spaces, books, quotes, and reflections designed for quiet growth and soft living.
+          An archive of digital spaces, books, quotes, and reflections designed for quiet growth and soft living. 🤎
         </p>
       </motion.div>
 

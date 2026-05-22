@@ -23,10 +23,10 @@ export default async function LettersIndex() {
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-4xl mx-auto w-full pb-24">
       <div className="mb-24 text-center">
         <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-4 text-balance">
-          Midnight Letters
+          Midnight Letters 💌
         </h1>
         <p className="opacity-60 text-lg max-w-xl mx-auto text-balance">
-          An archive of soft words for tired hearts. Originally sent via email.
+          An archive of soft words for tired hearts. Originally sent via email. 🕊️
         </p>
       </div>
 
@@ -51,13 +51,13 @@ export default async function LettersIndex() {
 
       {letters.length === 0 && (
         <div className="text-center py-20 text-brand-soft italic border border-brand-border rounded-xl mt-12 bg-brand-card">
-          The mailbox is currently empty.
+          The mailbox is currently empty. 📭
         </div>
       )}
 
       {/* Subscription CTA */}
       <div className="mt-32 p-12 bg-brand-card border border-brand-border rounded-2xl text-center">
-        <h3 className="font-serif text-3xl text-brand-text mb-4">Receive the next letter.</h3>
+        <h3 className="font-serif text-3xl text-brand-text mb-4">Receive the next letter. 🕯️</h3>
         <p className="text-brand-soft mb-8 max-w-md mx-auto">
           Twice a month, I send a gentle reminder that you are allowed to rest. No spam, no pressure.
         </p>
