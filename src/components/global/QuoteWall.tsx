@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SaveButton } from "@/components/global/SaveButton";
+import { ShareQuoteButton } from "@/components/global/ShareQuoteButton";
 import { useState } from "react";
 
 const cardBg: Record<string, string> = {
@@ -60,7 +61,8 @@ function QuoteCard({ quote, index }: { quote: Quote; index: number }) {
       )}
 
       {/* Actions — reveal on hover */}
-      <div className="absolute bottom-4 right-4 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="absolute bottom-4 right-4 flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+        <ShareQuoteButton text={quote.text} />
         <button
           onClick={handleCopy}
           className="text-[10px] uppercase tracking-widest border border-brand-border px-3 py-1.5 rounded-full hover:border-brand-accent hover:text-brand-accent transition-colors bg-brand-bg/80 backdrop-blur-sm"

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { OverthinkingTool } from "@/components/toolkit/OverthinkingTool";
 
 type Phase = "inhale" | "hold" | "exhale" | "rest";
 
@@ -203,6 +204,7 @@ function NightReset() {
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 const tools = [
+  { id: "overthinking", label: "Overthinking Release", desc: "Let go of heavy, looping thoughts", component: OverthinkingTool },
   { id: "breathe", label: "Breathing Circle", desc: "4-7-8 technique to calm your nervous system", component: BreathingCircle },
   { id: "no", label: "Soft No Script", desc: "Gentle words for when you need to set a boundary", component: SoftNoScript },
   { id: "wins", label: "Tiny Win Logger", desc: "Record small victories that usually go unnoticed", component: TinyWinLogger },
@@ -210,8 +212,8 @@ const tools = [
 ];
 
 export default function ToolkitPage() {
-  const [active, setActive] = useState("breathe");
-  const ActiveTool = tools.find(t => t.id === active)?.component || BreathingCircle;
+  const [active, setActive] = useState("overthinking");
+  const ActiveTool = tools.find(t => t.id === active)?.component || OverthinkingTool;
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto">
@@ -224,7 +226,7 @@ export default function ToolkitPage() {
       </div>
 
       {/* Tool selector */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-16">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-16">
         {tools.map(tool => (
           <button
             key={tool.id}

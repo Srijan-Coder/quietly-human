@@ -10,6 +10,7 @@ import { ReadingController } from "@/components/global/ReadingController";
 import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
 import SocialConnectCTA from "@/components/global/SocialConnectCTA";
 import ListenButton from "@/components/global/ListenButton";
+import { SaveButton } from "@/components/global/SaveButton";
 import Image from "next/image";
 
 export const revalidate = 60;
@@ -107,8 +108,9 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           )}
         </header>
 
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center items-center gap-6 mb-12">
           <ListenButton />
+          <SaveButton item={{ id: guide.slug, title: guide.title, type: "guide", url: `/guides/${guide.slug}` }} className="px-6 py-3 border border-brand-border bg-brand-card rounded-full" />
         </div>
 
         <ReadingTextWrapper>
