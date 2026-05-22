@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import AmbientBackground from "@/components/global/AmbientBackground";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
 import { TestimonialCarousel, type Testimonial } from "@/components/global/TestimonialCarousel";
 
-export default function HomeContent({ testimonials, ebooks, product }: { testimonials: Testimonial[], ebooks?: any[], product?: any }) {
+export default function HomeContent({ testimonials, ebooks, products }: { testimonials: Testimonial[], ebooks?: any[], products?: any[] }) {
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -23,7 +23,42 @@ export default function HomeContent({ testimonials, ebooks, product }: { testimo
     { title: "I'm Tired of Being Okay", tag: "Burnout" },
   ];
 
+  const premiumProducts = products && products.length > 0 ? products : [
+    { title: "The Overthinker's Journal", price: 19, slug: "#" }
+  ];
+
+  const freeSlides = [
+    {
+      title: "7-Day Emotional Reset",
+      subtitle: "Free Download",
+      desc: "A gentle week-long journey to help you release the pressure of having everything figured out.",
+      cta: "Get the free reset 💌",
+      link: "/reset",
+      element: (
+        <div className="font-serif text-4xl text-brand-text italic relative z-10 flex flex-col items-center">
+          <span>7 🕯️</span>
+          <span className="text-xs uppercase tracking-widest text-brand-soft mt-2 not-italic">Day Reset</span>
+        </div>
+      )
+    },
+    ...(ebooks || []).map(ebook => ({
+      title: ebook.title,
+      subtitle: "Free Ebook",
+      desc: "A short, gentle read to help you navigate heavy emotions and find your center.",
+      cta: "Read the book 📖",
+      link: `/books/${ebook.slug}`,
+      element: (
+        <div className="font-serif text-xl text-brand-text text-center px-4 relative z-10 flex flex-col items-center">
+          <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 not-italic">{ebook.tag}</span>
+          <span>{ebook.title}</span>
+        </div>
+      )
+    }))
+  ];
+
   const [headline, setHeadline] = useState("A quiet space for tired hearts.");
+  const [currentFreeSlide, setCurrentFreeSlide] = useState(0);
+  const [currentPremiumSlide, setCurrentPremiumSlide] = useState(0);
 
   useEffect(() => {
     const headlines = [
@@ -44,6 +79,30 @@ export default function HomeContent({ testimonials, ebooks, product }: { testimo
     ];
     setHeadline(headlines[Math.floor(Math.random() * headlines.length)]);
   }, []);
+
+  // Auto-slide for free resources
+  useEffect(() => {
+    if (freeSlides.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentFreeSlide((prev) => (prev + 1) % freeSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [freeSlides.length]);
+
+  // Auto-slide for premium products
+  useEffect(() => {
+    if (premiumProducts.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentPremiumSlide((prev) => (prev + 1) % premiumProducts.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [premiumProducts.length]);
+
+  const nextFreeSlide = () => setCurrentFreeSlide((prev) => (prev + 1) % freeSlides.length);
+  const prevFreeSlide = () => setCurrentFreeSlide((prev) => (prev - 1 + freeSlides.length) % freeSlides.length);
+  
+  const nextPremiumSlide = () => setCurrentPremiumSlide((prev) => (prev + 1) % premiumProducts.length);
+  const prevPremiumSlide = () => setCurrentPremiumSlide((prev) => (prev - 1 + premiumProducts.length) % premiumProducts.length);
 
   return (
     <div className="relative overflow-hidden w-full bg-brand-bg">
@@ -156,7 +215,7 @@ export default function HomeContent({ testimonials, ebooks, product }: { testimo
       <section className="w-full py-32 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
           
-          {/* FREE RESET (LEFT SIDE) */}
+          {/* FREE RESOURCES CAROUSEL (LEFT SIDE) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -167,78 +226,146 @@ export default function HomeContent({ testimonials, ebooks, product }: { testimo
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-30" />
             
-            <motion.div
-              className="aspect-[4/5] w-full max-w-[280px] bg-brand-card rounded-2xl border border-brand-border flex flex-col items-center justify-center relative overflow-hidden shadow-xl mb-10"
-              whileHover={{ rotateY: 5, rotateX: -3, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-            >
-              <div
-                className="absolute inset-0 opacity-20"
-                style={{
-                  background: "radial-gradient(ellipse at 30% 40%, var(--color-accent), transparent 70%)",
-                }}
-              />
-              <span className="font-serif text-4xl text-brand-text italic relative z-10">7 🕯️</span>
-              <span className="text-xs uppercase tracking-widest text-brand-soft mt-2 relative z-10">Day Reset</span>
-            </motion.div>
+            {freeSlides.length > 1 && (
+              <>
+                <button onClick={prevFreeSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
+                  ←
+                </button>
+                <button onClick={nextFreeSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
+                  →
+                </button>
+              </>
+            )}
 
-            <span className="text-xs tracking-widest uppercase text-brand-accent mb-4 block">Free Download</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">7-Day Emotional Reset</h2>
-            <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm">
-              A gentle week-long journey to help you release the pressure of having everything figured out.
-            </p>
-            <Link
-              href="/reset"
-              className="px-8 py-4 bg-brand-card border border-brand-border hover:border-brand-accent text-brand-text hover:text-brand-accent transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
-            >
-              Get the free reset 💌
-            </Link>
+            <div className="relative w-full max-w-[280px] aspect-[4/5] mb-10">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentFreeSlide}
+                  initial={{ opacity: 0, rotateY: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotateY: -10, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 bg-brand-card rounded-2xl border border-brand-border flex flex-col items-center justify-center relative overflow-hidden shadow-xl"
+                  style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+                >
+                  <div
+                    className="absolute inset-0 opacity-20"
+                    style={{ background: "radial-gradient(ellipse at 30% 40%, var(--color-accent), transparent 70%)" }}
+                  />
+                  {freeSlides[currentFreeSlide].element}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={currentFreeSlide}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col items-center flex-1 w-full"
+              >
+                <span className="text-xs tracking-widest uppercase text-brand-accent mb-4 block">{freeSlides[currentFreeSlide].subtitle}</span>
+                <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">{freeSlides[currentFreeSlide].title}</h2>
+                <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm h-16 overflow-hidden">
+                  {freeSlides[currentFreeSlide].desc}
+                </p>
+                <Link
+                  href={freeSlides[currentFreeSlide].link}
+                  className="px-8 py-4 bg-brand-card border border-brand-border hover:border-brand-accent text-brand-text hover:text-brand-accent transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
+                >
+                  {freeSlides[currentFreeSlide].cta}
+                </Link>
+              </motion.div>
+            </AnimatePresence>
+            
+            {/* Dots */}
+            {freeSlides.length > 1 && (
+              <div className="absolute bottom-6 flex gap-2">
+                {freeSlides.map((_, i) => (
+                  <button key={i} onClick={() => setCurrentFreeSlide(i)} className={`w-2 h-2 rounded-full transition-colors ${i === currentFreeSlide ? 'bg-brand-accent' : 'bg-brand-border'}`} />
+                ))}
+              </div>
+            )}
           </motion.div>
 
-          {/* PREMIUM PRODUCT (RIGHT SIDE) */}
+          {/* PREMIUM PRODUCT CAROUSEL (RIGHT SIDE) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={1}
             variants={fadeUp}
-            className="flex flex-col items-center text-center p-12 bg-brand-card border border-brand-border rounded-3xl relative overflow-hidden"
+            className="flex flex-col items-center text-center p-12 bg-brand-card border border-brand-border rounded-3xl relative overflow-hidden group"
           >
-            {/* Subtle glow background */}
             <div
               className="absolute inset-0 opacity-10"
-              style={{
-                background: "radial-gradient(circle at 70% 30%, var(--color-accent), transparent 60%)",
-              }}
+              style={{ background: "radial-gradient(circle at 70% 30%, var(--color-accent), transparent 60%)" }}
             />
             
-            <motion.div
-              className="aspect-[4/5] w-full max-w-[280px] bg-[#1A1A1A] dark:bg-[#111] rounded-2xl border border-[#333] flex flex-col items-center justify-center relative overflow-hidden shadow-2xl mb-10"
-              whileHover={{ rotateY: -5, rotateX: 3, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-            >
-               <span className="font-serif text-3xl text-[#E5E5E5] px-6 text-center text-balance leading-snug relative z-10">
-                 {/* @ts-ignore */}
-                 {product?.title || "The Overthinker's Journal"}
-               </span>
-               <span className="text-[10px] uppercase tracking-widest text-[#888] mt-4 relative z-10">Premium Guide</span>
-               <div className="absolute inset-0 border-[1px] border-white/5 rounded-2xl m-3 pointer-events-none" />
-            </motion.div>
+            {premiumProducts.length > 1 && (
+              <>
+                <button onClick={prevPremiumSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
+                  ←
+                </button>
+                <button onClick={nextPremiumSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
+                  →
+                </button>
+              </>
+            )}
 
-            <span className="text-xs tracking-widest uppercase text-brand-soft mb-4 block">Quietly Humans Studio</span>
-            {/* @ts-ignore */}
-            <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">{product?.title || "The Overthinker's Journal"}</h2>
-            <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm">
-              Premium resources, guided journals, and digital dashboards designed to help you live softly and intentionally.
-            </p>
-            <Link
-              href="/library"
-              className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
-            >
-              Explore the Studio ☕
-            </Link>
+            <div className="relative w-full max-w-[280px] aspect-[4/5] mb-10">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentPremiumSlide}
+                  initial={{ opacity: 0, rotateY: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotateY: 10, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 bg-[#1A1A1A] dark:bg-[#111] rounded-2xl border border-[#333] flex flex-col items-center justify-center relative overflow-hidden shadow-2xl"
+                  style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+                >
+                   <span className="font-serif text-3xl text-[#E5E5E5] px-6 text-center text-balance leading-snug relative z-10">
+                     {premiumProducts[currentPremiumSlide].title}
+                   </span>
+                   <span className="text-[10px] uppercase tracking-widest text-[#888] mt-4 relative z-10">Premium Guide</span>
+                   <div className="absolute inset-0 border-[1px] border-white/5 rounded-2xl m-3 pointer-events-none" />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={currentPremiumSlide}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col items-center flex-1 w-full"
+              >
+                <span className="text-xs tracking-widest uppercase text-brand-soft mb-4 block">Quietly Humans Studio</span>
+                <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">{premiumProducts[currentPremiumSlide].title}</h2>
+                <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm h-16 overflow-hidden">
+                  Premium resources, guided journals, and digital dashboards designed to help you live softly and intentionally.
+                </p>
+                <Link
+                  href={premiumProducts[currentPremiumSlide].slug !== "#" ? `/products/${premiumProducts[currentPremiumSlide].slug}` : "/library"}
+                  className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
+                >
+                  Explore the Studio ☕
+                </Link>
+              </motion.div>
+            </AnimatePresence>
+            
+            {/* Dots */}
+            {premiumProducts.length > 1 && (
+              <div className="absolute bottom-6 flex gap-2">
+                {premiumProducts.map((_, i) => (
+                  <button key={i} onClick={() => setCurrentPremiumSlide(i)} className={`w-2 h-2 rounded-full transition-colors ${i === currentPremiumSlide ? 'bg-brand-accent' : 'bg-brand-border'}`} />
+                ))}
+              </div>
+            )}
           </motion.div>
           
         </div>
@@ -284,7 +411,7 @@ export default function HomeContent({ testimonials, ebooks, product }: { testimo
                   <span className="font-serif text-xl text-brand-muted px-8 text-center">{book.title}</span>
                 </motion.div>
                 <h3 className="font-serif text-2xl text-brand-text mb-2 group-hover:text-brand-accent transition-colors">{book.title}</h3>
-                <Link href="/library" className="text-xs uppercase tracking-widest text-brand-soft group-hover:text-brand-accent transition-colors">
+                <Link href={book.slug ? `/books/${book.slug}` : "/library"} className="text-xs uppercase tracking-widest text-brand-soft group-hover:text-brand-accent transition-colors">
                   Read the book
                 </Link>
               </motion.div>

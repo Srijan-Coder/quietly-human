@@ -33,6 +33,7 @@ const menuCategories = [
       { name: "My Collection", path: "/collection" },
       { name: "Journey Paths", path: "/paths/behind" },
       { name: "Free Resources", path: "/resources" },
+      { name: "Free Ebooks", path: "/books" },
     ]
   },
   {
