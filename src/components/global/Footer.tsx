@@ -30,6 +30,7 @@ export default function Footer() {
           <span className="text-xs tracking-widest uppercase opacity-40">Connect</span>
           <Link href="/breathe" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Breathe Room</Link>
           <Link href="/reset" className="text-sm opacity-80 hover:text-brand-accent transition-colors">7-Day Reset</Link>
+          <Link href="/heavy" className="text-sm opacity-80 hover:text-brand-accent transition-colors italic">When things feel heavy</Link>
           <Link href="/quotes" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Words</Link>
           <Link href="/about" className="text-sm opacity-80 hover:text-brand-accent transition-colors">About Srijan</Link>
           <Link href="/contact" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Contact</Link>

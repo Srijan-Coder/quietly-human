@@ -9,6 +9,7 @@ import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
 import { LetterPaperBox } from "@/components/global/LetterPaperBox";
 import { ClientCopyButton } from "@/components/global/ClientCopyButton";
 import SocialConnectCTA from "@/components/global/SocialConnectCTA";
+import ListenButton from "@/components/global/ListenButton";
 import { Metadata } from "next";
 
 export const revalidate = 60;
@@ -103,8 +104,12 @@ export default async function LetterPage({ params }: { params: Promise<{ slug: s
           )}
         </header>
 
+        <div className="flex justify-center mb-12">
+          <ListenButton />
+        </div>
+
         <ReadingTextWrapper>
-          <div className="max-w-none pb-16">
+          <div id="article-content" className="max-w-none pb-16">
             {letter.body ? (
               <LetterPaperBox>
                 <CustomPortableText value={letter.body} />

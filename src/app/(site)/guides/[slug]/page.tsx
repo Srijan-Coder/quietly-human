@@ -9,6 +9,7 @@ import { Metadata } from "next";
 import { ReadingController } from "@/components/global/ReadingController";
 import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
 import SocialConnectCTA from "@/components/global/SocialConnectCTA";
+import ListenButton from "@/components/global/ListenButton";
 import Image from "next/image";
 
 export const revalidate = 60;
@@ -106,8 +107,12 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           )}
         </header>
 
+        <div className="flex justify-center mb-12">
+          <ListenButton />
+        </div>
+
         <ReadingTextWrapper>
-          <div className="max-w-none mt-12 pb-32">
+          <div id="article-content" className="max-w-none mt-12 pb-32">
             {guide.content ? <CustomPortableText value={guide.content} /> : <p className="text-brand-soft">The guide is empty.</p>}
           </div>
         </ReadingTextWrapper>
