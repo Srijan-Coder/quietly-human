@@ -245,7 +245,7 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
                   animate={{ opacity: 1, rotateY: 0, scale: 1 }}
                   exit={{ opacity: 0, rotateY: -10, scale: 0.95 }}
                   transition={{ duration: 0.5 }}
-                  className="absolute inset-0 bg-brand-card rounded-2xl border border-brand-border flex flex-col items-center justify-center relative overflow-hidden shadow-xl"
+                  className="absolute inset-0 bg-brand-card rounded-2xl border border-brand-border flex flex-col items-center justify-center overflow-hidden shadow-xl"
                   style={{ transformStyle: "preserve-3d", perspective: 1000 }}
                 >
                   <div
@@ -323,7 +323,7 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
                   animate={{ opacity: 1, rotateY: 0, scale: 1 }}
                   exit={{ opacity: 0, rotateY: 10, scale: 0.95 }}
                   transition={{ duration: 0.5 }}
-                  className="absolute inset-0 bg-[#1A1A1A] dark:bg-[#111] rounded-2xl border border-[#333] flex flex-col items-center justify-center relative overflow-hidden shadow-2xl"
+                  className="absolute inset-0 bg-[#1A1A1A] dark:bg-[#111] rounded-2xl border border-[#333] flex flex-col items-center justify-center overflow-hidden shadow-2xl"
                   style={{ transformStyle: "preserve-3d", perspective: 1000 }}
                 >
                    <span className="font-serif text-3xl text-[#E5E5E5] px-6 text-center text-balance leading-snug relative z-10">
