@@ -213,7 +213,7 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
 
       {/* ─── 3. RESOURCES & PRODUCTS ──────────────────────── */}
       <section className="w-full py-32 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
           
           {/* FREE RESOURCES CAROUSEL (LEFT SIDE) */}
           <motion.div
@@ -386,7 +386,7 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
             <p className="text-brand-soft">Tangible comfort for long nights.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {books.map((book, i) => (
               <motion.div
                 key={book.title}
@@ -459,7 +459,7 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
           viewport={{ once: true }}
           custom={0}
           variants={fadeUp}
-          className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12 p-12 rounded-2xl border border-brand-border"
+          className="max-w-4xl mx-auto flex flex-col lg:flex-row items-center gap-12 p-12 rounded-2xl border border-brand-border"
           style={{ background: "radial-gradient(ellipse at 80% 50%, var(--color-accent)08, transparent 70%)" }}
         >
           <div className="flex-1">
