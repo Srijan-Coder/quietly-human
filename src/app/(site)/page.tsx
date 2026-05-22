@@ -12,5 +12,16 @@ export default async function Home() {
     );
   } catch (error) { console.error(error); }
 
-  return <HomeContent testimonials={testimonials} />;
+  let ebooks = [];
+  try {
+    ebooks = await client.fetch(
+      groq`*[_type == "ebook"] | order(_createdAt desc)[0...3] {
+        title,
+        "tag": emotionTags[0],
+        "slug": slug.current
+      }`
+    );
+  } catch (error) { console.error(error); }
+
+  return <HomeContent testimonials={testimonials} ebooks={ebooks} />;
 }

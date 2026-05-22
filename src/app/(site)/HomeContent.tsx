@@ -6,7 +6,7 @@ import AmbientBackground from "@/components/global/AmbientBackground";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
 import { TestimonialCarousel, type Testimonial } from "@/components/global/TestimonialCarousel";
 
-export default function HomeContent({ testimonials }: { testimonials: Testimonial[] }) {
+export default function HomeContent({ testimonials, ebooks }: { testimonials: Testimonial[], ebooks?: any[] }) {
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -16,7 +16,7 @@ export default function HomeContent({ testimonials }: { testimonials: Testimonia
     }),
   };
 
-  const books = [
+  const books = ebooks && ebooks.length > 0 ? ebooks : [
     { title: "I Am Not Behind in Life", tag: "Feeling Behind" },
     { title: "A Small Book for Tired Hearts", tag: "Exhausted" },
     { title: "I'm Tired of Being Okay", tag: "Burnout" },

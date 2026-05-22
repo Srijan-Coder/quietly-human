@@ -2,6 +2,7 @@ import { client } from "@/sanity/lib/client";
 import { postsQuery } from "@/sanity/lib/queries";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
+import { CategoryFilter } from "@/components/global/CategoryFilter";
 
 export const revalidate = 60; // revalidate this page every 60 seconds
 
@@ -13,7 +14,11 @@ export interface Post {
   categories?: string[];
 }
 
-export default async function BlogPage() {
+export default async function BlogPage(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const currentCategory = searchParams?.category as string | undefined;
   let posts = [];
   try {
     posts = await client.fetch(postsQuery);
@@ -21,10 +26,17 @@ export default async function BlogPage() {
     console.warn("Failed to fetch posts from Sanity (likely missing projectId):", error);
   }
 
-  const categoryList = [
-    "Feeling Behind", "Overthinking", "Tired Hearts", "Soft Life", 
-    "People Pleasing", "Loneliness", "Rest Without Guilt", "Quiet Growth"
-  ];
+  const categorySet = new Set<string>();
+  posts.forEach((post: Post) => {
+    if (post.categories) {
+      post.categories.forEach(cat => categorySet.add(cat));
+    }
+  });
+  const categoryList = Array.from(categorySet).sort();
+
+  const filteredPosts = currentCategory
+    ? posts.filter((post: Post) => post.categories?.includes(currentCategory))
+    : posts;
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-24">
@@ -36,17 +48,10 @@ export default async function BlogPage() {
       </div>
 
       {/* Category Menu */}
-      <div className="flex flex-wrap gap-3 mb-16 border-b border-brand-border pb-8">
-        <button className="px-4 py-2 bg-brand-text text-brand-bg rounded-full text-xs uppercase tracking-widest transition-colors hover:bg-brand-accent hover:text-white">All</button>
-        {categoryList.map((cat) => (
-          <button key={cat} className="px-4 py-2 border border-brand-border text-brand-text rounded-full text-xs uppercase tracking-widest transition-colors hover:border-brand-accent hover:text-brand-accent">
-            {cat}
-          </button>
-        ))}
-      </div>
+      <CategoryFilter categories={categoryList} currentCategory={currentCategory} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {posts.filter((post: Post) => post.slug).map((post: Post) => (
+        {filteredPosts.filter((post: Post) => post.slug).map((post: Post) => (
           <Link href={`/blog/${post.slug}`} key={post._id} className="group flex flex-col gap-4">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-card rounded-xl border border-brand-border shadow-sm">
               {post.mainImage ? (
@@ -75,9 +80,9 @@ export default async function BlogPage() {
         ))}
       </div>
       
-      {posts.length === 0 && (
+      {filteredPosts.length === 0 && (
         <div className="py-24 text-center text-brand-soft">
-          <p>The library is quiet. Check back soon for new thoughts.</p>
+          <p>The library is quiet. No posts found for this category.</p>
         </div>
       )}
     </div>
