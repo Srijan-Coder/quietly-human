@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import { notFound } from "next/navigation";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
-import { SaveButton } from "@/components/global/SaveButton";
+
 import { ReadingController } from "@/components/global/ReadingController";
 import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
 import Image from "next/image";

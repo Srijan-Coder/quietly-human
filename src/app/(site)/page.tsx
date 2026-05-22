@@ -2,13 +2,15 @@ import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import HomeContent from "./HomeContent";
 
+import { type Testimonial } from "@/components/global/TestimonialCarousel";
+
 export default async function Home() {
-  let testimonials: any[] = [];
+  let testimonials: Testimonial[] = [];
   try {
     testimonials = await client.fetch(
       groq`*[_type == "testimonial" && featured == true] | order(order asc, _createdAt desc)`
     );
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   return <HomeContent testimonials={testimonials} />;
 }

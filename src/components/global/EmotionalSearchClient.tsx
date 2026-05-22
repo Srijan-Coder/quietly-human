@@ -4,14 +4,33 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
-export function EmotionalSearchClient({ initialData }: { initialData: any }) {
+export interface SearchItem {
+  _id: string;
+  title: string;
+  subtitle?: string;
+  slug: string;
+  emotionTags?: string[];
+}
+
+export interface InitialData {
+  guides?: SearchItem[];
+  letters?: SearchItem[];
+  books?: SearchItem[];
+}
+
+export interface SearchResult extends SearchItem {
+  type: "guide" | "letter" | "book";
+  url: string;
+}
+
+export function EmotionalSearchClient({ initialData }: { initialData: InitialData }) {
   const [query, setQuery] = useState("");
 
   const allItems = useMemo(() => {
-    const items: any[] = [];
-    initialData.guides?.forEach((g: any) => items.push({ ...g, type: "guide", url: `/guides/${g.slug}` }));
-    initialData.letters?.forEach((l: any) => items.push({ ...l, type: "letter", url: `/letters/${l.slug}` }));
-    initialData.books?.forEach((b: any) => items.push({ ...b, type: "book", url: `/read/${b.slug}` }));
+    const items: SearchResult[] = [];
+    initialData.guides?.forEach((g) => items.push({ ...g, type: "guide", url: `/guides/${g.slug}` }));
+    initialData.letters?.forEach((l) => items.push({ ...l, type: "letter", url: `/letters/${l.slug}` }));
+    initialData.books?.forEach((b) => items.push({ ...b, type: "book", url: `/read/${b.slug}` }));
     return items;
   }, [initialData]);
 

@@ -20,7 +20,15 @@ const cardText: Record<string, string> = {
   midnight: "text-[#C9956A]",
 };
 
-function QuoteCard({ quote, index }: { quote: any; index: number }) {
+export interface Quote {
+  _id: string;
+  text: string;
+  author?: string;
+  cardColor?: string;
+  emotionTags?: string[];
+}
+
+function QuoteCard({ quote, index }: { quote: Quote; index: number }) {
   const [copied, setCopied] = useState(false);
   const bg = cardBg[quote.cardColor || "warm"];
   const text = cardText[quote.cardColor || "warm"];
@@ -42,7 +50,7 @@ function QuoteCard({ quote, index }: { quote: any; index: number }) {
       className={`group relative p-8 md:p-10 rounded-2xl border border-brand-border flex flex-col justify-between min-h-[220px] ${bg} shadow-sm hover:shadow-xl transition-shadow duration-500`}
     >
       <div className={`font-serif text-xl md:text-2xl leading-relaxed text-balance italic ${text} mb-6`}>
-        "{quote.text}"
+        &quot;{quote.text}&quot;
       </div>
 
       {quote.author && (
@@ -66,8 +74,8 @@ function QuoteCard({ quote, index }: { quote: any; index: number }) {
       </div>
 
       {/* Emotion tags */}
-      {quote.emotionTags?.length > 0 && (
-        <div className="flex gap-2 mt-4 flex-wrap">
+      {!!quote.emotionTags?.length && (
+        <div className="flex flex-wrap gap-2 mb-4">
           {quote.emotionTags.map((tag: string) => (
             <span key={tag} className="text-[9px] uppercase tracking-widest text-brand-accent opacity-60">
               #{tag}
@@ -79,7 +87,7 @@ function QuoteCard({ quote, index }: { quote: any; index: number }) {
   );
 }
 
-export function QuoteWall({ quotes }: { quotes: any[] }) {
+export function QuoteWall({ quotes }: { quotes: Quote[] }) {
   if (quotes.length === 0) {
     return (
       <div className="text-center py-24 border border-dashed border-brand-border rounded-2xl">

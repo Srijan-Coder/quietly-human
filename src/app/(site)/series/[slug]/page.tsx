@@ -7,8 +7,28 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
-export default async function BlogSeriesPage({ params }: { params: { slug: string } }) {
-  let series: any = null;
+export interface SeriesPost {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  mainImage?: unknown;
+  publishedAt?: string;
+  type?: string;
+}
+
+export interface BlogSeries {
+  title: string;
+  description?: string;
+  emotionTag?: string;
+  coverImage?: unknown;
+  guides?: SeriesPost[];
+  letters?: SeriesPost[];
+}
+
+export default async function BlogSeriesPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  let series: BlogSeries | null = null;
   try {
     series = await client.fetch(
       groq`*[_type == "blogSeries" && slug.current == $slug][0]{
@@ -16,9 +36,9 @@ export default async function BlogSeriesPage({ params }: { params: { slug: strin
         guides[]->{_id, title, slug, excerpt, mainImage, publishedAt},
         letters[]->{_id, title, slug, excerpt, mainImage, publishedAt}
       }`,
-      { slug: params.slug }
+      { slug: resolvedParams.slug }
     );
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   if (!series) {
     notFound();
@@ -26,16 +46,16 @@ export default async function BlogSeriesPage({ params }: { params: { slug: strin
 
   // Combine and sort, but keep the specific order if it was set in the array for guides. 
   // For simplicity, we just list guides then letters.
-  const posts = [
-    ...(series.guides || []).map((p: any) => ({ ...p, type: 'guide' })),
-    ...(series.letters || []).map((p: any) => ({ ...p, type: 'letter' }))
+  const posts: SeriesPost[] = [
+    ...(series.guides || []).map((p: SeriesPost) => ({ ...p, type: 'guide' })),
+    ...(series.letters || []).map((p: SeriesPost) => ({ ...p, type: 'letter' }))
   ];
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-12">
       <div className="max-w-4xl mx-auto">
         <div className="mb-16 flex flex-col md:flex-row gap-8 items-center md:items-start">
-          {series.coverImage && (
+          {!!series.coverImage && (
              <div className="w-full md:w-1/3 aspect-[4/5] relative rounded-2xl overflow-hidden border border-brand-border shadow-sm shrink-0">
                <Image src={urlFor(series.coverImage).width(400).height(500).url()} alt={series.title} fill className="object-cover" />
              </div>
@@ -53,7 +73,7 @@ export default async function BlogSeriesPage({ params }: { params: { slug: strin
         </div>
 
         <div className="relative border-l border-brand-border ml-4 md:ml-8 pl-8 md:pl-12 py-8 flex flex-col gap-12">
-          {posts.map((post: any, i: number) => (
+          {posts.map((post: SeriesPost, i: number) => (
              <div key={post._id} className="relative">
                 {/* Timeline dot */}
                 <div className="absolute -left-[37px] md:-left-[53px] top-6 w-3 h-3 rounded-full bg-brand-bg border-2 border-brand-accent z-10" />

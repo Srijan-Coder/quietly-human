@@ -5,6 +5,14 @@ import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60; // revalidate this page every 60 seconds
 
+export interface Post {
+  _id: string;
+  title: string;
+  slug?: string;
+  mainImage?: unknown;
+  categories?: string[];
+}
+
 export default async function BlogPage() {
   let posts = [];
   try {
@@ -38,10 +46,11 @@ export default async function BlogPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {posts.filter((post: any) => post.slug).map((post: any) => (
+        {posts.filter((post: Post) => post.slug).map((post: Post) => (
           <Link href={`/blog/${post.slug}`} key={post._id} className="group flex flex-col gap-4">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-card rounded-xl border border-brand-border shadow-sm">
               {post.mainImage ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={urlFor(post.mainImage)?.url()}
                   alt={post.title}

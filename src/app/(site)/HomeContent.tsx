@@ -4,10 +4,9 @@ import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import AmbientBackground from "@/components/global/AmbientBackground";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
-import { AudioPlayer } from "@/components/global/AudioPlayer";
-import { TestimonialCarousel } from "@/components/global/TestimonialCarousel";
+import { TestimonialCarousel, type Testimonial } from "@/components/global/TestimonialCarousel";
 
-export default function HomeContent({ testimonials }: { testimonials: any[] }) {
+export default function HomeContent({ testimonials }: { testimonials: Testimonial[] }) {
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -122,7 +121,7 @@ export default function HomeContent({ testimonials }: { testimonials: any[] }) {
           className="max-w-3xl mx-auto text-center"
         >
           <p className="font-serif text-3xl md:text-5xl text-brand-text leading-relaxed text-balance">
-            You don't need to become someone else to belong here.
+            You don&apos;t need to become someone else to belong here.
           </p>
           <p className="mt-8 text-brand-soft font-sans text-lg max-w-xl mx-auto leading-loose">
             This is a sanctuary — a place to drop your shoulders, unclench your jaw, and simply exist.
@@ -302,8 +301,8 @@ export default function HomeContent({ testimonials }: { testimonials: any[] }) {
           className="max-w-4xl text-center"
         >
           <h2 className="font-serif text-4xl md:text-6xl text-brand-text leading-tight text-balance italic">
-            "Rest is not a reward for the work.{" "}
-            <span style={{ color: "var(--color-accent)" }}>It is the foundation of it.</span>"
+            &quot;Rest is not a reward for the work.{" "}
+            <span style={{ color: "var(--color-accent)" }}>It is the foundation of it.</span>&quot;
           </h2>
           <Link
             href="/breathe"

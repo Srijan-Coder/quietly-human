@@ -1,14 +1,15 @@
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
+import { type Testimonial } from "@/components/global/TestimonialCarousel";
 
 export const revalidate = 60;
 export const metadata = { title: "Reader Notes — Quietly Human" };
 
 export default async function TestimonialsPage() {
-  let testimonials: any[] = [];
+  let testimonials: Testimonial[] = [];
   try {
     testimonials = await client.fetch(groq`*[_type == "testimonial"] | order(order asc, _createdAt desc)`);
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-12">
@@ -23,10 +24,10 @@ export default async function TestimonialsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {testimonials.map((t: any) => (
+          {testimonials.map((t: Testimonial) => (
             <div key={t._id} className="p-8 bg-brand-card border border-brand-border rounded-2xl flex flex-col justify-between">
               <p className="font-serif text-xl text-brand-text leading-relaxed italic mb-8">
-                "{t.quote}"
+                &quot;{t.quote}&quot;
               </p>
               <div className="flex flex-col gap-1 text-xs uppercase tracking-widest text-brand-soft">
                 <span className="font-semibold text-brand-accent">{t.name}</span>

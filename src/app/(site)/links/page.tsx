@@ -11,16 +11,30 @@ const iconMap: Record<string, string> = {
   book: "📖", gift: "🎁", heart: "♡", link: "→", download: "↓",
 };
 
+export interface SocialLink {
+  _id: string;
+  label: string;
+  url: string;
+  icon: string;
+  highlighted: boolean;
+}
+
+export interface Profile {
+  name?: string;
+  bio?: Array<{ children?: Array<{ text?: string }> }>; // Sanity block content
+  image?: unknown;
+}
+
 export default async function LinksPage() {
-  let links: any[] = [];
-  let profile: any = null;
+  let links: SocialLink[] = [];
+  let profile: Profile | null = null;
 
   try {
     [links, profile] = await Promise.all([
       client.fetch(groq`*[_type == "socialLink" && active == true] | order(order asc) { _id, label, url, icon, highlighted }`),
       client.fetch(groq`*[_type == "author"][0] { name, bio, image }`),
     ]);
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start pt-24 pb-24 px-6">
@@ -68,7 +82,7 @@ export default async function LinksPage() {
                 {link.label}
               </a>
             ))
-          ) : links.map((link: any) => (
+          ) : links.map((link: SocialLink) => (
             <a
               key={link._id}
               href={link.url}

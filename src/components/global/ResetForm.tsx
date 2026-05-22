@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function ResetForm({ settings }: { settings: any }) {
+export interface ResetSettings {
+  successMessage?: string;
+  notionLink?: string;
+  driveLink?: string;
+}
+
+export function ResetForm({ settings }: { settings?: ResetSettings }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");

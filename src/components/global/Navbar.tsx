@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -64,10 +64,10 @@ export default function Navbar() {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0 }}
         className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center text-brand-text transition-all"
         style={{
-          background: isOpen ? "transparent" : "rgba(var(--color-bg-raw, 239,231,218), 0.7)",
+          backgroundColor: isOpen ? "transparent" : "var(--color-brand-bg)",
           backdropFilter: isOpen ? "none" : "blur(20px)",
           WebkitBackdropFilter: isOpen ? "none" : "blur(20px)",
-          borderBottom: isOpen ? "none" : "1px solid var(--color-border)",
+          borderBottom: isOpen ? "none" : "1px solid var(--color-brand-border)",
         }}
       >
         <Link href="/" onClick={() => setIsOpen(false)} className="font-serif text-lg md:text-2xl tracking-wide font-light z-50 relative hover:text-brand-accent transition-colors whitespace-nowrap">

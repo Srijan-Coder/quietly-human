@@ -13,12 +13,8 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-import Navbar from "@/components/global/Navbar";
-import Footer from "@/components/global/Footer";
-import CustomCursor from "@/components/global/CustomCursor";
-import SmoothScrolling from "@/components/global/SmoothScrolling";
+
 import { ThemeProvider } from "@/components/global/ThemeProvider";
-import { AudioPlayer } from "@/components/global/AudioPlayer";
 import { ReadingModeProvider } from "@/context/ReadingModeContext";
 import { AnnouncementBar } from "@/components/global/AnnouncementBar";
 import { client } from "@/sanity/lib/client";
@@ -77,7 +73,7 @@ export default async function RootLayout({
   let announcement = null;
   try {
     announcement = await client.fetch(`*[_type == "announcement"][0]`, {}, { next: { revalidate: 60 } });
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   return (
     <html
@@ -94,15 +90,7 @@ export default async function RootLayout({
         >
           <ReadingModeProvider>
             <AnnouncementBar data={announcement} />
-            <Navbar />
-            <CustomCursor />
-            <SmoothScrolling>
-              <main className="flex-1">
-                <AudioPlayer />
-                {children}
-              </main>
-              <Footer />
-            </SmoothScrolling>
+            {children}
           </ReadingModeProvider>
           <Analytics />
           <SpeedInsights />

@@ -9,7 +9,7 @@ export default async function FreeResetLibrary() {
   try {
     settings = await client.fetch(leadMagnetSettingsQuery);
   } catch (err) {
-    console.warn("Failed to fetch lead magnet settings");
+    console.warn("Failed to fetch lead magnet settings", err);
   }
 
   return (

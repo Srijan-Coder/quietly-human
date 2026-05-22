@@ -33,7 +33,7 @@ export function AudioPlayer() {
         });
       }
     }
-  }, [activeTrack]);
+  }, [activeTrack, isPlaying]);
 
   useEffect(() => {
     if (audioRef.current) {

@@ -5,7 +5,20 @@ import { PortableText } from "@portabletext/react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function EbookReader({ ebook }: { ebook: any }) {
+export interface Chapter {
+  _key?: string;
+  chapterTitle: string;
+  content: unknown[];
+}
+
+export interface Ebook {
+  title: string;
+  fileUrl?: string;
+  notionUrl?: string;
+  chapters?: Chapter[];
+}
+
+export function EbookReader({ ebook }: { ebook: Ebook }) {
   const [currentChapter, setCurrentChapter] = useState(0);
   const [fontSize, setFontSize] = useState<"normal" | "large" | "xlarge">("normal");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -82,7 +95,7 @@ export function EbookReader({ ebook }: { ebook: any }) {
 
             <div className="flex flex-col gap-4">
               <span className="text-[10px] uppercase tracking-widest opacity-40 mb-2">Chapters</span>
-              {chapters.map((ch: any, idx: number) => (
+              {chapters.map((ch: Chapter, idx: number) => (
                 <button
                   key={ch._key || idx}
                   onClick={() => {
@@ -147,7 +160,8 @@ export function EbookReader({ ebook }: { ebook: any }) {
             </h1>
 
             <div className={`prose prose-stone max-w-none font-serif text-brand-text leading-relaxed prose-headings:font-sans prose-headings:font-normal prose-headings:text-brand-soft prose-a:text-brand-accent ${fontSizeClasses[fontSize]}`}>
-              {activeChapter.content ? <PortableText value={activeChapter.content} /> : <p className="italic text-center">Chapter is empty.</p>}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {activeChapter.content ? <PortableText value={activeChapter.content as any} /> : <p className="italic text-center">Chapter is empty.</p>}
             </div>
           </motion.div>
         </article>

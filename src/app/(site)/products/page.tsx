@@ -5,6 +5,14 @@ import Link from "next/link";
 
 export const revalidate = 60;
 
+export interface Product {
+  _id: string;
+  title: string;
+  slug?: string;
+  price?: number;
+  coverImage?: unknown;
+}
+
 export default async function ProductsPage() {
   let products = [];
   try {
@@ -23,7 +31,7 @@ export default async function ProductsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {products.filter((product: any) => product.slug).map((product: any) => (
+        {products.filter((product: Product) => product.slug).map((product: Product) => (
           <Link
             href={`/products/${product.slug}`}
             key={product._id}
@@ -31,6 +39,7 @@ export default async function ProductsPage() {
           >
             <div className="relative aspect-[16/10] w-full overflow-hidden bg-brand-card flex items-center justify-center p-8 rounded-xl border border-brand-border">
               {product.coverImage ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={urlFor(product.coverImage)?.url()}
                   alt={product.title}

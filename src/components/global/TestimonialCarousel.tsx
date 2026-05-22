@@ -3,7 +3,15 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
-export function TestimonialCarousel({ testimonials = [] }: { testimonials: any[] }) {
+export interface Testimonial {
+  _id: string;
+  quote: string;
+  name: string;
+  handle?: string;
+  platform?: string;
+}
+
+export function TestimonialCarousel({ testimonials = [] }: { testimonials: Testimonial[] }) {
   const [index, setIndex] = useState(0);
 
   const safeTestimonials = Array.isArray(testimonials) ? testimonials : [];
@@ -36,7 +44,7 @@ export function TestimonialCarousel({ testimonials = [] }: { testimonials: any[]
             className="absolute inset-0 flex flex-col items-center justify-center text-center"
           >
             <p className="font-serif text-xl md:text-3xl text-brand-text leading-relaxed italic text-balance mb-6">
-              "{t.quote}"
+              &quot;{t.quote}&quot;
             </p>
             <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-brand-soft">
               <span className="font-semibold text-brand-accent">{t.name}</span>

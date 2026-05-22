@@ -5,6 +5,14 @@ import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
 
+export interface Guide {
+  _id: string;
+  title: string;
+  subtitle?: string;
+  slug?: string;
+  coverImage?: unknown;
+}
+
 export default async function GuidesIndex() {
   let guides = [];
   try {
@@ -25,10 +33,11 @@ export default async function GuidesIndex() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-        {guides.filter((guide: any) => guide.slug).map((guide: any) => (
+        {guides.filter((guide: Guide) => guide.slug).map((guide: Guide) => (
           <Link href={`/guides/${guide.slug}`} key={guide._id} className="group flex flex-col gap-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-card rounded-xl border border-brand-border shadow-sm">
               {guide.coverImage ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={urlFor(guide.coverImage)?.url()}
                   alt={guide.title}

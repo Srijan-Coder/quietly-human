@@ -1,17 +1,17 @@
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
-import { QuoteWall } from "@/components/global/QuoteWall";
+import { QuoteWall, type Quote } from "@/components/global/QuoteWall";
 
 export const revalidate = 60;
 export const metadata = { title: "Quiet Words — Quote Wall" };
 
 export default async function QuotesPage() {
-  let quotes: any[] = [];
+  let quotes: Quote[] = [];
   try {
     quotes = await client.fetch(groq`*[_type == "quote"] | order(_createdAt desc) {
       _id, text, author, emotionTags, cardColor, featured
     }`);
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-12">

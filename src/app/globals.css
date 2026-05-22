@@ -32,14 +32,14 @@
    DARK MODE — original balanced dark theme
    ============================================ */
 .dark {
-  --color-bg: #12100E;
-  --color-card: #1D1915;
-  --color-text: #F4EDE4;
-  --color-soft: #B8AAA0;
+  --color-bg: #161514;
+  --color-card: #1F1D1C;
+  --color-text: #EBE5DF;
+  --color-soft: #A39E99;
   --color-accent: #C9A46A;
-  --color-muted: #6E5540;
-  --color-blue: #6F8583;
-  --color-border: #332A23;
+  --color-muted: #3D3936;
+  --color-blue: #7B8F8D;
+  --color-border: #2E2A27;
 }
 
 body {

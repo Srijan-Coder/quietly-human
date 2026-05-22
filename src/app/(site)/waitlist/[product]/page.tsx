@@ -43,7 +43,7 @@ export default function WaitlistPage({ params }: { params: { product: string } }
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <p className="font-serif text-xl text-brand-text">You're on the list.</p>
+              <p className="font-serif text-xl text-brand-text">You&apos;re on the list.</p>
             </motion.div>
           ) : (
             <motion.form

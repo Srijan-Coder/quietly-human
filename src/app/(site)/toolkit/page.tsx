@@ -1,23 +1,38 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
+type Phase = "inhale" | "hold" | "exhale" | "rest";
+
+const phaseConfig: Record<Phase, { duration: number; next: Phase }> = { 
+  inhale: { duration: 4, next: "hold" }, 
+  hold: { duration: 7, next: "exhale" }, 
+  exhale: { duration: 8, next: "rest" }, 
+  rest: { duration: 2, next: "inhale" } 
+};
+
+const instructions: Record<Phase, string> = { 
+  inhale: "Breathe in", 
+  hold: "Hold", 
+  exhale: "Breathe out", 
+  rest: "Rest" 
+};
+
 // ─── Breathing Circle ──────────────────────────────────────────────────────
 function BreathingCircle() {
-  const [phase, setPhase] = useState<"inhale" | "hold" | "exhale" | "rest">("inhale");
+  const [phase, setPhase] = useState<Phase>("inhale");
   const [active, setActive] = useState(false);
   const [seconds, setSeconds] = useState(4);
-  const phaseConfig = { inhale: { duration: 4, next: "hold" }, hold: { duration: 7, next: "exhale" }, exhale: { duration: 8, next: "rest" }, rest: { duration: 2, next: "inhale" } };
-  const instructions = { inhale: "Breathe in", hold: "Hold", exhale: "Breathe out", rest: "Rest" };
 
   useEffect(() => {
     if (!active) return;
     const cfg = phaseConfig[phase];
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSeconds(cfg.duration);
     const countdown = setInterval(() => setSeconds(s => s - 1), 1000);
-    const next = setTimeout(() => setPhase(phaseConfig[phase].next as any), cfg.duration * 1000);
+    const next = setTimeout(() => setPhase(phaseConfig[phase].next), cfg.duration * 1000);
     return () => { clearInterval(countdown); clearTimeout(next); };
   }, [phase, active]);
 
@@ -78,7 +93,7 @@ function SoftNoScript() {
           transition={{ duration: 0.5 }}
           className="font-serif text-xl md:text-2xl text-brand-text leading-relaxed italic max-w-lg"
         >
-          "{softNos[index]}"
+          &quot;{softNos[index]}&quot;
         </motion.p>
       </AnimatePresence>
       <div className="flex gap-4">
@@ -94,13 +109,15 @@ function SoftNoScript() {
 }
 
 // ─── Tiny Win Logger ───────────────────────────────────────────────────────
+type TinyWin = { text: string; date: string };
+
 function TinyWinLogger() {
-  const [wins, setWins] = useLocalStorage<string[]>("tiny-wins", []);
+  const [wins, setWins] = useLocalStorage<TinyWin[]>("tiny-wins", []);
   const [input, setInput] = useState("");
 
   const addWin = () => {
     if (!input.trim()) return;
-    setWins([{ text: input, date: new Date().toLocaleDateString() } as any, ...wins]);
+    setWins([{ text: input, date: new Date().toLocaleDateString() }, ...wins]);
     setInput("");
   };
 
@@ -120,7 +137,7 @@ function TinyWinLogger() {
       </div>
       <div className="flex flex-col gap-2 max-h-48 overflow-y-auto">
         <AnimatePresence>
-          {(wins as any[]).map((win: any, i: number) => (
+          {wins.map((win, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, x: -10 }}
@@ -128,7 +145,7 @@ function TinyWinLogger() {
               exit={{ opacity: 0, x: 10 }}
               className="flex justify-between items-start p-3 bg-brand-card rounded-lg border border-brand-border text-sm"
             >
-              <span className="text-brand-text">{win.text || win}</span>
+              <span className="text-brand-text">{win.text}</span>
               <span className="text-[10px] text-brand-soft shrink-0 ml-4">{win.date}</span>
             </motion.div>
           ))}

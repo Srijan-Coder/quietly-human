@@ -1,17 +1,37 @@
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import Link from "next/link";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
 import { notFound } from "next/navigation";
+
+export interface EmotionPageData {
+  headline: string;
+  subheadline?: string;
+  metaDescription?: string;
+  openingParagraph?: string;
+  featuredQuote?: string;
+  relatedGuides?: {
+    _id: string;
+    title: string;
+    slug: { current: string };
+    excerpt?: string;
+    mainImage?: unknown;
+  }[];
+  relatedBooks?: {
+    _id: string;
+    title: string;
+    slug: { current: string };
+    price?: number;
+    coverImage?: unknown;
+  }[];
+}
 
 export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: { emotion: string } }) {
-  let page: any = null;
+  let page: EmotionPageData | null = null;
   try {
     page = await client.fetch(groq`*[_type == "seoEmotionPage" && emotion == $emotion][0]{ headline, metaDescription }`, { emotion: params.emotion });
-  } catch (_) {}
+  } catch (error) { console.error(error); }
   
   if (!page) return { title: "Quietly Human" };
   return {
@@ -21,7 +41,7 @@ export async function generateMetadata({ params }: { params: { emotion: string }
 }
 
 export default async function SEOEmotionPage({ params }: { params: { emotion: string } }) {
-  let page: any = null;
+  let page: EmotionPageData | null = null;
   try {
     page = await client.fetch(
       groq`*[_type == "seoEmotionPage" && emotion == $emotion][0]{
@@ -31,7 +51,7 @@ export default async function SEOEmotionPage({ params }: { params: { emotion: st
       }`,
       { emotion: params.emotion }
     );
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   if (!page) {
     notFound();
@@ -49,15 +69,15 @@ export default async function SEOEmotionPage({ params }: { params: { emotion: st
 
         {page.featuredQuote && (
            <div className="my-20 p-12 bg-brand-card border border-brand-border rounded-3xl text-center">
-             <p className="font-serif text-2xl md:text-3xl text-brand-text italic leading-relaxed">"{page.featuredQuote}"</p>
+             <p className="font-serif text-2xl md:text-3xl text-brand-text italic leading-relaxed">&quot;{page.featuredQuote}&quot;</p>
            </div>
         )}
 
-        {page.relatedGuides?.length > 0 && (
+        {!!page.relatedGuides?.length && (
           <div className="mb-24">
             <h2 className="text-xs uppercase tracking-widest text-brand-accent mb-8 text-center">Words that might help</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {page.relatedGuides.map((guide: any) => (
+              {page.relatedGuides?.map((guide) => (
                  <Link key={guide._id} href={`/guides/${guide.slug?.current}`} className="group flex flex-col p-6 rounded-2xl border border-brand-border hover:border-brand-accent transition-colors bg-brand-bg">
                     <h3 className="font-serif text-xl text-brand-text group-hover:text-brand-accent mb-3">{guide.title}</h3>
                     <p className="text-brand-soft text-sm leading-relaxed line-clamp-3">{guide.excerpt}</p>

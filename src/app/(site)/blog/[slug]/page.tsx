@@ -1,5 +1,5 @@
 import { client } from "@/sanity/lib/client";
-import { postBySlugQuery, postsQuery } from "@/sanity/lib/queries";
+import { postBySlugQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
@@ -34,6 +34,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </h1>
         {post.mainImage && (
           <div className="relative aspect-video w-full overflow-hidden bg-brand-card border border-brand-border rounded-xl mb-12">
+            {/* eslint-disable-next-line @next/next/no-img-element */ }
             <img
               src={urlFor(post.mainImage)?.url()}
               alt={post.title}

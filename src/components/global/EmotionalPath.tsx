@@ -13,19 +13,19 @@ export function EmotionalPath() {
           href="/paths/behind"
           className="p-8 border border-brand-border rounded-2xl text-center hover:border-brand-accent hover:bg-brand-card transition-all duration-500 cursor-pointer group flex items-center justify-center min-h-[120px]"
         >
-          <span className="text-sm font-sans text-brand-text group-hover:text-brand-accent transition-colors">"I feel behind in life"</span>
+          <span className="text-sm font-sans text-brand-text group-hover:text-brand-accent transition-colors">&quot;I feel behind in life&quot;</span>
         </Link>
         <Link 
           href="/paths/overthinking"
           className="p-8 border border-brand-border rounded-2xl text-center hover:border-brand-accent hover:bg-brand-card transition-all duration-500 cursor-pointer group flex items-center justify-center min-h-[120px]"
         >
-          <span className="text-sm font-sans text-brand-text group-hover:text-brand-accent transition-colors">"I am overthinking everything"</span>
+          <span className="text-sm font-sans text-brand-text group-hover:text-brand-accent transition-colors">&quot;I am overthinking everything&quot;</span>
         </Link>
         <Link 
           href="/paths/tired"
           className="p-8 border border-brand-border rounded-2xl text-center hover:border-brand-accent hover:bg-brand-card transition-all duration-500 cursor-pointer group flex items-center justify-center min-h-[120px]"
         >
-          <span className="text-sm font-sans text-brand-text group-hover:text-brand-accent transition-colors">"I am just deeply tired"</span>
+          <span className="text-sm font-sans text-brand-text group-hover:text-brand-accent transition-colors">&quot;I am just deeply tired&quot;</span>
         </Link>
       </div>
     </section>

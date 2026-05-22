@@ -6,13 +6,24 @@ import Image from "next/image";
 export const revalidate = 60;
 export const metadata = { title: "Free Resources — Quietly Human" };
 
+export interface Resource {
+  _id: string;
+  title: string;
+  description?: string;
+  resourceType: string;
+  file?: { asset?: { url?: string } };
+  externalUrl?: string;
+  coverImage?: unknown;
+  requiresEmail?: boolean;
+}
+
 export default async function ResourcesPage() {
-  let resources: any[] = [];
+  let resources: Resource[] = [];
   try {
     resources = await client.fetch(groq`*[_type == "resource"] | order(order asc, _createdAt desc) {
       _id, title, description, resourceType, file { asset->{ url } }, externalUrl, coverImage, requiresEmail, featured
     }`);
-  } catch (_) {}
+  } catch (error) { console.error(error); }
 
   const typeColors: Record<string, string> = {
     PDF: "text-amber-600 dark:text-amber-400",
@@ -43,7 +54,7 @@ export default async function ResourcesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item: any) => {
+          {items.map((item: Resource) => {
             const downloadUrl = item.file?.asset?.url || item.externalUrl;
             return (
               <a
@@ -53,12 +64,11 @@ export default async function ResourcesPage() {
                 rel="noopener noreferrer"
                 className="group flex flex-col border border-brand-border rounded-2xl overflow-hidden hover:border-brand-accent transition-colors duration-300 bg-brand-card"
               >
-                {item.coverImage && (
+                {item.coverImage ? (
                   <div className="aspect-video relative overflow-hidden">
                     <Image src={urlFor(item.coverImage).width(600).height(338).url()} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   </div>
-                )}
-                {!item.coverImage && (
+                ) : (
                   <div className="aspect-video flex items-center justify-center bg-brand-bg border-b border-brand-border">
                     <span className={`text-4xl ${typeColors[item.resourceType] || "text-brand-accent"}`}>
                       {item.resourceType === "PDF" ? "📄" : item.resourceType === "Wallpaper" ? "🖼" : item.resourceType === "Audio" ? "🎵" : "✦"}

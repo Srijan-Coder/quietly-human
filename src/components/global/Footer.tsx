@@ -1,6 +1,7 @@
 "use client";
 
 import { useReadingMode } from "@/context/ReadingModeContext";
+import Link from "next/link";
 
 export default function Footer() {
   const { isReadingMode } = useReadingMode();
@@ -18,20 +19,20 @@ export default function Footer() {
 
         <div className="flex flex-col gap-4">
           <span className="text-xs tracking-widest uppercase opacity-40">Ecosystem</span>
-          <a href="/guides" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Pillar Guides</a>
-          <a href="/books" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Books & Journals</a>
-          <a href="/products" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Digital Dashboard</a>
-          <a href="/blog" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Thoughts</a>
-          <a href="/letters" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Midnight Letters</a>
+          <Link href="/guides" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Pillar Guides</Link>
+          <Link href="/books" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Books & Journals</Link>
+          <Link href="/products" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Digital Dashboard</Link>
+          <Link href="/blog" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Thoughts</Link>
+          <Link href="/letters" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Midnight Letters</Link>
         </div>
 
         <div className="flex flex-col gap-4">
           <span className="text-xs tracking-widest uppercase opacity-40">Connect</span>
-          <a href="/breathe" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Breathe Room</a>
-          <a href="/reset" className="text-sm opacity-80 hover:text-brand-accent transition-colors">7-Day Reset</a>
-          <a href="/quotes" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Words</a>
-          <a href="/about" className="text-sm opacity-80 hover:text-brand-accent transition-colors">About Srijan</a>
-          <a href="/contact" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Contact</a>
+          <Link href="/breathe" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Breathe Room</Link>
+          <Link href="/reset" className="text-sm opacity-80 hover:text-brand-accent transition-colors">7-Day Reset</Link>
+          <Link href="/quotes" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Words</Link>
+          <Link href="/about" className="text-sm opacity-80 hover:text-brand-accent transition-colors">About Srijan</Link>
+          <Link href="/contact" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Contact</Link>
         </div>
 
         <div className="flex flex-col gap-4 col-span-1 md:col-span-1">
@@ -54,8 +55,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-brand-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs opacity-40 uppercase tracking-widest">
         <span>© 2026 Quietly Human Studio</span>
         <div className="flex gap-6">
-          <a href="/privacy" className="hover:text-brand-accent transition-colors">Privacy</a>
-          <a href="/terms" className="hover:text-brand-accent transition-colors">Terms</a>
+          <Link href="/privacy" className="hover:text-brand-accent transition-colors">Privacy</Link>
+          <Link href="/terms" className="hover:text-brand-accent transition-colors">Terms</Link>
         </div>
       </div>
       

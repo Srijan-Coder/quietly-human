@@ -1,4 +1,4 @@
-import { defineField, defineType, defineArrayMember } from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export const guideType = defineType({
   name: 'guide',

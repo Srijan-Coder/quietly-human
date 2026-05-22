@@ -4,6 +4,13 @@ import Link from "next/link";
 
 export const revalidate = 60;
 
+export interface Letter {
+  _id: string;
+  title: string;
+  slug?: string;
+  publishedAt: string;
+}
+
 export default async function LettersIndex() {
   let letters = [];
   try {
@@ -24,7 +31,7 @@ export default async function LettersIndex() {
       </div>
 
       <div className="flex flex-col gap-12">
-        {letters.filter((letter: any) => letter.slug).map((letter: any) => (
+        {letters.filter((letter: Letter) => letter.slug).map((letter: Letter) => (
           <Link 
             href={`/letters/${letter.slug}`} 
             key={letter._id} 

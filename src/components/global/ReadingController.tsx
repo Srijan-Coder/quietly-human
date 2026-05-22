@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import { useReadingMode } from "@/context/ReadingModeContext";
 import { motion, AnimatePresence } from "framer-motion";
