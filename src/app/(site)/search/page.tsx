@@ -1,4 +1,5 @@
 import { StandaloneSearchClient } from "@/components/global/StandaloneSearchClient";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Sanctuary Search - Quietly Humans",
@@ -8,7 +9,9 @@ export const metadata = {
 export default function SearchPage() {
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-4xl mx-auto w-full pb-24">
-      <StandaloneSearchClient />
+      <Suspense fallback={<p className="text-center text-brand-soft italic font-serif">Loading sanctuary...</p>}>
+        <StandaloneSearchClient />
+      </Suspense>
     </div>
   );
 }

@@ -3,10 +3,14 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { searchSanctuary, GlobalSearchResult } from "@/actions/search";
 
 export function StandaloneSearchClient() {
-  const [query, setQuery] = useState("");
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q") || "";
+  
+  const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
