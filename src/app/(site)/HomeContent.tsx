@@ -99,13 +99,13 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
               href="/reset"
               className="px-8 py-4 bg-brand-text text-brand-bg rounded-full text-xs tracking-widest uppercase hover:bg-brand-accent hover:text-white transition-all duration-500 hover:scale-105"
             >
-              Start Softly
+              Start Softly 🌿
             </Link>
             <Link
               href="/search"
               className="px-8 py-4 border border-brand-border text-brand-text rounded-full text-xs tracking-widest uppercase hover:border-brand-accent hover:text-brand-accent transition-all duration-500"
             >
-              How are you feeling?
+              How are you feeling? ☁️
             </Link>
           </motion.div>
         </div>
@@ -183,7 +183,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
 
           <div className="flex-1 flex flex-col items-start text-left">
             <span className="text-xs tracking-widest uppercase text-brand-accent mb-4 block">Free Download</span>
-            <h2 className="font-serif text-4xl md:text-5xl text-brand-text mb-6">7-Day Emotional Reset</h2>
+            <h2 className="font-serif text-4xl md:text-5xl text-brand-text mb-6">7-Day Emotional Reset 🕯️</h2>
             <p className="text-brand-soft leading-relaxed mb-8">
               A gentle week-long journey to help you release the pressure of having everything figured out. Daily soft prompts, phone wallpapers, and a quiet audio meditation.
             </p>
@@ -191,7 +191,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
               href="/reset"
               className="border-b border-brand-text text-brand-text pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors uppercase tracking-widest text-sm"
             >
-              Get the free reset
+              Get the free reset 💌
             </Link>
           </div>
         </motion.div>
@@ -208,7 +208,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
             variants={fadeUp}
             className="text-center mb-20"
           >
-            <h2 className="font-serif text-4xl md:text-5xl text-brand-text mb-4">Paper & Words</h2>
+            <h2 className="font-serif text-4xl md:text-5xl text-brand-text mb-4">Paper & Words 📖</h2>
             <p className="text-brand-soft">Tangible comfort for long nights.</p>
           </motion.div>
 
@@ -290,7 +290,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
         >
           <div className="flex-1">
             <span className="text-xs uppercase tracking-widest text-brand-accent mb-4 block">Your Sanctuary</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4">My Quiet Collection</h2>
+            <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4">My Quiet Collection ☕</h2>
             <p className="text-brand-soft leading-relaxed">
               Save articles, letters, and books that resonate with you. Kept locally on your device, just for you.
             </p>
@@ -336,7 +336,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
             href="/breathe"
             className="mt-12 inline-block text-xs uppercase tracking-widest text-brand-soft hover:text-brand-accent transition-colors border-b border-brand-border hover:border-brand-accent pb-1"
           >
-            Enter the Breathe Room
+            Enter the Breathe Room 🕊️
           </Link>
         </motion.div>
       </section>
