@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/studio/'], // Prevent indexing the private Sanity CMS
     },
-    sitemap: 'https://quietlyhumans.space/sitemap.xml',
+    sitemap: 'https://www.quietlyhumans.space/sitemap.xml',
   }
 }

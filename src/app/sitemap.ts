@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://quietlyhumans.space'
+  const baseUrl = 'https://www.quietlyhumans.space'
 
   return [
     {
