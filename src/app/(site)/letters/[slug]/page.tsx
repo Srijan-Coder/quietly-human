@@ -6,6 +6,8 @@ import Link from "next/link";
 import { SaveButton } from "@/components/global/SaveButton";
 import { ReadingController } from "@/components/global/ReadingController";
 import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
+import { LetterPaperBox } from "@/components/global/LetterPaperBox";
+import { ClientCopyButton } from "@/components/global/ClientCopyButton";
 
 export const revalidate = 60;
 
@@ -59,16 +61,20 @@ export default async function LetterPage({ params }: { params: Promise<{ slug: s
 
         <ReadingTextWrapper>
           <div className="max-w-none pb-16">
-            {letter.body ? <CustomPortableText value={letter.body} /> : <p className="text-brand-soft">This letter is blank.</p>}
+            {letter.body ? (
+              <LetterPaperBox>
+                <CustomPortableText value={letter.body} />
+              </LetterPaperBox>
+            ) : (
+              <p className="text-brand-soft">This letter is blank.</p>
+            )}
           </div>
         </ReadingTextWrapper>
 
         <div className="mt-20 p-8 bg-brand-card border border-brand-border rounded-xl text-center">
           <p className="font-serif text-xl text-brand-text mb-4">Did this letter resonate?</p>
           <p className="text-brand-soft text-sm mb-6">Forward it to a friend who might need these words tonight.</p>
-          <button type="button" className="px-6 py-3 border border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent transition-colors duration-500 rounded-full text-xs tracking-widest uppercase">
-            Copy Link
-          </button>
+          <ClientCopyButton />
         </div>
       </article>
     </>
