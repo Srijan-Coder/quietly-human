@@ -54,7 +54,10 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-brand-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs opacity-40 uppercase tracking-widest">
         <span>© 2026 Quietly Humans Studio</span>
-        <div className="flex gap-6">
+        <div className="flex gap-4 md:gap-6 flex-wrap justify-center md:justify-end">
+          <a href="https://pinterest.com/quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors">Pinterest</a>
+          <a href="https://instagram.com/quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors">Instagram</a>
+          <a href="https://www.youtube.com/@quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors">YouTube</a>
           <Link href="/privacy" className="hover:text-brand-accent transition-colors">Privacy</Link>
           <Link href="/terms" className="hover:text-brand-accent transition-colors">Terms</Link>
         </div>
