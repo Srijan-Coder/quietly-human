@@ -1,6 +1,7 @@
 "use client";
 
-import { useLocalStorage, SavedItem } from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { SavedItem } from "@/components/global/SaveButton";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
