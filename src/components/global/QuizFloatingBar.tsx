@@ -43,12 +43,8 @@ export default function QuizFloatingBar() {
           className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100]"
         >
           <div className="relative group">
-            <Link href="/quiz" className="flex items-center gap-4 bg-brand-text text-brand-bg px-6 py-4 rounded-full shadow-2xl hover:bg-brand-accent transition-colors duration-500 border border-transparent hover:border-brand-bg/20">
-              <span className="text-xl animate-pulse">🤍</span>
-              <div className="flex flex-col">
-                <span className="font-serif text-sm md:text-base">What Is Your Heart Carrying?</span>
-                <span className="text-[10px] uppercase tracking-widest opacity-80">Take the free assessment</span>
-              </div>
+            <Link href="/quiz" className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-brand-text text-brand-bg rounded-full shadow-2xl hover:bg-brand-accent transition-all duration-700 hover:scale-110">
+              <span className="text-xl md:text-2xl animate-[pulse_4s_ease-in-out_infinite]">🤍</span>
             </Link>
             <button 
               onClick={handleDismiss}
@@ -57,6 +53,11 @@ export default function QuizFloatingBar() {
             >
               ×
             </button>
+            
+            {/* Tooltip on hover */}
+            <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 px-4 py-2 bg-brand-card border border-brand-border rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none w-max max-w-[200px]">
+              <p className="text-xs font-serif text-brand-text">What is your heart carrying?</p>
+            </div>
           </div>
         </motion.div>
       )}
