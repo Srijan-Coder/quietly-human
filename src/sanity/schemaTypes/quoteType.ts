@@ -9,7 +9,8 @@ export const quoteType = defineType({
     defineField({ name: 'author', title: 'Author (leave blank for your own)', type: 'string' }),
     defineField({
       name: 'emotionTags', title: 'Emotional Tags', type: 'array', of: [{ type: 'string' }],
-      description: 'e.g. tired, overthinking, behind, lonely'
+      description: 'e.g. tired, overthinking, behind, lonely',
+      options: { layout: 'tags' }
     }),
     defineField({
       name: 'cardColor', title: 'Card Background', type: 'string',

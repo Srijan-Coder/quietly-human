@@ -33,6 +33,7 @@ export const guideType = defineType({
       type: 'array',
       description: 'Used for the Emotional Search Engine (e.g., "exhausted", "burnout", "lonely")',
       of: [{ type: 'string' }],
+      options: { layout: 'tags' }
     }),
     defineField({
       name: 'content',

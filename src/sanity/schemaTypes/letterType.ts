@@ -27,6 +27,7 @@ export const letterType = defineType({
       type: 'array',
       description: 'Used for the Emotional Search Engine (e.g., "overthinking", "anxious", "behind")',
       of: [{ type: 'string' }],
+      options: { layout: 'tags' }
     }),
     defineField({
       name: 'body',

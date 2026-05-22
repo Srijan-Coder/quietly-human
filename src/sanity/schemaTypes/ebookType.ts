@@ -34,6 +34,7 @@ export const ebookType = defineType({
       type: 'array',
       description: 'Used for the Emotional Search Engine',
       of: [{ type: 'string' }],
+      options: { layout: 'tags' }
     }),
     defineField({
       name: 'ebookFile',
