@@ -5,6 +5,7 @@ import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import Image from "next/image";
+import { CustomPortableText } from "@/components/global/CustomPortableText";
 
 export const revalidate = 60;
 
@@ -98,10 +99,17 @@ export default async function EbookPage({ params }: { params: Promise<{ slug: st
         <section className="w-full max-w-2xl mt-16 border-t border-brand-border pt-16">
           <h2 className="font-serif text-3xl text-brand-text mb-8 text-center">Chapters</h2>
           <ul className="space-y-4">
-            {book.chapters.map((chapter: string, i: number) => (
-              <li key={i} className="flex gap-4 text-brand-soft items-start">
-                <span className="text-xs uppercase tracking-widest mt-1 opacity-50 w-8">{String(i + 1).padStart(2, '0')}</span>
-                <span className="text-lg leading-relaxed">{chapter}</span>
+            {book.chapters.map((chapter: any, i: number) => (
+              <li key={i} className="flex flex-col gap-2 text-brand-soft items-start mb-8">
+                <div className="flex gap-4 items-center">
+                  <span className="text-xs uppercase tracking-widest opacity-50 w-8">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="font-serif text-2xl text-brand-text">{chapter.chapterTitle}</span>
+                </div>
+                {chapter.content && (
+                  <div className="pl-12 max-w-none text-brand-soft prose-p:leading-relaxed">
+                    <CustomPortableText value={chapter.content} />
+                  </div>
+                )}
               </li>
             ))}
           </ul>
