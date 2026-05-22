@@ -135,7 +135,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "-100%" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 bg-brand-bg px-6 pt-32 pb-12 overflow-y-auto flex flex-col md:justify-center"
+            className="fixed inset-0 z-40 bg-brand-bg px-6 pt-32 pb-32 md:pt-40 md:pb-24 overflow-y-auto flex flex-col"
           >
             <div className="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-8">
               {menuCategories.map((category, i) => (
