@@ -2,7 +2,7 @@
 
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
-import AmbientParticles from "@/components/3d/AmbientParticles";
+import AmbientBackground from "@/components/global/AmbientBackground";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
 import { AudioPlayer } from "@/components/global/AudioPlayer";
 import { TestimonialCarousel } from "@/components/global/TestimonialCarousel";
@@ -31,11 +31,10 @@ export default async function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center overflow-hidden">
-
-      {/* ─── 1. HERO ────────────────────────────── */}
+    <div className="relative overflow-hidden w-full bg-brand-bg">
+      <AmbientBackground />
+      {/* ─── 1. HERO SECTION ──────────────────────── */}
       <section className="relative w-full min-h-screen flex flex-col justify-center items-center pt-20 px-6 text-center overflow-hidden">
-        <AmbientParticles />
 
         {/* Radial glow behind headline */}
         <div

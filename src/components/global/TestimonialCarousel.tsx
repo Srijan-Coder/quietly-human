@@ -3,18 +3,20 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
-export function TestimonialCarousel({ testimonials }: { testimonials: any[] }) {
+export function TestimonialCarousel({ testimonials = [] }: { testimonials: any[] }) {
   const [index, setIndex] = useState(0);
 
+  const safeTestimonials = Array.isArray(testimonials) ? testimonials : [];
+
   useEffect(() => {
-    if (testimonials.length <= 1) return;
+    if (safeTestimonials.length <= 1) return;
     const interval = setInterval(() => {
-      setIndex((i) => (i + 1) % testimonials.length);
+      setIndex((i) => (i + 1) % safeTestimonials.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [testimonials.length]);
+  }, [safeTestimonials.length]);
 
-  if (!testimonials || testimonials.length === 0) return null;
+  if (safeTestimonials.length === 0) return null;
 
   return (
     <div className="relative w-full max-w-4xl mx-auto overflow-hidden px-4 md:px-12 py-16">
