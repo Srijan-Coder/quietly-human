@@ -23,6 +23,7 @@ const menuCategories = [
       { name: "7-Day Reset", path: "/reset" },
       { name: "Quiet Words", path: "/quotes" },
       { name: "Soft Toolkit", path: "/toolkit" },
+      { name: "When it feels heavy...", path: "/heavy" },
     ]
   },
   {

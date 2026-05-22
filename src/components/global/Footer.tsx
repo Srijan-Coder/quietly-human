@@ -30,7 +30,6 @@ export default function Footer() {
           <span className="text-xs tracking-widest uppercase opacity-40">Connect</span>
           <Link href="/breathe" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Breathe Room</Link>
           <Link href="/reset" className="text-sm opacity-80 hover:text-brand-accent transition-colors">7-Day Reset</Link>
-          <Link href="/heavy" className="text-sm opacity-80 hover:text-brand-accent transition-colors italic">When things feel heavy</Link>
           <Link href="/quotes" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Words</Link>
           <Link href="/about" className="text-sm opacity-80 hover:text-brand-accent transition-colors">About Srijan</Link>
           <Link href="/contact" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Contact</Link>
@@ -64,8 +63,13 @@ export default function Footer() {
         </div>
       </div>
       
-      <div className="text-center mt-16 opacity-30 hover:opacity-100 transition-opacity duration-1000 text-[10px] tracking-[0.2em] uppercase cursor-default">
-        Take a deep breath before you close this tab.
+      <div className="text-center mt-16 opacity-30 hover:opacity-100 transition-opacity duration-1000 flex flex-col items-center gap-6">
+        <span className="text-[10px] tracking-[0.2em] uppercase cursor-default">
+          Take a deep breath before you close this tab.
+        </span>
+        <Link href="/heavy" className="font-serif text-sm italic hover:text-brand-accent transition-colors opacity-70">
+          When things feel heavy...
+        </Link>
       </div>
     </footer>
   );
