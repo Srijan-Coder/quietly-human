@@ -31,15 +31,16 @@ export default function CustomCursor() {
 
       // Dot — instant
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+        dotRef.current.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px) rotate(45deg)`;
       }
 
       // Ring
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+        const rotation = (Date.now() / 20) % 360;
+        ringRef.current.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px) rotate(${rotation}deg)`;
         ringRef.current.style.borderColor = isHovering
           ? "var(--color-accent)"
-          : "var(--color-border)";
+          : "var(--color-accent)";
         ringRef.current.style.scale = isHovering ? "1.6" : "1";
       }
 
@@ -51,7 +52,7 @@ export default function CustomCursor() {
 
         trailRefs.current.forEach((el, i) => {
           if (!el) return;
-          el.style.transform = `translate(${trailX[i] - 3}px, ${trailY[i] - 3}px)`;
+          el.style.transform = `translate(${trailX[i] - 3}px, ${trailY[i] - 3}px) rotate(45deg)`;
           el.style.opacity = String((1 - i / TRAIL_COUNT) * 0.35);
           el.style.scale = String(1 - i * 0.12);
         });
@@ -88,43 +89,47 @@ export default function CustomCursor() {
 
   return (
     <div className="hidden md:block pointer-events-none select-none">
-      {/* Dot */}
+      {/* Dot - Diamond shape */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 z-[101] pointer-events-none rounded-full"
+        className="fixed top-0 left-0 z-[101] pointer-events-none"
         style={{
           width: 8,
           height: 8,
           backgroundColor: "var(--color-text)",
+          rotate: "45deg",
+          boxShadow: "0 0 10px 2px var(--color-text)",
           willChange: "transform",
-          transition: "background-color 0.2s",
+          transition: "background-color 0.2s, scale 0.2s",
         }}
       />
 
-      {/* Ring */}
+      {/* Ring - Rotating Dashed */}
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 z-[100] pointer-events-none rounded-full border"
+        className="fixed top-0 left-0 z-[100] pointer-events-none rounded-full border border-dashed"
         style={{
           width: 40,
           height: 40,
-          borderColor: "var(--color-border)",
-          borderStyle: "solid",
+          borderColor: "var(--color-accent)",
           willChange: "transform",
           transition: "border-color 0.3s, scale 0.25s ease",
+          opacity: 0.6,
         }}
       />
 
-      {/* Trail */}
+      {/* Trail - Glowing diamonds */}
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
           ref={(el) => { trailRefs.current[i] = el; }}
-          className="fixed top-0 left-0 z-[99] pointer-events-none rounded-full"
+          className="fixed top-0 left-0 z-[99] pointer-events-none"
           style={{
             width: 6,
             height: 6,
             backgroundColor: "var(--color-accent)",
+            rotate: "45deg",
+            boxShadow: "0 0 8px 1px var(--color-accent)",
             willChange: "transform, opacity",
           }}
         />
