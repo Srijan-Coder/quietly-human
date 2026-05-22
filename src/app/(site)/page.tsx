@@ -1,18 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import AmbientParticles from "@/components/3d/AmbientParticles";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
 import { AudioPlayer } from "@/components/global/AudioPlayer";
 
 export default function Home() {
-  const fadeUp = {
+  const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.15 },
+      transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: i * 0.15 },
     }),
   };
 
