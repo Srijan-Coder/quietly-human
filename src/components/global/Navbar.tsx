@@ -70,11 +70,11 @@ export default function Navbar() {
           borderBottom: isOpen ? "none" : "1px solid var(--color-border)",
         }}
       >
-        <Link href="/" className="font-serif text-2xl tracking-wide font-light z-50 relative hover:text-brand-accent transition-colors">
+        <Link href="/" onClick={() => setIsOpen(false)} className="font-serif text-2xl tracking-wide font-light z-50 relative hover:text-brand-accent transition-colors shrink-0">
           Quietly Human
         </Link>
 
-        <div className="flex items-center gap-8 z-50 relative">
+        <div className="flex items-center gap-6 md:gap-8 z-50 relative shrink-0">
           <nav className="hidden lg:flex gap-8 items-center">
             {mainNavLinks.map((link) => (
               <Link
@@ -93,7 +93,7 @@ export default function Navbar() {
 
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="text-sm uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity w-12 text-right"
+            className="text-sm uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity text-right shrink-0 min-w-[60px]"
           >
             {isOpen ? "Close" : "Menu"}
           </button>

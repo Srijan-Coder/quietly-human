@@ -51,7 +51,7 @@ function GlowOrbs() {
 }
 
 // Fine dust particles
-function DustParticles({ count = 600 }) {
+function DustParticles({ count = 150 }) {
   const mesh = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
@@ -81,7 +81,7 @@ function DustParticles({ count = 600 }) {
 
   return (
     <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[0.04, 6, 6]} />
+      <sphereGeometry args={[0.04, 4, 4]} />
       <meshBasicMaterial color="#C9956A" transparent opacity={0.25} />
     </instancedMesh>
   );
@@ -143,8 +143,7 @@ export default function AmbientParticles() {
         <pointLight position={[10, 10, 10]} intensity={0.3} color="#C9956A" />
         <pointLight position={[-10, -10, 5]} intensity={0.2} color="#8EA8A6" />
         <GlowOrbs />
-        <DustParticles count={500} />
-        <WebLines />
+        <DustParticles count={150} />
       </Canvas>
     </div>
   );

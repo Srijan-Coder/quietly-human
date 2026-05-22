@@ -29,17 +29,17 @@
 }
 
 /* ============================================
-   DARK MODE — deep espresso
+   DARK MODE — original balanced dark theme
    ============================================ */
 .dark {
-  --color-bg: #0F0D0B;
-  --color-card: #181411;
-  --color-text: #F0E8DC;
-  --color-soft: #A89888;
-  --color-accent: #C9956A;
-  --color-muted: #5A4030;
-  --color-blue: #607A78;
-  --color-border: #2A2018;
+  --color-bg: #12100E;
+  --color-card: #1D1915;
+  --color-text: #F4EDE4;
+  --color-soft: #B8AAA0;
+  --color-accent: #C9A46A;
+  --color-muted: #6E5540;
+  --color-blue: #6F8583;
+  --color-border: #332A23;
 }
 
 body {
