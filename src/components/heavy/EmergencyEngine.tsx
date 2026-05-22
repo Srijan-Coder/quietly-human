@@ -95,9 +95,19 @@ export default function EmergencyEngine() {
               </motion.p>
             </div>
 
-            <button onClick={() => setView("initial")} className="mt-24 text-xs tracking-widest uppercase text-white/30 hover:text-white/70 transition-colors">
-              Go Back
-            </button>
+            <div className="mt-24 flex flex-col items-center gap-8">
+              <a 
+                href="https://findahelpline.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs tracking-widest uppercase text-white/50 border-b border-white/20 pb-1 hover:text-white hover:border-white/50 transition-colors"
+              >
+                Find international crisis support
+              </a>
+              <button onClick={() => setView("initial")} className="text-[10px] tracking-widest uppercase text-white/30 hover:text-white/70 transition-colors">
+                Go Back
+              </button>
+            </div>
           </motion.div>
         );
 
