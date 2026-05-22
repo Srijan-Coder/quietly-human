@@ -11,9 +11,9 @@ export default function CustomCursor() {
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  const dotSpringConfig = { damping: 20, stiffness: 2000, mass: 0.01 };
-  const dotX = useSpring(mouseX, dotSpringConfig);
-  const dotY = useSpring(mouseY, dotSpringConfig);
+  // Inner dot tracks exactly with zero lag
+  const dotX = mouseX;
+  const dotY = mouseY;
 
   const [isHovering, setIsHovering] = useState(false);
 

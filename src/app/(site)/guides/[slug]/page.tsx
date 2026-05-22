@@ -8,6 +8,7 @@ import { Metadata } from "next";
 
 import { ReadingController } from "@/components/global/ReadingController";
 import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
+import SocialConnectCTA from "@/components/global/SocialConnectCTA";
 import Image from "next/image";
 
 export const revalidate = 60;
@@ -117,6 +118,8 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             Start the 7-Day Reset
           </Link>
         </div>
+
+        <SocialConnectCTA />
       </article>
     </>
   );

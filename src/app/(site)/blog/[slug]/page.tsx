@@ -2,6 +2,7 @@ import { client } from "@/sanity/lib/client";
 import { postBySlugQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { CustomPortableText } from "@/components/global/CustomPortableText";
+import SocialConnectCTA from "@/components/global/SocialConnectCTA";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
@@ -92,6 +93,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <div className="max-w-none">
         {post.body ? <CustomPortableText value={post.body} /> : <p className="text-brand-soft">The thoughts are empty.</p>}
       </div>
+
+      <SocialConnectCTA />
     </article>
   );
 }
