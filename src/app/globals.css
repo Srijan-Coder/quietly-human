@@ -53,6 +53,11 @@ a, button, [role="button"] {
   cursor: none;
 }
 
+/* Show native cursor inside the CMS Studio */
+.studio-container, .studio-container * {
+  cursor: auto !important;
+}
+
 /* ============================================
    Film Grain Overlay
    ============================================ */

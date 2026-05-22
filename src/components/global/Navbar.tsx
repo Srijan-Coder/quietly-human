@@ -10,6 +10,7 @@ import { useReadingMode } from "@/context/ReadingModeContext";
 const mainNavLinks = [
   { name: "Guides", path: "/guides" },
   { name: "Letters", path: "/letters" },
+  { name: "Blog", path: "/blog" },
   { name: "Library", path: "/library" },
 ];
 
@@ -27,6 +28,7 @@ const menuCategories = [
     title: "Explore",
     links: [
       { name: "Emotional Search", path: "/search" },
+      { name: "Quiet Thoughts (Blog)", path: "/blog" },
       { name: "My Collection", path: "/collection" },
       { name: "Journey Paths", path: "/paths/behind" },
       { name: "Free Resources", path: "/resources" },
