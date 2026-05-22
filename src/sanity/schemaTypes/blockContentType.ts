@@ -62,6 +62,7 @@ export const blockContentType = defineType({
       name: 'actionButton',
       title: 'Action Button',
       type: 'object',
+      icon: ImageIcon, // Reusing ImageIcon as a placeholder icon since it's already imported
       fields: [
         { name: 'buttonText', type: 'string', title: 'Button Text' },
         { name: 'url', type: 'url', title: 'Button URL' },
