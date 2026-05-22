@@ -5,8 +5,16 @@ import Link from "next/link";
 import AmbientParticles from "@/components/3d/AmbientParticles";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
 import { AudioPlayer } from "@/components/global/AudioPlayer";
+import { TestimonialCarousel } from "@/components/global/TestimonialCarousel";
+import { client } from "@/sanity/lib/client";
+import { groq } from "next-sanity";
 
-export default function Home() {
+export default async function Home() {
+  let testimonials: any[] = [];
+  try {
+    testimonials = await client.fetch(groq`*[_type == "testimonial" && featured == true] | order(order asc, _createdAt desc)`);
+  } catch (_) {}
+
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -276,6 +284,21 @@ export default function Home() {
           </Link>
         </motion.div>
       </section>
+
+      {/* ─── 6.5 TESTIMONIALS ───────────────────── */}
+      {testimonials.length > 0 && (
+        <section className="w-full py-32 bg-brand-bg relative overflow-hidden">
+           <div className="text-center mb-12">
+             <span className="text-xs uppercase tracking-widest text-brand-accent block">Community</span>
+           </div>
+           <TestimonialCarousel testimonials={testimonials} />
+           <div className="text-center mt-8">
+              <Link href="/testimonials" className="text-[10px] uppercase tracking-widest text-brand-soft hover:text-brand-accent transition-colors">
+                Read more notes
+              </Link>
+           </div>
+        </section>
+      )}
 
       {/* ─── 7. CLOSING QUOTE ───────────────────── */}
       <section className="w-full py-40 px-6 flex items-center justify-center min-h-[60vh]">

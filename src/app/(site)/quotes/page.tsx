@@ -1,30 +1,29 @@
-export default function QuoteGallery() {
-  const quotes = [
-    "You do not need to become someone else to belong here.",
-    "Rest is not a reward for the work. It is the foundation of it.",
-    "Be gentle with the version of you that is still learning.",
-    "A soft life requires hard boundaries.",
-    "You are allowed to take up space simply by existing.",
-    "Overthinking is just your brain trying to protect you from things that haven't happened yet."
-  ];
+import { client } from "@/sanity/lib/client";
+import { groq } from "next-sanity";
+import { QuoteWall } from "@/components/global/QuoteWall";
+
+export const revalidate = 60;
+export const metadata = { title: "Quiet Words — Quote Wall" };
+
+export default async function QuotesPage() {
+  let quotes: any[] = [];
+  try {
+    quotes = await client.fetch(groq`*[_type == "quote"] | order(_createdAt desc) {
+      _id, text, author, emotionTags, cardColor, featured
+    }`);
+  } catch (_) {}
 
   return (
-    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-24">
-      <div className="mb-24 text-center">
-        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-4">Quiet Words</h1>
-        <p className="opacity-60 text-lg max-w-xl mx-auto text-balance">
-          Save these to your camera roll for when the loud thoughts return.
-        </p>
-      </div>
-
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-        {quotes.map((quote, idx) => (
-          <div key={idx} className="break-inside-avoid bg-brand-card border border-brand-border shadow-lg p-12 flex items-center justify-center aspect-square transition-transform duration-700 hover:scale-[1.02]">
-            <p className="font-serif text-2xl md:text-3xl text-center text-balance leading-snug">
-              "{quote}"
-            </p>
-          </div>
-        ))}
+    <div className="min-h-screen pt-32 pb-24 px-6 md:px-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-20">
+          <span className="text-xs uppercase tracking-widest text-brand-accent mb-4 block">Quiet Words</span>
+          <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-6">The Quote Wall</h1>
+          <p className="text-brand-soft max-w-xl mx-auto leading-relaxed">
+            Words for the moments when you need to remember you are not alone.
+          </p>
+        </div>
+        <QuoteWall quotes={quotes} />
       </div>
     </div>
   );

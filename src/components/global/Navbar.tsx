@@ -20,15 +20,7 @@ const menuCategories = [
       { name: "The Breathe Room", path: "/breathe" },
       { name: "7-Day Reset", path: "/reset" },
       { name: "Quiet Words", path: "/quotes" },
-    ]
-  },
-  {
-    title: "Read",
-    links: [
-      { name: "Books & Journals", path: "/books" },
-      { name: "Pillar Guides", path: "/guides" },
-      { name: "Midnight Letters", path: "/letters" },
-      { name: "Quiet Thoughts", path: "/blog" },
+      { name: "Soft Toolkit", path: "/toolkit" },
     ]
   },
   {
@@ -36,17 +28,25 @@ const menuCategories = [
     links: [
       { name: "Emotional Search", path: "/search" },
       { name: "My Collection", path: "/collection" },
-      { name: "Digital Products", path: "/products" },
-      { name: "The Library", path: "/library" },
       { name: "Journey Paths", path: "/paths/behind" },
+      { name: "Free Resources", path: "/resources" },
+    ]
+  },
+  {
+    title: "Library",
+    links: [
+      { name: "Pillar Guides", path: "/guides" },
+      { name: "Midnight Letters", path: "/letters" },
+      { name: "Books & Journals", path: "/library" },
+      { name: "The Ecosystem", path: "/ecosystem" },
     ]
   },
   {
     title: "Connect",
     links: [
+      { name: "Reader Notes", path: "/testimonials" },
+      { name: "Link-in-Bio", path: "/links" },
       { name: "About Srijan", path: "/about" },
-      { name: "Say Hello", path: "/contact" },
-      { name: "Social Links", path: "/links" },
     ]
   }
 ];

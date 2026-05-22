@@ -20,6 +20,8 @@ import SmoothScrolling from "@/components/global/SmoothScrolling";
 import { ThemeProvider } from "@/components/global/ThemeProvider";
 import { AudioPlayer } from "@/components/global/AudioPlayer";
 import { ReadingModeProvider } from "@/context/ReadingModeContext";
+import { AnnouncementBar } from "@/components/global/AnnouncementBar";
+import { client } from "@/sanity/lib/client";
 
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -67,11 +69,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let announcement = null;
+  try {
+    announcement = await client.fetch(`*[_type == "announcement"][0]`, {}, { next: { revalidate: 60 } });
+  } catch (_) {}
+
   return (
     <html
       lang="en"
@@ -86,8 +93,16 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <ReadingModeProvider>
-            <AudioPlayer />
-            {children}
+            <AnnouncementBar data={announcement} />
+            <Navbar />
+            <CustomCursor />
+            <SmoothScrolling>
+              <main className="flex-1">
+                <AudioPlayer />
+                {children}
+              </main>
+              <Footer />
+            </SmoothScrolling>
           </ReadingModeProvider>
           <Analytics />
           <SpeedInsights />
