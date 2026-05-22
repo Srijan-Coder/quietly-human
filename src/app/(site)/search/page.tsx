@@ -1,22 +1,14 @@
-import { client } from "@/sanity/lib/client";
-import { groq } from "next-sanity";
-import { EmotionalSearchClient } from "@/components/global/EmotionalSearchClient";
+import { StandaloneSearchClient } from "@/components/global/StandaloneSearchClient";
 
-export const revalidate = 60;
+export const metadata = {
+  title: "Sanctuary Search - Quietly Humans",
+  description: "Search for a feeling, word, or topic.",
+};
 
-export default async function SearchPage() {
-  // Fetch everything to power the fuzzy emotional search
-  const query = groq`{
-    "guides": *[_type == "guide"] { _id, title, "slug": slug.current, emotionTags, subtitle },
-    "letters": *[_type == "letter"] { _id, title, "slug": slug.current, emotionTags, publishedAt },
-    "books": *[_type == "ebook"] { _id, title, "slug": slug.current, emotionTags, author }
-  }`;
-
-  const data = await client.fetch(query);
-
+export default function SearchPage() {
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-4xl mx-auto w-full pb-24">
-      <EmotionalSearchClient initialData={data} />
+      <StandaloneSearchClient />
     </div>
   );
 }

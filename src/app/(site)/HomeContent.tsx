@@ -256,18 +256,23 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
           variants={fadeUp}
           className="max-w-3xl mx-auto text-center"
         >
-          <span className="text-xs uppercase tracking-widest text-brand-accent mb-6 block">Search by Feeling</span>
+          <span className="text-xs uppercase tracking-widest text-brand-accent mb-6 block">Sanctuary Search</span>
           <h2 className="font-serif text-4xl md:text-5xl text-brand-text mb-6">
             What is weighing on you tonight?
           </h2>
           <p className="text-brand-soft mb-12 max-w-xl mx-auto leading-relaxed">
-            Type how you feel and we will find the exact words, guides, and resets you need right now.
+            Search how you feel and we will find the exact words, guides, and books you need right now.
           </p>
           <Link
             href="/search"
-            className="inline-block px-10 py-5 border border-brand-border text-brand-text rounded-full text-xs tracking-widest uppercase hover:border-brand-accent hover:text-brand-accent hover:scale-105 transition-all duration-500"
+            className="w-full max-w-2xl mx-auto bg-brand-card border border-brand-border hover:border-brand-accent transition-colors rounded-full flex items-center px-8 py-6 cursor-pointer group shadow-sm"
           >
-            I feel...
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-brand-soft group-hover:text-brand-accent transition-colors">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <span className="ml-4 text-brand-soft/60 font-serif text-xl italic group-hover:text-brand-text transition-colors">
+              I feel...
+            </span>
           </Link>
         </motion.div>
       </section>
