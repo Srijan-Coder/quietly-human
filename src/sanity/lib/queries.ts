@@ -1,10 +1,19 @@
 import { groq } from "next-sanity";
 
+// --- Sitemap Queries ---
+export const allPostSlugsQuery = groq`*[_type == "post" && defined(slug.current)][].slug.current`;
+export const allGuideSlugsQuery = groq`*[_type == "guide" && defined(slug.current)][].slug.current`;
+export const allLetterSlugsQuery = groq`*[_type == "letter" && defined(slug.current)][].slug.current`;
+
+// --- Content Queries ---
 export const postsQuery = groq`*[_type == "post"] | order(_createdAt desc) {
   _id,
   title,
   "slug": slug.current,
-  mainImage,
+  mainImage {
+    ...,
+    "alt": alt
+  },
   body,
   "categories": categories[]->title
 }`;
@@ -13,8 +22,13 @@ export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][
   _id,
   title,
   "slug": slug.current,
-  mainImage,
-  body
+  mainImage {
+    ...,
+    "alt": alt
+  },
+  body,
+  publishedAt,
+  "authorName": author->name
 }`;
 
 export const productsQuery = groq`*[_type == "product"] | order(_createdAt desc) {
@@ -23,7 +37,10 @@ export const productsQuery = groq`*[_type == "product"] | order(_createdAt desc)
   "slug": slug.current,
   price,
   link,
-  coverImage
+  coverImage {
+    ...,
+    "alt": alt
+  }
 }`;
 
 export const productBySlugQuery = groq`*[_type == "product" && slug.current == $slug][0] {
@@ -32,7 +49,10 @@ export const productBySlugQuery = groq`*[_type == "product" && slug.current == $
   "slug": slug.current,
   price,
   link,
-  coverImage,
+  coverImage {
+    ...,
+    "alt": alt
+  },
   description,
   whatsIncluded,
   whoItsFor,
@@ -44,7 +64,10 @@ export const guidesQuery = groq`*[_type == "guide"] | order(_createdAt desc) {
   title,
   "slug": slug.current,
   subtitle,
-  coverImage
+  coverImage {
+    ...,
+    "alt": alt
+  }
 }`;
 
 export const guideBySlugQuery = groq`*[_type == "guide" && slug.current == $slug][0] {
@@ -52,8 +75,12 @@ export const guideBySlugQuery = groq`*[_type == "guide" && slug.current == $slug
   title,
   "slug": slug.current,
   subtitle,
-  coverImage,
-  content
+  coverImage {
+    ...,
+    "alt": alt
+  },
+  content,
+  _createdAt
 }`;
 
 export const lettersQuery = groq`*[_type == "letter"] | order(publishedAt desc) {
@@ -76,7 +103,10 @@ export const ebookBySlugQuery = groq`*[_type == "ebook" && slug.current == $slug
   title,
   "slug": slug.current,
   author,
-  coverImage,
+  coverImage {
+    ...,
+    "alt": alt
+  },
   "fileUrl": ebookFile.asset->url,
   notionUrl,
   chapters

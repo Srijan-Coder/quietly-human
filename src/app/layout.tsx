@@ -81,6 +81,20 @@ export default async function RootLayout({
       className={`${cormorant.variable} ${inter.variable} antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Quietly Humans Studio",
+              "url": "https://quietlyhumans.space",
+              "description": "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
+            })
+          }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col font-sans bg-brand-bg text-brand-text selection:bg-brand-accent/20 selection:text-brand-text transition-colors duration-1000">
         <ThemeProvider
           attribute="class"

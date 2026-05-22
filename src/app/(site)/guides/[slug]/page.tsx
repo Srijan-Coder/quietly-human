@@ -4,12 +4,41 @@ import { CustomPortableText } from "@/components/global/CustomPortableText";
 import { notFound } from "next/navigation";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
+import { Metadata } from "next";
 
 import { ReadingController } from "@/components/global/ReadingController";
 import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
 import Image from "next/image";
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const guide = await client.fetch(guideBySlugQuery, { slug: resolvedParams.slug });
+  if (!guide) return {};
+
+  const ogImage = guide.coverImage ? urlFor(guide.coverImage)?.width(1200).height(630).url() : undefined;
+
+  return {
+    title: guide.title,
+    description: guide.subtitle || "A deep dive guide on the Quietly Humans Studio.",
+    alternates: {
+      canonical: `https://www.quietlyhumans.space/guides/${guide.slug}`,
+    },
+    openGraph: {
+      title: guide.title,
+      description: guide.subtitle || "A deep dive guide on the Quietly Humans Studio.",
+      type: "article",
+      url: `https://www.quietlyhumans.space/guides/${guide.slug}`,
+      images: ogImage ? [{ url: ogImage, alt: guide.coverImage?.alt || guide.title }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: guide.title,
+      images: ogImage ? [ogImage] : undefined,
+    },
+  };
+}
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
@@ -24,8 +53,26 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": guide.title,
+    "description": guide.subtitle,
+    "image": guide.coverImage ? [urlFor(guide.coverImage)?.url()] : [],
+    "author": [{
+      "@type": "Organization",
+      "name": "Quietly Humans",
+      "url": "https://www.quietlyhumans.space"
+    }],
+    "datePublished": guide._createdAt,
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ReadingController />
       <article className="min-h-screen pt-32 px-6 md:px-12 max-w-4xl mx-auto w-full pb-32">
         <Link 
@@ -50,7 +97,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             <div className="relative aspect-[21/9] w-full overflow-hidden bg-brand-card border border-brand-border rounded-xl mb-16 shadow-lg">
               <Image
                 src={urlFor(guide.coverImage).width(1200).height(600).url()}
-                alt={guide.title}
+                alt={guide.coverImage?.alt || guide.title}
                 fill
                 className="object-cover w-full h-full opacity-90"
               />

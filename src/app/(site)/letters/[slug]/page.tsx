@@ -8,8 +8,34 @@ import { ReadingController } from "@/components/global/ReadingController";
 import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
 import { LetterPaperBox } from "@/components/global/LetterPaperBox";
 import { ClientCopyButton } from "@/components/global/ClientCopyButton";
+import { Metadata } from "next";
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const letter = await client.fetch(letterBySlugQuery, { slug: resolvedParams.slug });
+  if (!letter) return {};
+
+  return {
+    title: letter.title,
+    description: letter.excerpt || "Read this Midnight Letter on the Quietly Humans Studio.",
+    alternates: {
+      canonical: `https://www.quietlyhumans.space/letters/${letter.slug}`,
+    },
+    openGraph: {
+      title: letter.title,
+      description: letter.excerpt || "Read this Midnight Letter on the Quietly Humans Studio.",
+      type: "article",
+      publishedTime: letter.publishedAt,
+      url: `https://www.quietlyhumans.space/letters/${letter.slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: letter.title,
+    },
+  };
+}
 
 export default async function LetterPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
@@ -24,8 +50,25 @@ export default async function LetterPage({ params }: { params: Promise<{ slug: s
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": letter.title,
+    "description": letter.excerpt,
+    "author": [{
+      "@type": "Organization",
+      "name": "Quietly Humans",
+      "url": "https://www.quietlyhumans.space"
+    }],
+    "datePublished": letter.publishedAt,
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ReadingController />
       <article className="min-h-screen pt-32 px-6 md:px-12 max-w-3xl mx-auto w-full pb-32">
         <Link 
