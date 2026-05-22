@@ -1,15 +1,26 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+
+  const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  const dotSpringConfig = { damping: 40, stiffness: 1000, mass: 0.1 };
+  const dotX = useSpring(mouseX, dotSpringConfig);
+  const dotY = useSpring(mouseY, dotSpringConfig);
+
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -29,7 +40,7 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
   return (
     <div className="hidden md:block pointer-events-none z-[9999] fixed inset-0">
@@ -37,26 +48,28 @@ export default function CustomCursor() {
       <motion.div
         className="fixed top-0 left-0 border border-brand-accent rounded-full border-dashed"
         animate={{
-          x: mousePosition.x - 20,
-          y: mousePosition.y - 20,
           scale: isHovering ? 1.5 : 1,
           rotate: 360,
         }}
         transition={{
-          x: { type: "spring", stiffness: 150, damping: 25, mass: 0.5 },
-          y: { type: "spring", stiffness: 150, damping: 25, mass: 0.5 },
           scale: { type: "spring", stiffness: 300, damping: 20 },
           rotate: { duration: 10, repeat: Infinity, ease: "linear" }
         }}
-        style={{ width: 40, height: 40, opacity: 0.5 }}
+        style={{ 
+          x: smoothX,
+          y: smoothY,
+          translateX: "-50%",
+          translateY: "-50%",
+          width: 40, 
+          height: 40, 
+          opacity: 0.5 
+        }}
       />
 
       {/* Inner Glowing Diamond */}
       <motion.div
         className="fixed top-0 left-0 bg-brand-text"
         animate={{
-          x: mousePosition.x - 4,
-          y: mousePosition.y - 4,
           scale: isHovering ? 0 : 1,
         }}
         transition={{
@@ -65,6 +78,10 @@ export default function CustomCursor() {
           damping: 40,
         }}
         style={{ 
+          x: dotX,
+          y: dotY,
+          translateX: "-50%",
+          translateY: "-50%",
           width: 8, 
           height: 8, 
           rotate: "45deg",
