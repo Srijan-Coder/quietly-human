@@ -68,7 +68,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
             transition={{ duration: 2.5, ease: "easeOut" }}
             className="text-[10px] uppercase tracking-[0.5em] text-brand-accent"
           >
-            A Digital Sanctuary
+            A Digital Sanctuary 🌿
           </motion.span>
 
           <motion.h1
@@ -86,7 +86,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
             transition={{ duration: 2, delay: 0.8 }}
             className="text-brand-soft font-sans text-lg max-w-xl leading-relaxed"
           >
-            Books, guides, resets, and digital spaces for people rebuilding softly.
+            Books, guides, resets, and digital spaces for people rebuilding softly. 🤍
           </motion.p>
 
           <motion.div
@@ -96,7 +96,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
             className="flex flex-col sm:flex-row gap-4 mt-4"
           >
             <Link
-              href="/reset"
+              href="/library"
               className="px-8 py-4 bg-brand-text text-brand-bg rounded-full text-xs tracking-widest uppercase hover:bg-brand-accent hover:text-white transition-all duration-500 hover:scale-105"
             >
               Start Softly 🌿
@@ -117,7 +117,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
           transition={{ duration: 3, delay: 2.5 }}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
         >
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft">Scroll slowly</span>
+          <span className="text-[10px] uppercase tracking-widest text-brand-soft">Scroll slowly 🕰️</span>
           <motion.div
             className="w-px h-12 bg-brand-accent origin-top"
             animate={{ scaleY: [0, 1, 0] }}
@@ -144,10 +144,10 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
           className="max-w-3xl mx-auto text-center"
         >
           <p className="font-serif text-3xl md:text-5xl text-brand-text leading-relaxed text-balance">
-            You don&apos;t need to become someone else to belong here.
+            You don&apos;t need to become someone else to belong here. 🤎
           </p>
           <p className="mt-8 text-brand-soft font-sans text-lg max-w-xl mx-auto leading-loose">
-            This is a sanctuary — a place to drop your shoulders, unclench your jaw, and simply exist.
+            This is a sanctuary — a place to drop your shoulders, unclench your jaw, and simply exist. ☁️
           </p>
         </motion.div>
       </section>
@@ -176,7 +176,7 @@ export default function HomeContent({ testimonials, ebooks }: { testimonials: Te
                   background: "radial-gradient(ellipse at 30% 40%, var(--color-accent), transparent 70%)",
                 }}
               />
-              <span className="font-serif text-4xl text-brand-text italic relative z-10">7</span>
+              <span className="font-serif text-4xl text-brand-text italic relative z-10">7 🕯️</span>
               <span className="text-xs uppercase tracking-widest text-brand-soft mt-2 relative z-10">Day Reset</span>
             </motion.div>
           </div>
