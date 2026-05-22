@@ -58,6 +58,7 @@ export default function Footer() {
           <a href="https://pinterest.com/quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors">Pinterest</a>
           <a href="https://instagram.com/quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors">Instagram</a>
           <a href="https://www.youtube.com/@quietlyhumansspace" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors">YouTube</a>
+          <Link href="/about" className="hover:text-brand-accent transition-colors">About</Link>
           <Link href="/privacy" className="hover:text-brand-accent transition-colors">Privacy</Link>
           <Link href="/terms" className="hover:text-brand-accent transition-colors">Terms</Link>
         </div>
