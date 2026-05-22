@@ -34,8 +34,11 @@ const menuCategories = [
   {
     title: "Explore",
     links: [
+      { name: "Emotional Search", path: "/search" },
+      { name: "My Collection", path: "/collection" },
       { name: "Digital Products", path: "/products" },
       { name: "The Library", path: "/library" },
+      { name: "Journey Paths", path: "/paths/behind" },
     ]
   },
   {
@@ -59,10 +62,16 @@ export default function Navbar() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: isReadingMode ? 0 : 1, y: isReadingMode ? -100 : 0 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0 }}
-        className="fixed top-0 left-0 w-full z-50 px-6 py-8 md:px-12 flex justify-between items-center text-brand-text"
+        className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center text-brand-text transition-all"
+        style={{
+          background: isOpen ? "transparent" : "rgba(var(--color-bg-raw, 239,231,218), 0.7)",
+          backdropFilter: isOpen ? "none" : "blur(20px)",
+          WebkitBackdropFilter: isOpen ? "none" : "blur(20px)",
+          borderBottom: isOpen ? "none" : "1px solid var(--color-border)",
+        }}
       >
-        <Link href="/" className="font-serif text-2xl tracking-wide font-light z-50 relative">
-          Quietly Human Studio
+        <Link href="/" className="font-serif text-2xl tracking-wide font-light z-50 relative hover:text-brand-accent transition-colors">
+          Quietly Human
         </Link>
 
         <div className="flex items-center gap-8 z-50 relative">

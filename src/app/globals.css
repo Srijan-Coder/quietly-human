@@ -14,35 +14,48 @@
   --font-sans: var(--font-inter);
 }
 
+/* ============================================
+   LIGHT MODE — warm parchment (not harsh white)
+   ============================================ */
 :root {
-  --color-bg: #F8F1E8;
-  --color-card: #FFF9F2;
-  --color-text: #2F2A26;
-  --color-soft: #6F6258;
-  --color-accent: #A77C5B;
-  --color-muted: #E5D4C3;
-  --color-blue: #AAB8B7;
-  --color-border: #DDD0C4;
+  --color-bg: #EFE7DA;
+  --color-card: #F7F0E6;
+  --color-text: #2A2118;
+  --color-soft: #6B5E52;
+  --color-accent: #9E6E47;
+  --color-muted: #D8C9B5;
+  --color-blue: #8EA8A6;
+  --color-border: #CBBFB0;
 }
 
+/* ============================================
+   DARK MODE — deep espresso
+   ============================================ */
 .dark {
-  --color-bg: #12100E;
-  --color-card: #1D1915;
-  --color-text: #F4EDE4;
-  --color-soft: #B8AAA0;
-  --color-accent: #C9A46A;
-  --color-muted: #6E5540;
-  --color-blue: #6F8583;
-  --color-border: #332A23;
+  --color-bg: #0F0D0B;
+  --color-card: #181411;
+  --color-text: #F0E8DC;
+  --color-soft: #A89888;
+  --color-accent: #C9956A;
+  --color-muted: #5A4030;
+  --color-blue: #607A78;
+  --color-border: #2A2018;
 }
 
 body {
   background-color: var(--color-brand-bg);
   color: var(--color-brand-text);
   font-family: var(--font-sans);
+  cursor: none; /* Hide native cursor — we have a custom one */
 }
 
-/* Film Grain Overlay */
+a, button, [role="button"] {
+  cursor: none;
+}
+
+/* ============================================
+   Film Grain Overlay
+   ============================================ */
 .film-grain {
   position: fixed;
   top: 0;
@@ -50,17 +63,62 @@ body {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 50;
-  opacity: 0.04;
+  z-index: 999;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Cinematic utility classes */
+/* ============================================
+   Custom 3D Page Transition / Parallax helpers
+   ============================================ */
 .text-balance {
   text-wrap: balance;
 }
 
-/* Lenis smooth scrolling base styles */
+/* 3D card tilt effect */
+.tilt-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.3s ease;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ============================================
+   Cursor overrides — revealed by CustomCursor.tsx
+   ============================================ */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.cursor-ring {
+  width: 40px;
+  height: 40px;
+}
+
+/* ============================================
+   Lenis smooth scrolling
+   ============================================ */
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -79,4 +137,56 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
+}
+
+/* ============================================
+   Prose reading styles
+   ============================================ */
+.prose-brand {
+  color: var(--color-text);
+  line-height: 1.9;
+}
+
+.prose-brand h1,
+.prose-brand h2,
+.prose-brand h3 {
+  font-family: var(--font-serif);
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+.prose-brand a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ============================================
+   Scroll progress bar
+   ============================================ */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-accent);
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* ============================================
+   3D Floating cards
+   ============================================ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-8px) rotate(0.5deg); }
+  66% { transform: translateY(-4px) rotate(-0.5deg); }
+}
+
+.float-anim {
+  animation: float 6s ease-in-out infinite;
+}
+
+.float-anim-delayed {
+  animation: float 6s ease-in-out 2s infinite;
 }
