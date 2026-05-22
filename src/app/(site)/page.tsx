@@ -52,13 +52,10 @@ export default function Home() {
           <motion.h1
             initial={{ opacity: 0, y: 30, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] as [number,number,number,number], delay: 0.3 }}
             className="text-5xl md:text-7xl lg:text-8xl font-serif text-balance tracking-tight text-brand-text"
           >
-            A quiet space for{" "}
-            <span className="italic" style={{ color: "var(--color-accent)" }}>
-              tired hearts.
-            </span>
+            A quiet space for tired hearts.
           </motion.h1>
 
           <motion.p

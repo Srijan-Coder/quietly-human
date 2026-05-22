@@ -1,154 +1,134 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
-  const [ringPos, setRingPos] = useState({ x: -100, y: -100 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
-  const [trail, setTrail] = useState<{ x: number; y: number; id: number }[]>([]);
-  const trailIdRef = useRef(0);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    let ringX = -100;
-    let ringY = -100;
+    // We bypass React state entirely — all animation is done via direct DOM for zero lag
+    let mouseX = -200;
+    let mouseY = -200;
+    let ringX = -200;
+    let ringY = -200;
+    let isHovering = false;
     let rafId: number;
+
+    // Trail positions ring-buffer
+    const TRAIL_COUNT = 6;
+    const trailX = new Array(TRAIL_COUNT).fill(-200);
+    const trailY = new Array(TRAIL_COUNT).fill(-200);
+    let trailFrame = 0;
 
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-    const animate = () => {
-      ringX = lerp(ringX, position.x, 0.12);
-      ringY = lerp(ringY, position.y, 0.12);
-      setRingPos({ x: ringX, y: ringY });
-      rafId = requestAnimationFrame(animate);
+    const tick = () => {
+      // Smooth ring follow
+      ringX = lerp(ringX, mouseX, 0.1);
+      ringY = lerp(ringY, mouseY, 0.1);
+
+      // Dot — instant
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+      }
+
+      // Ring
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+        ringRef.current.style.borderColor = isHovering
+          ? "var(--color-accent)"
+          : "var(--color-border)";
+        ringRef.current.style.scale = isHovering ? "1.6" : "1";
+      }
+
+      // Trail — update every other frame for perf
+      trailFrame++;
+      if (trailFrame % 2 === 0) {
+        trailX.pop(); trailX.unshift(mouseX);
+        trailY.pop(); trailY.unshift(mouseY);
+
+        trailRefs.current.forEach((el, i) => {
+          if (!el) return;
+          el.style.transform = `translate(${trailX[i] - 3}px, ${trailY[i] - 3}px)`;
+          el.style.opacity = String((1 - i / TRAIL_COUNT) * 0.35);
+          el.style.scale = String(1 - i * 0.12);
+        });
+      }
+
+      rafId = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(rafId);
-  }, [position]);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX: x, clientY: y } = e;
-      setPosition({ x, y });
+    rafId = requestAnimationFrame(tick);
 
-      // Add trail particle
-      const id = trailIdRef.current++;
-      setTrail(prev => [...prev.slice(-6), { x, y, id }]);
+    const onMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      setIsHovering(
-        target.tagName.toLowerCase() === "a" ||
-        target.tagName.toLowerCase() === "button" ||
-        !!target.closest("a") ||
-        !!target.closest("button")
-      );
+    const onOver = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      isHovering =
+        t.tagName === "A" ||
+        t.tagName === "BUTTON" ||
+        !!t.closest("a") ||
+        !!t.closest("button");
     };
 
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseover", handleMouseOver);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mouseover", onOver, { passive: true });
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseover", handleMouseOver);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseover", onOver);
     };
   }, []);
 
-  // Clean up trail particles
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTrail(prev => prev.slice(1));
-    }, 80);
-    return () => clearTimeout(timer);
-  }, [trail]);
-
   return (
-    <div className="hidden md:block pointer-events-none">
-      {/* Comet Trail */}
-      {trail.map((point, i) => (
-        <div
-          key={point.id}
-          className="fixed rounded-full pointer-events-none z-[98]"
-          style={{
-            left: point.x - 3,
-            top: point.y - 3,
-            width: 6,
-            height: 6,
-            opacity: (i / trail.length) * 0.4,
-            backgroundColor: "var(--color-accent)",
-            transform: `scale(${(i / trail.length) * 0.8})`,
-            transition: "opacity 0.1s ease",
-          }}
-        />
-      ))}
-
-      {/* Outer rotating ring */}
-      <motion.div
-        className="fixed z-[99] pointer-events-none"
-        style={{
-          width: 44,
-          height: 44,
-          left: ringPos.x - 22,
-          top: ringPos.y - 22,
-        }}
-      >
-        <motion.div
-          className="w-full h-full rounded-full border-2"
-          style={{
-            borderColor: isHovering ? "var(--color-accent)" : "var(--color-border)",
-            borderStyle: "dashed",
-          }}
-          animate={{
-            rotate: 360,
-            scale: isHovering ? 1.5 : isClicking ? 0.8 : 1,
-          }}
-          transition={{
-            rotate: { duration: 6, repeat: Infinity, ease: "linear" },
-            scale: { duration: 0.2, ease: "easeOut" },
-          }}
-        />
-        {/* Inner cross */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          animate={{ opacity: isHovering ? 1 : 0, scale: isHovering ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="w-full h-[1px]" style={{ backgroundColor: "var(--color-accent)" }} />
-        </motion.div>
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          animate={{ opacity: isHovering ? 1 : 0, scale: isHovering ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="h-full w-[1px]" style={{ backgroundColor: "var(--color-accent)" }} />
-        </motion.div>
-      </motion.div>
-
-      {/* Dot (instant, sharp) */}
-      <motion.div
-        className="fixed z-[100] pointer-events-none rounded-full"
+    <div className="hidden md:block pointer-events-none select-none">
+      {/* Dot */}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 z-[101] pointer-events-none rounded-full"
         style={{
           width: 8,
           height: 8,
-          left: position.x - 4,
-          top: position.y - 4,
-          backgroundColor: isHovering ? "var(--color-accent)" : "var(--color-text)",
+          backgroundColor: "var(--color-text)",
+          willChange: "transform",
+          transition: "background-color 0.2s",
         }}
-        animate={{
-          scale: isClicking ? 0.5 : 1,
-        }}
-        transition={{ duration: 0.1 }}
       />
+
+      {/* Ring */}
+      <div
+        ref={ringRef}
+        className="fixed top-0 left-0 z-[100] pointer-events-none rounded-full border"
+        style={{
+          width: 40,
+          height: 40,
+          borderColor: "var(--color-border)",
+          borderStyle: "solid",
+          willChange: "transform",
+          transition: "border-color 0.3s, scale 0.25s ease",
+        }}
+      />
+
+      {/* Trail */}
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          ref={(el) => { trailRefs.current[i] = el; }}
+          className="fixed top-0 left-0 z-[99] pointer-events-none rounded-full"
+          style={{
+            width: 6,
+            height: 6,
+            backgroundColor: "var(--color-accent)",
+            willChange: "transform, opacity",
+          }}
+        />
+      ))}
     </div>
   );
 }
