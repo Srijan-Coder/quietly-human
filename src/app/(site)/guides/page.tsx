@@ -45,7 +45,7 @@ export default async function GuidesIndex() {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center font-serif text-brand-muted italic opacity-50">
-                  Quietly Human
+                  Quietly Humans
                 </div>
               )}
             </div>

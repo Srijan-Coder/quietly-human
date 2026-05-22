@@ -4,7 +4,7 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 60;
-export const metadata = { title: "Links — Quietly Human" };
+export const metadata = { title: "Links — Quietly Humans" };
 
 const iconMap: Record<string, string> = {
   instagram: "📷", youtube: "▶️", twitter: "✦", notion: "◻", email: "✉",

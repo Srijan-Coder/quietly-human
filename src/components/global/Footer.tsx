@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
         
         <div className="flex flex-col gap-4 col-span-1 md:col-span-1">
-          <span className="font-serif text-2xl">Quietly Human Studio</span>
+          <span className="font-serif text-2xl">Quietly Humans Studio</span>
           <span className="text-sm opacity-60 max-w-xs leading-relaxed">
             Books, journals, resets, and digital spaces for people rebuilding quietly.
           </span>
@@ -53,7 +53,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-brand-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs opacity-40 uppercase tracking-widest">
-        <span>© 2026 Quietly Human Studio</span>
+        <span>© 2026 Quietly Humans Studio</span>
         <div className="flex gap-6">
           <Link href="/privacy" className="hover:text-brand-accent transition-colors">Privacy</Link>
           <Link href="/terms" className="hover:text-brand-accent transition-colors">Terms</Link>

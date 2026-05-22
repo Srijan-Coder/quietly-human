@@ -25,22 +25,22 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 export const metadata: Metadata = {
   metadataBase: new URL('https://quietlyhumans.space'),
   title: {
-    default: "Quietly Human Studio | Emotional Wellness",
-    template: "%s | Quietly Human"
+    default: "Quietly Humans Studio | Emotional Wellness",
+    template: "%s | Quietly Humans"
   },
   description: "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
   keywords: ["emotional wellness", "overthinking", "soft living", "mental health", "journaling", "introverts"],
   openGraph: {
-    title: "Quietly Human Studio",
+    title: "Quietly Humans Studio",
     description: "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
     url: "https://quietlyhumans.space",
-    siteName: "Quietly Human",
+    siteName: "Quietly Humans",
     images: [
       {
         url: "/og-image.jpg", // The user can upload this to the public folder later
         width: 1200,
         height: 630,
-        alt: "Quietly Human Studio",
+        alt: "Quietly Humans Studio",
       },
     ],
     locale: "en_US",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Quietly Human Studio",
+    title: "Quietly Humans Studio",
     description: "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
     creator: "@quietlyhuman",
   },

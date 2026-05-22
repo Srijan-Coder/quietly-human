@@ -3,7 +3,7 @@ import { groq } from "next-sanity";
 import { type Testimonial } from "@/components/global/TestimonialCarousel";
 
 export const revalidate = 60;
-export const metadata = { title: "Reader Notes — Quietly Human" };
+export const metadata = { title: "Reader Notes — Quietly Humans" };
 
 export default async function TestimonialsPage() {
   let testimonials: Testimonial[] = [];

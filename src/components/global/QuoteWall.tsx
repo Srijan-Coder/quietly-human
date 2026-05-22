@@ -34,7 +34,7 @@ function QuoteCard({ quote, index }: { quote: Quote; index: number }) {
   const text = cardText[quote.cardColor || "warm"];
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`"${quote.text}" — ${quote.author || "Quietly Human"}`);
+    navigator.clipboard.writeText(`"${quote.text}" — ${quote.author || "Quietly Humans"}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

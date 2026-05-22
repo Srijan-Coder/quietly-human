@@ -4,7 +4,7 @@ import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 
 export const revalidate = 60;
-export const metadata = { title: "Free Resources — Quietly Human" };
+export const metadata = { title: "Free Resources — Quietly Humans" };
 
 export interface Resource {
   _id: string;

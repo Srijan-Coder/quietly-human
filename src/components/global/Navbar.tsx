@@ -73,7 +73,7 @@ export default function Navbar() {
         }}
       >
         <Link href="/" onClick={() => setIsOpen(false)} className="font-serif text-lg md:text-2xl tracking-wide font-light z-50 relative hover:text-brand-accent transition-colors whitespace-nowrap">
-          Quietly Human
+          Quietly Humans
         </Link>
 
         <div className="flex items-center gap-4 md:gap-8 z-50 relative">

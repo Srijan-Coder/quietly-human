@@ -33,9 +33,9 @@ export async function generateMetadata({ params }: { params: { emotion: string }
     page = await client.fetch(groq`*[_type == "seoEmotionPage" && emotion == $emotion][0]{ headline, metaDescription }`, { emotion: params.emotion });
   } catch (error) { console.error(error); }
   
-  if (!page) return { title: "Quietly Human" };
+  if (!page) return { title: "Quietly Humans" };
   return {
-    title: `${page.headline} — Quietly Human`,
+    title: `${page.headline} — Quietly Humans`,
     description: page.metaDescription,
   };
 }
