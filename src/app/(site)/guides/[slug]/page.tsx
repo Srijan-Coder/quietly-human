@@ -1,6 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import { guideBySlugQuery } from "@/sanity/lib/queries";
-import { PortableText } from "@portabletext/react";
+import { CustomPortableText } from "@/components/global/CustomPortableText";
 import { notFound } from "next/navigation";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
@@ -59,8 +59,8 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         </header>
 
         <ReadingTextWrapper>
-          <div className="max-w-3xl mx-auto">
-            {guide.content ? <PortableText value={guide.content} /> : <p>The guide is empty.</p>}
+          <div className="max-w-none mt-12 pb-32">
+            {guide.content ? <CustomPortableText value={guide.content} /> : <p className="text-brand-soft">The guide is empty.</p>}
           </div>
         </ReadingTextWrapper>
 

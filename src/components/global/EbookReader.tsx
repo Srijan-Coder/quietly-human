@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PortableText } from "@portabletext/react";
+import { CustomPortableText } from "@/components/global/CustomPortableText";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -159,9 +159,9 @@ export function EbookReader({ ebook }: { ebook: Ebook }) {
               {activeChapter.chapterTitle}
             </h1>
 
-            <div className={`prose prose-stone max-w-none font-serif text-brand-text leading-relaxed prose-headings:font-sans prose-headings:font-normal prose-headings:text-brand-soft prose-a:text-brand-accent ${fontSizeClasses[fontSize]}`}>
+            <div className={`max-w-none ${fontSizeClasses[fontSize]}`}>
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {activeChapter.content ? <PortableText value={activeChapter.content as any} /> : <p className="italic text-center">Chapter is empty.</p>}
+              {activeChapter.content ? <CustomPortableText value={activeChapter.content as any} /> : <p className="italic text-center">Chapter is empty.</p>}
             </div>
           </motion.div>
         </article>

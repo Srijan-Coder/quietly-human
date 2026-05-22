@@ -1,13 +1,11 @@
 import { client } from "@/sanity/lib/client";
 import { postBySlugQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
-import { PortableText } from "@portabletext/react";
+import { CustomPortableText } from "@/components/global/CustomPortableText";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export const revalidate = 60;
-
-
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
@@ -34,7 +32,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </h1>
         {post.mainImage && (
           <div className="relative aspect-video w-full overflow-hidden bg-brand-card border border-brand-border rounded-xl mb-12">
-            {/* eslint-disable-next-line @next/next/no-img-element */ }
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={urlFor(post.mainImage)?.url()}
               alt={post.title}
@@ -44,8 +42,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         )}
       </header>
 
-      <div className="prose prose-lg prose-stone max-w-none font-sans text-brand-soft prose-headings:font-serif prose-headings:text-brand-text prose-headings:font-normal prose-a:text-brand-accent">
-        {post.body ? <PortableText value={post.body} /> : <p>The thoughts are empty.</p>}
+      <div className="max-w-none">
+        {post.body ? <CustomPortableText value={post.body} /> : <p className="text-brand-soft">The thoughts are empty.</p>}
       </div>
     </article>
   );

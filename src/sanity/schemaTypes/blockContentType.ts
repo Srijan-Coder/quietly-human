@@ -57,6 +57,23 @@ export const blockContentType = defineType({
         ],
       },
     }),
+    // Custom Link/Button Block
+    defineArrayMember({
+      name: 'actionButton',
+      title: 'Action Button',
+      type: 'object',
+      fields: [
+        { name: 'buttonText', type: 'string', title: 'Button Text' },
+        { name: 'url', type: 'url', title: 'Button URL' },
+        { 
+          name: 'style', 
+          type: 'string', 
+          title: 'Button Style', 
+          options: { list: ['Primary (Solid)', 'Secondary (Outline)'] },
+          initialValue: 'Primary (Solid)'
+        }
+      ]
+    }),
     // You can add additional types here. Note that you can't use
     // primitive types such as 'string' and 'number' in the same array
     // as a block type.
