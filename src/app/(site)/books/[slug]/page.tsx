@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const book = await client.fetch(ebookBySlugQuery, { slug: resolvedParams.slug });
   if (!book) return {};
 
-  const ogImage = book.coverImage ? urlFor(book.coverImage)?.width(1200).height(630).url() : undefined;
+  const ogImage = book.coverImage?.asset ? urlFor(book.coverImage).width(1200).height(630).url() : undefined;
 
   return {
     title: book.title,
@@ -66,7 +66,7 @@ export default async function EbookPage({ params }: { params: Promise<{ slug: st
           </p>
         )}
         
-        {book.coverImage ? (
+        {book.coverImage?.asset ? (
           <div className="relative aspect-[3/4] w-full max-w-md overflow-hidden bg-brand-card border border-brand-border rounded-xl shadow-2xl mb-12 transition-transform duration-700 hover:scale-105">
             <Image
               src={urlFor(book.coverImage).width(800).height(1066).url()}

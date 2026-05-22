@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const guide = await client.fetch(guideBySlugQuery, { slug: resolvedParams.slug });
   if (!guide) return {};
 
-  const ogImage = guide.coverImage ? urlFor(guide.coverImage)?.width(1200).height(630).url() : undefined;
+  const ogImage = guide.coverImage?.asset ? urlFor(guide.coverImage).width(1200).height(630).url() : undefined;
 
   return {
     title: guide.title,
@@ -58,7 +58,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     "@type": "Article",
     "headline": guide.title,
     "description": guide.subtitle,
-    "image": guide.coverImage ? [urlFor(guide.coverImage)?.url()] : [],
+    "image": guide.coverImage?.asset ? [urlFor(guide.coverImage).url()] : [],
     "author": [{
       "@type": "Organization",
       "name": "Quietly Humans",
@@ -93,7 +93,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             </p>
           )}
           
-          {guide.coverImage && (
+          {guide.coverImage?.asset && (
             <div className="relative aspect-[21/9] w-full overflow-hidden bg-brand-card border border-brand-border rounded-xl mb-16 shadow-lg">
               <Image
                 src={urlFor(guide.coverImage).width(1200).height(600).url()}
