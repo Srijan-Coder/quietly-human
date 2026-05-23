@@ -21,6 +21,10 @@ export default function FocusTimer() {
 
   useEffect(() => {
     setIsClient(true);
+    const savedCustomTime = localStorage.getItem("quietly_custom_timer_mins");
+    if (savedCustomTime) {
+      setCustomMinutes(parseInt(savedCustomTime, 10));
+    }
   }, []);
 
   useEffect(() => {
@@ -61,6 +65,7 @@ export default function FocusTimer() {
     const val = parseInt(e.target.value) || 0;
     setCustomMinutes(val);
     setTimeLeft(val * 60);
+    localStorage.setItem("quietly_custom_timer_mins", val.toString());
   };
 
   const playSoftChime = () => {
