@@ -9,7 +9,7 @@ import { TestimonialCarousel, type Testimonial } from "@/components/global/Testi
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 
-export default function HomeContent({ testimonials, ebooks, products }: { testimonials: Testimonial[], ebooks?: any[], products?: any[] }) {
+export default function HomeContent({ testimonials, latestAdditions }: { testimonials: Testimonial[], latestAdditions?: any[] }) {
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -19,48 +19,52 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
     }),
   };
 
-  const books = ebooks && ebooks.length > 0 ? ebooks : [
-    { title: "I Am Not Behind in Life", tag: "Feeling Behind" },
-    { title: "A Small Book for Tired Hearts", tag: "Exhausted" },
-    { title: "I'm Tired of Being Okay", tag: "Burnout" },
-  ];
+  const books = latestAdditions?.filter(item => item._type === 'book') || [];
 
-  const premiumProducts = products && products.length > 0 ? products : [
-    { title: "The Overthinker's Journal", price: 19, slug: "#" }
-  ];
+  const slides = (latestAdditions && latestAdditions.length > 0) ? latestAdditions.map(item => {
+    let subtitle = "New Arrival";
+    let cta = "Read More";
+    let link = "#";
 
-  const freeSlides = [
+    if (item._type === 'book') {
+      subtitle = item.bookFormat === 'free' ? "Free Ebook" : item.bookFormat === 'premium' ? "Premium Ebook" : "Physical Book";
+      cta = item.bookFormat === 'premium' ? "Explore Book ☕" : "Read Book 📖";
+      link = `/books/${item.slug}`;
+    } else if (item._type === 'guide') {
+      subtitle = "Sanctuary Guide";
+      cta = "Read Guide 🌿";
+      link = `/guides/${item.slug}`;
+    } else if (item._type === 'letter') {
+      subtitle = "Midnight Letter";
+      cta = "Read Letter 💌";
+      link = `/letters/${item.slug}`;
+    } else if (item._type === 'post') {
+      subtitle = "Journal Entry";
+      cta = "Read Entry ✍️";
+      link = `/blog/${item.slug}`;
+    }
+
+    return {
+      title: item.title,
+      subtitle,
+      desc: item.tagline || item.subtitle || item.excerpt || "A quiet space for tired hearts.",
+      cta,
+      link,
+      coverImage: item.coverImage,
+    };
+  }) : [
     {
       title: "7-Day Emotional Reset",
       subtitle: "Free Download",
       desc: "A gentle week-long journey to help you release the pressure of having everything figured out.",
       cta: "Get the free reset 💌",
       link: "/reset",
-      element: (
-        <div className="font-serif text-4xl text-brand-text italic relative z-10 flex flex-col items-center">
-          <span>7 🕯️</span>
-          <span className="text-xs uppercase tracking-widest text-brand-soft mt-2 not-italic">Day Reset</span>
-        </div>
-      )
-    },
-    ...(ebooks || []).map(ebook => ({
-      title: ebook.title,
-      subtitle: "Free Ebook",
-      desc: "A short, gentle read to help you navigate heavy emotions and find your center.",
-      cta: "Read the book 📖",
-      link: `/books/${ebook.slug}`,
-      element: (
-        <div className="font-serif text-xl text-brand-text text-center px-4 relative z-10 flex flex-col items-center">
-          <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 not-italic">{ebook.tag}</span>
-          <span>{ebook.title}</span>
-        </div>
-      )
-    }))
+      coverImage: null,
+    }
   ];
 
   const [headline, setHeadline] = useState("A quiet space for tired hearts.");
-  const [currentFreeSlide, setCurrentFreeSlide] = useState(0);
-  const [currentPremiumSlide, setCurrentPremiumSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const headlines = [
@@ -82,29 +86,17 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
     setHeadline(headlines[Math.floor(Math.random() * headlines.length)]);
   }, []);
 
-  // Auto-slide for free resources
+  // Auto-slide for latest additions
   useEffect(() => {
-    if (freeSlides.length <= 1) return;
+    if (slides.length <= 1) return;
     const timer = setInterval(() => {
-      setCurrentFreeSlide((prev) => (prev + 1) % freeSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [freeSlides.length]);
-
-  // Auto-slide for premium products
-  useEffect(() => {
-    if (premiumProducts.length <= 1) return;
-    const timer = setInterval(() => {
-      setCurrentPremiumSlide((prev) => (prev + 1) % premiumProducts.length);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [premiumProducts.length]);
+  }, [slides.length]);
 
-  const nextFreeSlide = () => setCurrentFreeSlide((prev) => (prev + 1) % freeSlides.length);
-  const prevFreeSlide = () => setCurrentFreeSlide((prev) => (prev - 1 + freeSlides.length) % freeSlides.length);
-  
-  const nextPremiumSlide = () => setCurrentPremiumSlide((prev) => (prev + 1) % premiumProducts.length);
-  const prevPremiumSlide = () => setCurrentPremiumSlide((prev) => (prev - 1 + premiumProducts.length) % premiumProducts.length);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
     <div className="relative overflow-hidden w-full bg-brand-bg">
@@ -213,161 +205,107 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
         </motion.div>
       </section>
 
-      {/* ─── 3. RESOURCES & PRODUCTS ──────────────────────── */}
+      {/* ─── 3. LATEST ADDITIONS CAROUSEL ──────────────────────── */}
       <section className="w-full py-32 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="max-w-4xl mx-auto">
           
-          {/* FREE RESOURCES CAROUSEL (LEFT SIDE) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={0}
             variants={fadeUp}
-            className="flex flex-col items-center text-center p-12 bg-brand-bg border border-brand-border rounded-3xl relative overflow-hidden group"
+            className="flex flex-col md:flex-row items-center justify-between p-12 bg-brand-card border border-brand-border rounded-3xl relative overflow-hidden group shadow-sm"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-30" />
             
-            {freeSlides.length > 1 && (
-              <>
-                <button onClick={prevFreeSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
-                  ←
-                </button>
-                <button onClick={nextFreeSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
-                  →
-                </button>
-              </>
-            )}
+            {/* Carousel Content (Left Side on Desktop) */}
+            <div className="flex-1 flex flex-col justify-center pr-0 md:pr-12 text-center md:text-left mb-12 md:mb-0 relative z-10 w-full">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-brand-soft mb-2 block">The Sanctuary Archive</span>
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={currentSlide}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4 }}
+                  className="flex flex-col"
+                >
+                  <span className="text-xs tracking-widest uppercase text-brand-accent mb-4 block">{slides[currentSlide].subtitle}</span>
+                  <h2 className="font-serif text-4xl md:text-5xl text-brand-text mb-6 text-balance leading-tight">{slides[currentSlide].title}</h2>
+                  <p className="text-brand-soft leading-relaxed mb-10 max-w-md mx-auto md:mx-0 text-base h-24 overflow-hidden">
+                    {slides[currentSlide].desc}
+                  </p>
+                  <div className="flex items-center justify-center md:justify-start gap-6">
+                    <Link
+                      href={slides[currentSlide].link}
+                      className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-all duration-500 rounded-full text-xs tracking-widest uppercase shadow-md"
+                    >
+                      {slides[currentSlide].cta}
+                    </Link>
+                    
+                    {/* Next/Prev Navigation */}
+                    {slides.length > 1 && (
+                      <div className="flex gap-2">
+                        <button onClick={prevSlide} className="p-3 rounded-full border border-brand-border text-brand-soft hover:text-brand-accent hover:border-brand-accent transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                          </svg>
+                        </button>
+                        <button onClick={nextSlide} className="p-3 rounded-full border border-brand-border text-brand-soft hover:text-brand-accent hover:border-brand-accent transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-            <div className="relative w-full max-w-[280px] aspect-[4/5] mb-10">
+            {/* Carousel Cover Image (Right Side on Desktop) */}
+            <div className="w-full max-w-[280px] shrink-0 aspect-[4/5] relative perspective-1000">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={currentFreeSlide}
-                  initial={{ opacity: 0, rotateY: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                  exit={{ opacity: 0, rotateY: -10, scale: 0.95 }}
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 bg-brand-card rounded-2xl border border-brand-border flex flex-col items-center justify-center overflow-hidden shadow-xl"
-                  style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+                  key={currentSlide}
+                  initial={{ opacity: 0, rotateY: 15, x: 20 }}
+                  animate={{ opacity: 1, rotateY: -5, x: 0, scale: 1.05 }}
+                  exit={{ opacity: 0, rotateY: -15, x: -20 }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                  className="absolute inset-0 bg-brand-bg rounded-2xl border border-brand-border flex flex-col items-center justify-center overflow-hidden shadow-2xl"
+                  style={{ transformStyle: "preserve-3d" }}
                 >
                   <div
-                    className="absolute inset-0 opacity-20"
-                    style={{ background: "radial-gradient(ellipse at 30% 40%, var(--color-accent), transparent 70%)" }}
+                    className="absolute inset-0 opacity-20 z-20 pointer-events-none"
+                    style={{ background: "radial-gradient(ellipse at 30% 20%, var(--color-accent), transparent 70%)" }}
                   />
-                  {freeSlides[currentFreeSlide].element}
+                  {slides[currentSlide].coverImage?.asset ? (
+                    <Image
+                      src={urlFor(slides[currentSlide].coverImage).width(500).height(667).url()}
+                      alt={slides[currentSlide].title}
+                      fill
+                      className="object-cover w-full h-full opacity-90 relative z-10"
+                    />
+                  ) : (
+                    <>
+                      <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 relative z-10 text-center px-4">{slides[currentSlide].subtitle}</span>
+                      <span className="font-serif text-2xl text-brand-text px-8 text-center text-balance relative z-10 leading-snug">{slides[currentSlide].title}</span>
+                    </>
+                  )}
                 </motion.div>
               </AnimatePresence>
+              
+              {/* Pagination Dots */}
+              {slides.length > 1 && (
+                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+                  {slides.map((_, i) => (
+                    <button key={i} onClick={() => setCurrentSlide(i)} className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-brand-accent w-6' : 'bg-brand-border'}`} />
+                  ))}
+                </div>
+              )}
             </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={currentFreeSlide}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                transition={{ duration: 0.3 }}
-                className="flex flex-col items-center flex-1 w-full"
-              >
-                <span className="text-xs tracking-widest uppercase text-brand-accent mb-4 block">{freeSlides[currentFreeSlide].subtitle}</span>
-                <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">{freeSlides[currentFreeSlide].title}</h2>
-                <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm h-16 overflow-hidden">
-                  {freeSlides[currentFreeSlide].desc}
-                </p>
-                <Link
-                  href={freeSlides[currentFreeSlide].link}
-                  className="px-8 py-4 bg-brand-card border border-brand-border hover:border-brand-accent text-brand-text hover:text-brand-accent transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
-                >
-                  {freeSlides[currentFreeSlide].cta}
-                </Link>
-              </motion.div>
-            </AnimatePresence>
             
-            {/* Dots */}
-            {freeSlides.length > 1 && (
-              <div className="absolute bottom-6 flex gap-2">
-                {freeSlides.map((_, i) => (
-                  <button key={i} onClick={() => setCurrentFreeSlide(i)} className={`w-2 h-2 rounded-full transition-colors ${i === currentFreeSlide ? 'bg-brand-accent' : 'bg-brand-border'}`} />
-                ))}
-              </div>
-            )}
-          </motion.div>
-
-          {/* PREMIUM PRODUCT CAROUSEL (RIGHT SIDE) */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            custom={1}
-            variants={fadeUp}
-            className="flex flex-col items-center text-center p-12 bg-brand-card border border-brand-border rounded-3xl relative overflow-hidden group"
-          >
-            <div
-              className="absolute inset-0 opacity-10"
-              style={{ background: "radial-gradient(circle at 70% 30%, var(--color-accent), transparent 60%)" }}
-            />
-            
-            {premiumProducts.length > 1 && (
-              <>
-                <button onClick={prevPremiumSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
-                  ←
-                </button>
-                <button onClick={nextPremiumSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-brand-soft hover:text-brand-accent transition-colors z-20">
-                  →
-                </button>
-              </>
-            )}
-
-            <div className="relative w-full max-w-[280px] aspect-[4/5] mb-10">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentPremiumSlide}
-                  initial={{ opacity: 0, rotateY: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                  exit={{ opacity: 0, rotateY: 10, scale: 0.95 }}
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 bg-[#1A1A1A] dark:bg-[#111] rounded-2xl border border-[#333] flex flex-col items-center justify-center overflow-hidden shadow-2xl"
-                  style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-                >
-                   <span className="font-serif text-3xl text-[#E5E5E5] px-6 text-center text-balance leading-snug relative z-10">
-                     {premiumProducts[currentPremiumSlide].title}
-                   </span>
-                   <span className="text-[10px] uppercase tracking-widest text-[#888] mt-4 relative z-10">Premium Guide</span>
-                   <div className="absolute inset-0 border-[1px] border-white/5 rounded-2xl m-3 pointer-events-none" />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={currentPremiumSlide}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                transition={{ duration: 0.3 }}
-                className="flex flex-col items-center flex-1 w-full"
-              >
-                <span className="text-xs tracking-widest uppercase text-brand-soft mb-4 block">Quietly Humans Studio</span>
-                <h2 className="font-serif text-3xl md:text-4xl text-brand-text mb-4 text-balance">{premiumProducts[currentPremiumSlide].title}</h2>
-                <p className="text-brand-soft leading-relaxed mb-8 max-w-sm text-sm h-16 overflow-hidden">
-                  Premium resources, guided journals, and digital dashboards designed to help you live softly and intentionally.
-                </p>
-                <Link
-                  href={premiumProducts[currentPremiumSlide].slug !== "#" ? `/books/${premiumProducts[currentPremiumSlide].slug}` : "/library"}
-                  className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
-                >
-                  Explore the Studio ☕
-                </Link>
-              </motion.div>
-            </AnimatePresence>
-            
-            {/* Dots */}
-            {premiumProducts.length > 1 && (
-              <div className="absolute bottom-6 flex gap-2">
-                {premiumProducts.map((_, i) => (
-                  <button key={i} onClick={() => setCurrentPremiumSlide(i)} className={`w-2 h-2 rounded-full transition-colors ${i === currentPremiumSlide ? 'bg-brand-accent' : 'bg-brand-border'}`} />
-                ))}
-              </div>
-            )}
           </motion.div>
           
         </div>

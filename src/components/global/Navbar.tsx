@@ -20,6 +20,7 @@ const menuCategories = [
     title: "Sanctuary 🌿",
     links: [
       { name: "The Breathe Room", path: "/breathe" },
+      { name: "Quiet Focus", path: "/focus" },
       { name: "7-Day Reset", path: "/reset" },
       { name: "Quiet Words", path: "/quotes" },
       { name: "Soft Toolkit", path: "/toolkit" },

@@ -12,27 +12,25 @@ export default async function Home() {
     );
   } catch (error) { console.error(error); }
 
-  let ebooks = [];
+  let latestAdditions = [];
   try {
-    ebooks = await client.fetch(
-      groq`*[_type == "book"] | order(_createdAt desc)[0...3] {
+    latestAdditions = await client.fetch(
+      groq`*[_type in ["book", "guide", "letter", "post"]] | order(_createdAt desc)[0...5] {
+        _type,
+        _id,
         title,
-        "tag": tagline,
-        "slug": slug.current
+        "slug": slug.current,
+        tagline,
+        bookFormat,
+        subtitle,
+        excerpt,
+        coverImage {
+          ...,
+          "alt": alt
+        }
       }`
     );
   } catch (error) { console.error(error); }
 
-  let products = [];
-  try {
-    products = await client.fetch(
-      groq`*[_type == "book" && bookFormat == "premium"] | order(_createdAt desc)[0...3] {
-        title,
-        price,
-        "slug": slug.current
-      }`
-    );
-  } catch (error) { console.error(error); }
-
-  return <HomeContent testimonials={testimonials} ebooks={ebooks} products={products} />;
+  return <HomeContent testimonials={testimonials} latestAdditions={latestAdditions} />;
 }
