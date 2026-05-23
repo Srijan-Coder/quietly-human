@@ -259,6 +259,106 @@ export default function ToolkitHub() {
           </span>
         </Link>
 
+        {/* Tool 13: The Cognitive Courtroom */}
+        <Link 
+          href="/toolkit/cognitive-courtroom" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">⚖️</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">⚖️</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Cognitive Courtroom
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            For catastrophizing. Put your anxious thoughts on trial by stripping away the story and extracting only the cold, hard facts.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 14: Urge Surfing */}
+        <Link 
+          href="/toolkit/urge-surfer" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🌊</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🌊</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            Urge Surfing
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            A DBT tool for cravings and impulses. Watch a visual 5-minute wave and log your urge intensity in real-time until it breaks.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 15: The Yes, But Flipper */}
+        <Link 
+          href="/toolkit/yes-but-flipper" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🃏</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🃏</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The "Yes, But" Flipper
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            Combat black-and-white thinking. Write an absolute negative thought on a digital card, flip it over, and force your brain to find the nuance.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 16: Emotion Color Wheel */}
+        <Link 
+          href="/toolkit/emotion-color-wheel" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🎨</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🎨</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            Emotion Color Wheel
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            For alexithymia. Drill down into an interactive color wheel to find the exact word for what you're feeling, and get a micro-action to cope.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 17: The Friction Generator */}
+        <Link 
+          href="/toolkit/friction-generator" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🛑</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🛑</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Friction Generator
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            A literal speed bump for impulsive decisions. You must physically hold a button for 30 unbroken seconds before acting on your impulse.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
       </div>
     </div>
   );
