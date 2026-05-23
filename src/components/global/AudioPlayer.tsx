@@ -128,7 +128,7 @@ export function AudioPlayer() {
       )}
 
       {/* Floating UI */}
-      <div className="fixed bottom-6 left-6 z-50 flex flex-col-reverse items-start gap-4">
+      <div id="global-audio-player" className="fixed bottom-6 left-6 z-50 flex flex-col-reverse items-start gap-4">
         
         {/* Toggle Button */}
         <button

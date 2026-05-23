@@ -19,6 +19,7 @@ export default function FocusPage() {
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(50);
   const [isTimerActive, setIsTimerActive] = useState(false);
+  const [isZenMode, setIsZenMode] = useState(false);
   
   const [isClient, setIsClient] = useState(false);
   
@@ -35,6 +36,16 @@ export default function FocusPage() {
       setAudioYoutubeId(savedAudioYt);
     }
   }, []);
+
+  // Sync Zen Mode with body class
+  useEffect(() => {
+    if (isZenMode) {
+      document.body.classList.add("zen-mode");
+    } else {
+      document.body.classList.remove("zen-mode");
+    }
+    return () => document.body.classList.remove("zen-mode");
+  }, [isZenMode]);
 
   // Sync play/pause with Timer
   useEffect(() => {
@@ -87,7 +98,7 @@ export default function FocusPage() {
   if (!isClient) return null;
 
   return (
-    <div className="relative min-h-screen flex flex-col w-full bg-brand-bg pt-32 pb-20 overflow-hidden">
+    <div className={`relative min-h-screen flex flex-col w-full bg-brand-bg pb-20 overflow-hidden transition-all duration-700 ${isZenMode ? 'pt-8' : 'pt-32'}`}>
       
       {/* Background Image Transition */}
       <AnimatePresence mode="popLayout">
@@ -107,7 +118,7 @@ export default function FocusPage() {
               className="object-cover"
             />
             {/* Dark Overlay so text is readable */}
-            <div className="absolute inset-0 bg-brand-bg/60 backdrop-blur-[2px]" />
+            <div className={`absolute inset-0 bg-brand-bg transition-opacity duration-1000 ${isZenMode ? "opacity-30 backdrop-blur-none" : "opacity-60 backdrop-blur-[2px]"}`} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -133,16 +144,16 @@ export default function FocusPage() {
               className="w-full h-full pointer-events-none"
             />
           </div>
-          <div className="absolute inset-0 bg-brand-bg/60 backdrop-blur-[2px]" />
+          <div className={`absolute inset-0 bg-brand-bg transition-opacity duration-1000 ${isZenMode ? "opacity-30 backdrop-blur-none" : "opacity-60 backdrop-blur-[2px]"}`} />
         </div>
       )}
 
       {/* Radial glow */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none"
+        className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-1000"
         style={{
           background: "radial-gradient(circle at 50% 40%, var(--color-accent) 0%, transparent 60%)",
-          opacity: 0.15,
+          opacity: isZenMode ? 0.05 : 0.15,
         }}
       />
 
@@ -175,7 +186,7 @@ export default function FocusPage() {
       )}
 
       {/* Audio Controls */}
-      <div className="absolute top-6 right-6 md:top-12 md:right-12 z-50 flex items-center gap-4 bg-brand-card/80 backdrop-blur-md border border-brand-border rounded-full p-2 shadow-sm">
+      <div className={`absolute top-6 right-6 md:top-12 md:right-12 z-50 flex items-center gap-4 bg-brand-card/80 backdrop-blur-md border border-brand-border rounded-full p-2 shadow-sm transition-all duration-700 ${isZenMode ? "opacity-0 pointer-events-none translate-y-[-20px]" : "opacity-100 translate-y-0"}`}>
         <button 
           onClick={toggleMute}
           className="p-2 rounded-full text-brand-text hover:text-brand-accent transition-colors flex items-center justify-center"
@@ -205,27 +216,29 @@ export default function FocusPage() {
           key={activeTheme.name}
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-[10px] uppercase tracking-[0.2em] text-brand-accent mb-4 text-center mt-12 md:mt-0"
+          className={`text-[10px] uppercase tracking-[0.2em] text-brand-accent mb-4 text-center mt-12 md:mt-0 transition-opacity duration-700 ${isZenMode ? "opacity-0" : "opacity-100"}`}
         >
           {activeTheme.name} Room
         </motion.span>
         
-        <h1 className="text-4xl md:text-5xl font-serif text-brand-text mb-4 text-center">Quiet Focus</h1>
-        <p className="text-brand-soft text-center max-w-lg mb-12 md:mb-16 leading-relaxed">
+        <h1 className={`text-4xl md:text-5xl font-serif text-brand-text mb-4 text-center transition-all duration-700 ${isZenMode ? "opacity-0 h-0 overflow-hidden mb-0" : "opacity-100 h-auto"}`}>Quiet Focus</h1>
+        <p className={`text-brand-soft text-center max-w-lg mb-12 md:mb-16 leading-relaxed transition-all duration-700 ${isZenMode ? "opacity-0 h-0 overflow-hidden mb-0" : "opacity-100 h-auto"}`}>
           A space to drop your shoulders, set your intention, and do your deep work gently.
         </p>
 
-        <FocusTimer onTimerActiveChange={setIsTimerActive} />
+        <FocusTimer onTimerActiveChange={setIsTimerActive} isZenMode={isZenMode} onZenModeToggle={() => setIsZenMode(!isZenMode)} />
         
-        <FocusThemeSelector 
-          activeTheme={activeTheme} 
-          onSelectTheme={setActiveTheme} 
-          audioMode={audioMode}
-          setAudioMode={setAudioMode}
-          audioYoutubeId={audioYoutubeId}
-          setAudioYoutubeId={setAudioYoutubeId}
-          setLocalAudioFile={setLocalAudioFile}
-        />
+        <div className={`w-full transition-all duration-700 ${isZenMode ? "opacity-0 pointer-events-none translate-y-10" : "opacity-100 translate-y-0"}`}>
+          <FocusThemeSelector 
+            activeTheme={activeTheme} 
+            onSelectTheme={setActiveTheme} 
+            audioMode={audioMode}
+            setAudioMode={setAudioMode}
+            audioYoutubeId={audioYoutubeId}
+            setAudioYoutubeId={setAudioYoutubeId}
+            setLocalAudioFile={setLocalAudioFile}
+          />
+        </div>
       </div>
     </div>
   );

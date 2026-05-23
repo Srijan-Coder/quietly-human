@@ -78,10 +78,20 @@ a, button, [role="button"] {
 /* ============================================
    Custom 3D Page Transition / Parallax helpers
    ============================================ */
-.text-balance {
-  text-wrap: balance;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
+/* Zen Mode Hide Rules */
+body.zen-mode header,
+body.zen-mode footer,
+body.zen-mode #global-audio-player,
+body.zen-mode #site-compass,
+body.zen-mode #quiz-floating-bar {
+  display: none !important;
+}
 /* 3D card tilt effect */
 .tilt-card {
   transform-style: preserve-3d;
