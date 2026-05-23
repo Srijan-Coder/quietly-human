@@ -27,12 +27,12 @@ export async function createProfile(data: { id: string, username: string, displa
 
     if (error) {
       console.error(error);
-      return { error: "Failed to create profile. Please try again." };
+      return { error: `Failed to create profile. Supabase error: ${error.message || JSON.stringify(error)}` };
     }
 
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return { error: "An unexpected error occurred." };
+    return { error: `An unexpected error occurred. Error: ${error.message || JSON.stringify(error)}` };
   }
 }
