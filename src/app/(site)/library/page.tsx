@@ -1,61 +1,50 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function LibraryPage() {
-  const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
-  };
-
+export default function LibraryHub() {
   return (
-    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-24">
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={fadeUp}
-        className="mb-20 text-center"
-      >
-        <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-6">The Library 📖</h1>
-        <p className="text-brand-soft font-sans max-w-2xl mx-auto leading-relaxed">
-          An archive of digital spaces, books, quotes, and reflections designed for quiet growth and soft living. 🤎
+    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-24">
+      <header className="mb-24 text-center">
+        <h1 className="text-5xl md:text-7xl font-serif text-brand-text mb-6">The Library 🏛️</h1>
+        <p className="text-brand-soft text-lg max-w-2xl mx-auto text-balance">
+          A collection of digital resources, journals, and tools designed to help you organize your mind and live a softer life.
         </p>
-      </motion.div>
+      </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 1 }} className="group">
-          <Link href="/books" className="block">
-            <div className="aspect-[16/9] w-full bg-brand-card rounded-2xl border border-brand-border flex items-center justify-center mb-6 group-hover:border-brand-accent transition-colors duration-500 overflow-hidden relative">
-              <span className="font-serif text-3xl opacity-50 group-hover:scale-105 transition-transform duration-1000">Books & Journals</span>
-            </div>
-          </Link>
-        </motion.div>
+        {/* Books & Journals (Free Ebooks) */}
+        <Link 
+          href="/books" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors tilt-card"
+        >
+          <div className="text-4xl mb-6">📖</div>
+          <h2 className="font-serif text-3xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors">
+            Books & Journals
+          </h2>
+          <p className="text-brand-soft mb-8">
+            Free downloadable ebooks, PDF workbooks, and guided journals. Available to all community members.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors">
+            Browse collection →
+          </span>
+        </Link>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 1 }} className="group">
-          <Link href="/products" className="block">
-            <div className="aspect-[16/9] w-full bg-brand-card rounded-2xl border border-brand-border flex items-center justify-center mb-6 group-hover:border-brand-accent transition-colors duration-500 overflow-hidden relative">
-              <span className="font-serif text-3xl opacity-50 group-hover:scale-105 transition-transform duration-1000">Digital Dashboards</span>
-            </div>
-          </Link>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1 }} className="group">
-          <Link href="/blog" className="block">
-            <div className="aspect-[16/9] w-full bg-brand-card rounded-2xl border border-brand-border flex items-center justify-center mb-6 group-hover:border-brand-accent transition-colors duration-500 overflow-hidden relative">
-              <span className="font-serif text-3xl opacity-50 group-hover:scale-105 transition-transform duration-1000">Quiet Thoughts</span>
-            </div>
-          </Link>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 1 }} className="group">
-          <Link href="/quotes" className="block">
-            <div className="aspect-[16/9] w-full bg-brand-card rounded-2xl border border-brand-border flex items-center justify-center mb-6 group-hover:border-brand-accent transition-colors duration-500 overflow-hidden relative">
-              <span className="font-serif text-3xl opacity-50 group-hover:scale-105 transition-transform duration-1000">Quote Gallery</span>
-            </div>
-          </Link>
-        </motion.div>
+        {/* Digital Dashboards (Products/Notion) */}
+        <Link 
+          href="/products" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors tilt-card"
+        >
+          <div className="text-4xl mb-6">💻</div>
+          <h2 className="font-serif text-3xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors">
+            Digital Dashboards
+          </h2>
+          <p className="text-brand-soft mb-8">
+            Premium Notion templates, focus systems, and organizational hubs for deep work and soft living.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors">
+            Explore dashboards →
+          </span>
+        </Link>
 
       </div>
     </div>
