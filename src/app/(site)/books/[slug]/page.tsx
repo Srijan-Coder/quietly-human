@@ -8,6 +8,8 @@ import { SecureDownloadButton } from "@/components/global/SecureDownloadButton";
 import { SaveButton } from "@/components/global/SaveButton";
 import { auth } from "@clerk/nextjs/server";
 import { SignInButton } from "@clerk/nextjs";
+import { PortableText } from "@portabletext/react";
+import { CustomPortableText } from "@/components/global/CustomPortableText";
 
 export const revalidate = 60;
 
@@ -24,13 +26,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${book.title} | The Library`,
-    description: `Download the free ebook ${book.title} by ${book.author || "Quietly Humans"}.`,
+    description: `Download or purchase ${book.title}.`,
     alternates: {
       canonical: `https://www.quietlyhumans.space/books/${resolvedParams.slug}`,
     },
     openGraph: {
       title: book.title,
-      description: `Download the free ebook ${book.title} by ${book.author || "Quietly Humans"}.`,
+      description: `Explore ${book.title}.`,
       type: "book",
       url: `https://www.quietlyhumans.space/books/${resolvedParams.slug}`,
       images: ogImage ? [{ url: ogImage, alt: book.title }] : undefined,
@@ -50,13 +52,22 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
   const book = await client.fetch(
     groq`*[_type in ["ebook", "book", "product"] && slug.current == $slug][0]{
       _id,
+      _type,
       title,
       "slug": slug.current,
       author,
       coverImage,
       "fileUrl": ebookFile.asset->url,
       notionUrl,
-      emotionTags
+      emotionTags,
+      bookFormat,
+      price,
+      purchaseUrl,
+      "productLink": link,
+      whatsIncluded,
+      purchaseLinks,
+      demoChapter,
+      "hasChapters": defined(chapters)
     }`,
     { slug: resolvedParams.slug }
   );
@@ -64,6 +75,21 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
   if (!book) {
     notFound();
   }
+
+  // Determine the effective format
+  // If it's explicitly 'free', 'premium', or 'physical', use that.
+  // Otherwise infer based on type or existing fields.
+  let format = 'free';
+  if (book.bookFormat) {
+    format = book.bookFormat;
+  } else if (book._type === 'product' || book.price) {
+    format = 'premium';
+  } else if (book.purchaseLinks && book.purchaseLinks.length > 0) {
+    format = 'physical';
+  }
+
+  const effectivePrice = book.price || 0;
+  const effectivePurchaseUrl = book.purchaseUrl || book.productLink;
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32">
@@ -118,6 +144,21 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
             </p>
           </div>
 
+          {/* Premium "What's Included" */}
+          {format === 'premium' && book.whatsIncluded && book.whatsIncluded.length > 0 && (
+            <div className="mb-12 p-6 bg-brand-card border border-brand-border rounded-xl">
+              <h3 className="text-xs uppercase tracking-widest text-brand-text mb-4">What's Included</h3>
+              <ul className="space-y-2">
+                {book.whatsIncluded.map((item: string, i: number) => (
+                  <li key={i} className="text-brand-soft flex items-start gap-2">
+                    <span className="text-brand-accent mt-1">✦</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {book.emotionTags && book.emotionTags.length > 0 && (
             <div className="mb-12">
               <div className="flex flex-wrap gap-2">
@@ -130,39 +171,119 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
             </div>
           )}
 
+          {/* Action Area based on Format */}
           <div className="pt-8 border-t border-brand-border">
-            {userId ? (
-              <>
-                {book.fileUrl ? (
-                  <SecureDownloadButton fileUrl={book.fileUrl} />
-                ) : book.notionUrl ? (
+            
+            {/* FORMAT: FREE */}
+            {format === 'free' && (
+              <div className="flex flex-col gap-4">
+                {userId ? (
+                  <div className="flex flex-wrap gap-4">
+                    {book.fileUrl && <SecureDownloadButton fileUrl={book.fileUrl} />}
+                    {book.notionUrl && (
+                      <a 
+                        href={book.notionUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block px-8 py-4 bg-brand-text text-brand-bg rounded-full text-sm uppercase tracking-widest hover:bg-brand-accent transition-colors shadow-lg"
+                      >
+                        Open in Notion
+                      </a>
+                    )}
+                    {book.hasChapters && (
+                      <Link 
+                        href={`/read/${book.slug}`}
+                        className="inline-block px-8 py-4 bg-brand-card border border-brand-border text-brand-text rounded-full text-sm uppercase tracking-widest hover:border-brand-accent transition-colors"
+                      >
+                        Read Online
+                      </Link>
+                    )}
+                    {!book.fileUrl && !book.notionUrl && !book.hasChapters && (
+                      <button disabled className="px-8 py-4 bg-brand-card text-brand-soft border border-brand-border rounded-full text-sm uppercase tracking-widest cursor-not-allowed">
+                        File not available
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <SignInButton mode="modal">
+                      <button className="px-8 py-4 bg-brand-accent text-white rounded-full text-sm uppercase tracking-widest hover:bg-brand-text transition-colors shadow-lg">
+                        Create Account to Download
+                      </button>
+                    </SignInButton>
+                    <p className="text-xs text-brand-soft mt-4 italic">
+                      * This file is securely encrypted. You must be signed into your community account to download.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* FORMAT: PREMIUM */}
+            {format === 'premium' && (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-6 mb-2">
+                  <span className="text-3xl font-serif text-brand-text">${effectivePrice}</span>
+                </div>
+                {effectivePurchaseUrl ? (
                   <a 
-                    href={book.notionUrl}
+                    href={effectivePurchaseUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block px-8 py-4 bg-brand-text text-brand-bg rounded-full text-sm uppercase tracking-widest hover:bg-brand-accent transition-colors shadow-lg"
+                    className="inline-block px-10 py-5 bg-brand-accent text-white rounded-full text-sm uppercase tracking-widest hover:bg-brand-text transition-all duration-300 shadow-[0_0_20px_rgba(252,163,17,0.2)] hover:shadow-[0_0_30px_rgba(252,163,17,0.4)] text-center w-full md:w-auto"
                   >
-                    Open in Notion
+                    Purchase Now
                   </a>
                 ) : (
                   <button disabled className="px-8 py-4 bg-brand-card text-brand-soft border border-brand-border rounded-full text-sm uppercase tracking-widest cursor-not-allowed">
-                    File not available
+                    Currently Unavailable
                   </button>
                 )}
-              </>
-            ) : (
-              <SignInButton mode="modal">
-                <button className="px-8 py-4 bg-brand-accent text-white rounded-full text-sm uppercase tracking-widest hover:bg-brand-text transition-colors shadow-lg">
-                  Create Account to Download
-                </button>
-              </SignInButton>
+                <p className="text-xs text-brand-soft mt-2 italic">
+                  * Secure checkout via encrypted payment gateway.
+                </p>
+              </div>
+            )}
+
+            {/* FORMAT: PHYSICAL */}
+            {format === 'physical' && (
+              <div className="flex flex-col gap-4">
+                <h3 className="text-xs uppercase tracking-widest text-brand-text mb-2">Available At:</h3>
+                <div className="flex flex-wrap gap-4">
+                  {book.purchaseLinks && book.purchaseLinks.length > 0 ? (
+                    book.purchaseLinks.map((link: any, i: number) => (
+                      <a 
+                        key={i}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 bg-brand-card border border-brand-border text-brand-text rounded-lg text-xs uppercase tracking-widest hover:border-brand-accent hover:text-brand-accent transition-colors"
+                      >
+                        {link.store} ({link.format})
+                      </a>
+                    ))
+                  ) : (
+                    <span className="text-brand-soft text-sm">Links coming soon.</span>
+                  )}
+                </div>
+              </div>
             )}
           </div>
-          <p className="text-xs text-brand-soft mt-4 italic">
-            * This file is securely encrypted. You must be signed into your community account to download.
-          </p>
         </div>
       </div>
+
+      {/* Demo Chapter (for Physical/Premium) */}
+      {(format === 'physical' || format === 'premium') && book.demoChapter && (
+        <div className="mt-32 pt-20 border-t border-brand-border max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-serif text-brand-text mb-4">Read a Sample</h2>
+            <p className="text-brand-soft text-sm uppercase tracking-widest">A preview from the book</p>
+          </div>
+          <div className="prose prose-invert prose-brand max-w-none">
+            <CustomPortableText value={book.demoChapter} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
