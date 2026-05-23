@@ -6,10 +6,16 @@ const isProtectedRoute = createRouteMatcher([
   // Add other routes here if needed in the future, e.g., '/library/downloads(.*)'
 ]);
 
+import { NextResponse } from "next/server";
+
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
     await auth.protect();
   }
+  
+  const response = NextResponse.next();
+  response.headers.set("x-current-path", req.nextUrl.pathname);
+  return response;
 });
 
 export const config = {
