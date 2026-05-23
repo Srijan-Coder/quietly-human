@@ -79,6 +79,46 @@ export default function ToolkitHub() {
           </span>
         </Link>
 
+        {/* Tool 4: The Brain Dump */}
+        <Link 
+          href="/toolkit/brain-dump" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🗑️</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🗑️</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Brain Dump
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            An unreadable canvas. Type everything that is overwhelming you. It blurs out instantly. Wipe it clean when you are done.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 5: The Decision Coin */}
+        <Link 
+          href="/toolkit/decision-coin" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🪙</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🪙</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Decision Coin
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            For chronic overthinkers. Type your dilemma and let the universe give you a definitive answer. Commit to it.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
       </div>
     </div>
   );

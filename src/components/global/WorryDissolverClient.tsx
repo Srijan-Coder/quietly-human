@@ -4,15 +4,18 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
+type AnimationStyle = "smoke" | "burn" | "drop" | "wind" | "shatter" | "fade";
+
 export default function WorryDissolverClient() {
   const [text, setText] = useState("");
   const [stage, setStage] = useState<"typing" | "dissolving" | "released">("typing");
+  const [animStyle, setAnimStyle] = useState<AnimationStyle>("smoke");
 
   const handleRelease = () => {
     if (!text.trim()) return;
     setStage("dissolving");
 
-    // Wait for the smoke dissolve animation to finish before showing the final message
+    // Wait for the dissolve animation to finish before showing the final message
     setTimeout(() => {
       setStage("released");
     }, 4000);
@@ -23,32 +26,95 @@ export default function WorryDissolverClient() {
     setStage("typing");
   };
 
+  const getAnimationProps = (index: number) => {
+    const randomDelay = Math.random() * 2;
+    const randomX = (Math.random() - 0.5) * 100;
+    const randomY = (Math.random() - 0.5) * 100;
+    const randomRotation = (Math.random() - 0.5) * 180;
+    
+    switch (animStyle) {
+      case "burn":
+        return {
+          initial: { opacity: 1, y: 0, x: 0, color: "#e0e0e0" },
+          animate: { 
+            opacity: 0, 
+            y: -150 - Math.random() * 50, 
+            x: randomX, 
+            color: "#ff4500", // turns to fire
+            scale: 0.2,
+            filter: "blur(4px)"
+          },
+          transition: { duration: 2 + Math.random() * 1.5, delay: randomDelay, ease: "easeOut" }
+        };
+      case "drop":
+        return {
+          initial: { opacity: 1, y: 0, x: 0, rotate: 0 },
+          animate: { 
+            opacity: 0, 
+            y: 500, // falls down
+            x: randomX * 0.5, 
+            rotate: randomRotation 
+          },
+          transition: { duration: 1.5 + Math.random(), delay: randomDelay * 0.5, ease: "easeIn" }
+        };
+      case "wind":
+        return {
+          initial: { opacity: 1, x: 0, y: 0, skewX: 0 },
+          animate: { 
+            opacity: 0, 
+            x: 800 + Math.random() * 200, // blows right
+            y: randomY,
+            skewX: -30 
+          },
+          transition: { duration: 1.5, delay: index * 0.02, ease: "easeInOut" } // blows away in sequence
+        };
+      case "shatter":
+        return {
+          initial: { opacity: 1, x: 0, y: 0, rotate: 0 },
+          animate: { 
+            opacity: 0, 
+            x: randomX * 3, 
+            y: randomY * 3, 
+            rotate: randomRotation * 2,
+            scale: Math.random() > 0.5 ? 1.5 : 0.5
+          },
+          transition: { duration: 1 + Math.random(), delay: 0, ease: "easeOut" } // explodes all at once
+        };
+      case "fade":
+        return {
+          initial: { opacity: 1, scale: 1 },
+          animate: { opacity: 0, scale: 0.9 },
+          transition: { duration: 3, delay: randomDelay * 0.5, ease: "easeInOut" } // slow gentle fade
+        };
+      case "smoke":
+      default:
+        return {
+          initial: { opacity: 1, y: 0, x: 0, rotate: 0, filter: "blur(0px)" },
+          animate: { 
+            opacity: 0, 
+            y: -100 - Math.random() * 50, 
+            x: randomX, 
+            rotate: randomRotation,
+            filter: "blur(10px)"
+          },
+          transition: { duration: 2 + Math.random() * 1.5, delay: randomDelay, ease: "easeOut" }
+        };
+    }
+  };
+
   // Helper to render text as individual animated spans
-  const renderSmokeText = () => {
+  const renderAnimatedText = () => {
     const chars = text.split("");
     return (
       <div className="w-full text-brand-text font-serif text-lg md:text-xl p-4 text-center min-h-[150px] leading-relaxed break-words whitespace-pre-wrap">
         {chars.map((char, index) => {
-          const randomDelay = Math.random() * 2;
-          const randomX = (Math.random() - 0.5) * 100;
-          const randomRotation = (Math.random() - 0.5) * 90;
-          
+          const props = getAnimationProps(index);
           return (
             <motion.span
               key={index}
-              initial={{ opacity: 1, y: 0, x: 0, rotate: 0, filter: "blur(0px)" }}
-              animate={{ 
-                opacity: 0, 
-                y: -100 - Math.random() * 50, 
-                x: randomX, 
-                rotate: randomRotation,
-                filter: "blur(10px)"
-              }}
-              transition={{ 
-                duration: 2 + Math.random() * 1.5, 
-                delay: randomDelay, 
-                ease: "easeOut" 
-              }}
+              initial={props.initial}
+              animate={props.animate}
+              transition={props.transition}
               className="inline-block"
             >
               {char === " " ? "\u00A0" : char}
@@ -82,6 +148,22 @@ export default function WorryDissolverClient() {
               className="w-full bg-transparent border-b border-brand-border/50 text-brand-text font-serif text-lg md:text-xl p-4 focus:outline-none focus:border-brand-accent resize-none min-h-[150px] text-center placeholder:text-brand-soft/50"
               autoFocus
             />
+            
+            <div className="mt-8 flex flex-col items-center">
+              <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-3">How should it disappear?</span>
+              <div className="flex flex-wrap justify-center gap-2">
+                {(["smoke", "burn", "drop", "wind", "shatter", "fade"] as AnimationStyle[]).map(style => (
+                  <button
+                    key={style}
+                    onClick={() => setAnimStyle(style)}
+                    className={`px-3 py-1 rounded text-[10px] uppercase tracking-widest transition-colors ${animStyle === style ? "bg-brand-card text-brand-accent border border-brand-accent" : "text-brand-soft border border-brand-border hover:text-brand-text"}`}
+                  >
+                    {style}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <motion.button
               onClick={handleRelease}
               disabled={!text.trim()}
@@ -94,13 +176,13 @@ export default function WorryDissolverClient() {
           </motion.div>
         )}
 
-        {/* Stage 2: Dissolving (Smoke Effect) */}
+        {/* Stage 2: Dissolving */}
         {stage === "dissolving" && (
           <motion.div
             key="dissolving"
             className="w-full flex flex-col items-center"
           >
-            {renderSmokeText()}
+            {renderAnimatedText()}
           </motion.div>
         )}
 
