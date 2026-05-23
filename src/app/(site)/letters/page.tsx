@@ -9,6 +9,7 @@ export interface Letter {
   title: string;
   slug?: string;
   publishedAt: string;
+  guestName?: string;
 }
 
 export default async function LettersIndex() {
@@ -18,7 +19,8 @@ export default async function LettersIndex() {
       _id,
       title,
       "slug": slug.current,
-      publishedAt
+      publishedAt,
+      guestName
     }`);
   } catch (error) {
     console.warn("Failed to fetch letters:", error);
@@ -46,6 +48,11 @@ export default async function LettersIndex() {
               <h2 className="font-serif text-2xl md:text-3xl text-brand-text mb-2 group-hover:text-brand-accent transition-colors">
                 {letter.title}
               </h2>
+              {letter.guestName && (
+                <span className="text-[10px] uppercase tracking-widest text-brand-accent">
+                  {letter.guestName}
+                </span>
+              )}
             </div>
             <div className="text-xs uppercase tracking-widest text-brand-soft mt-4 md:mt-0">
               {new Date(letter.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

@@ -12,6 +12,7 @@ export interface Post {
   slug?: string;
   mainImage?: unknown;
   categories?: string[];
+  guestName?: string;
 }
 
 export default async function BlogPage(props: {
@@ -26,6 +27,7 @@ export default async function BlogPage(props: {
       title,
       "slug": slug.current,
       mainImage,
+      guestName,
       "categories": categories[]->title
     }`);
   } catch (error) {
@@ -74,11 +76,9 @@ export default async function BlogPage(props: {
               )}
             </div>
             <div>
-              {post.categories && post.categories.length > 0 && (
-                <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block">
-                  {post.categories[0]}
-                </span>
-              )}
+              <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block">
+                {post.guestName ? `${post.guestName}` : post.categories?.[0] || "Blog Post"}
+              </span>
               <h2 className="font-serif text-2xl group-hover:text-brand-accent transition-colors text-brand-text">{post.title}</h2>
               <span className="text-xs uppercase tracking-widest text-brand-soft mt-3 block group-hover:text-brand-text transition-colors">Read Article</span>
             </div>

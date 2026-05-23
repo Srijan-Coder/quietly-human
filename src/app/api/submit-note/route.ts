@@ -72,7 +72,7 @@ export async function POST(request: Request) {
         slug: { _type: 'slug', current: `${generateSlug(title)}-${Date.now()}` },
         guestName: name,
         guestEmail: email || "No email provided",
-        isApproved: false, // Must be manually approved
+        isApproved: true, // Instantly approved
         publishedAt: new Date().toISOString(),
         body: toPortableText(bodyText),
         ...(imageAssetId ? { mainImage: { _type: 'image', asset: { _type: 'reference', _ref: imageAssetId } } } : {})
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
         slug: { _type: 'slug', current: `${generateSlug(title)}-${Date.now()}` },
         guestName: name,
         guestEmail: email || "No email provided",
-        isApproved: false, // Must be manually approved
+        isApproved: true, // Instantly approved
         publishedAt: new Date().toISOString(),
         body: toPortableText(bodyText),
       });
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
         email: email || "No email provided",
         quote: bodyText,
         platform: "Website Form",
-        isApproved: false, 
+        isApproved: true, 
         featured: false,
       });
     }

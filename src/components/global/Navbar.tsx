@@ -121,10 +121,10 @@ export default function Navbar() {
 
           <ThemeToggle />
 
-          <div className="hidden md:block">
+          <div className="flex items-center">
             {isLoaded && !isSignedIn && (
               <SignInButton mode="modal">
-                <button className="text-sm uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">
+                <button className="text-xs md:text-sm uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">
                   Sign In
                 </button>
               </SignInButton>
@@ -133,7 +133,7 @@ export default function Navbar() {
               <UserButton 
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "w-8 h-8",
+                    userButtonAvatarBox: "w-7 h-7 md:w-8 md:h-8",
                   }
                 }}
               />
