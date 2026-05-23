@@ -84,6 +84,30 @@ export default async function CreatorRoomPage({ params }: Props) {
         )}
       </header>
 
+      {/* Creator Pins (Pinterest-Style) */}
+      {profile.pins && profile.pins.length > 0 && (
+        <div className="mb-16">
+          <h2 className="text-sm uppercase tracking-widest text-brand-soft mb-8 flex items-center gap-2">
+            <span>📌</span> Pinned by Creator
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {profile.pins.map((pin: any, idx: number) => (
+              <a key={idx} href={pin.url} target="_blank" rel="noopener noreferrer" className="group block bg-brand-card border border-brand-border rounded-xl overflow-hidden hover:border-brand-accent transition-colors shadow-sm">
+                <div className="h-32 bg-brand-bg relative flex items-center justify-center p-4 text-center border-b border-brand-border">
+                  <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all">
+                    {pin.emoji || "🔗"}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-sm text-brand-text mb-1 font-bold truncate">{pin.title}</h3>
+                  <p className="text-[10px] uppercase tracking-widest text-brand-soft truncate">{pin.subtitle}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Published Content */}
       <div>
         <h2 className="text-sm uppercase tracking-widest text-brand-soft mb-8 flex items-center gap-2">

@@ -8,6 +8,7 @@ CREATE TABLE public.profiles (
   avatar_url text,
   stripe_customer_id text,
   is_premium boolean DEFAULT false,
+  pins jsonb DEFAULT '[]'::jsonb,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
