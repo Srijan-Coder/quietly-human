@@ -8,9 +8,13 @@ import { syncCollectionToClerk } from "@/actions/collection";
 export type CollectionItem = {
   id: string; // usually the slug or path
   title: string;
-  type: "Letter" | "Guide" | "Thought" | "Book" | "letter" | "post" | "book" | "product" | "guide";
+  type: "Letter" | "Guide" | "Thought" | "Book" | "letter" | "post" | "book" | "product" | "guide" | "Tool";
   url: string;
   dateSaved: string;
+  folderId?: string;
+  privateNote?: string;
+  hasAudioNote?: boolean;
+  readingProgress?: number; // 0 to 100
 };
 
 export function useCollection() {
@@ -39,6 +43,14 @@ export function useCollection() {
       ...collection,
     ];
 
+    setLocalCollection(newCollection);
+    syncToCloud(newCollection);
+  };
+
+  const updateItem = (id: string, updates: Partial<CollectionItem>) => {
+    const newCollection = collection.map((item) => 
+      item.id === id ? { ...item, ...updates } : item
+    );
     setLocalCollection(newCollection);
     syncToCloud(newCollection);
   };
@@ -79,6 +91,7 @@ export function useCollection() {
   return {
     collection,
     saveItem,
+    updateItem,
     removeItem,
     isSaved,
   };

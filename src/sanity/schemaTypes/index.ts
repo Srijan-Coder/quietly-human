@@ -21,6 +21,7 @@ import { seoEmotionPageType } from './seoEmotionPageType'
 import { bookType } from './bookType'
 import { timeCapsuleType } from './timeCapsuleType'
 import { userCollectionType } from './userCollectionType'
+import { sharedKitType } from './sharedKitType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -28,6 +29,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     productType, guideType, letterType, ebookType, bookType,
     subscriberType, leadMagnetSettings,
     quoteType, resourceType, testimonialType, announcementType,
-    blogSeriesType, socialLinkType, seoEmotionPageType, timeCapsuleType, userCollectionType,
+    blogSeriesType, socialLinkType, seoEmotionPageType, timeCapsuleType, userCollectionType, sharedKitType,
   ],
 }
