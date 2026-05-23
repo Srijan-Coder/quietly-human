@@ -43,35 +43,36 @@ export default function ThreeAMRoom() {
 
   // Fade out candles over time
   useEffect(() => {
-    if (candles.length === 0) return;
-    
     const interval = setInterval(() => {
       setCandles(prev => 
         prev.map(c => ({ ...c, opacity: c.opacity - 0.05 }))
             .filter(c => c.opacity > 0)
       );
-    }, 5000); // Reduce opacity every 5 seconds
+    }, 2000); // Reduce opacity every 2 seconds
 
     return () => clearInterval(interval);
-  }, [candles]);
+  }, []);
 
   const leaveCandle = () => {
     // Prevent spamming too many candles
-    if (candles.length > 20) return;
+    if (candles.length > 30) return;
 
     // Random position within central bounds
-    const x = 10 + Math.random() * 80; // 10% to 90%
-    const y = 20 + Math.random() * 60; // 20% to 80%
+    const x = 5 + Math.random() * 90; // 5% to 95%
+    const y = 5 + Math.random() * 90; // 5% to 95%
     
     const newCandle: Candle = {
-      id: Date.now(),
+      id: Date.now() + Math.random(),
       x,
       y,
       opacity: 1,
-      size: 10 + Math.random() * 15,
+      size: 15 + Math.random() * 20,
     };
     
     setCandles(prev => [...prev, newCandle]);
+    
+    // Simulate real user interaction by incrementing the live counter!
+    setActiveUsers(prev => prev + 1);
   };
 
   return (
