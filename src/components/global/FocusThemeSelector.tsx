@@ -66,6 +66,19 @@ export default function FocusThemeSelector({ activeTheme, onSelectTheme, customU
       <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-4 block text-center">Room Atmosphere</span>
       
       <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar justify-start md:justify-center">
+        {/* Custom Audio Button */}
+        <button
+          onClick={() => setShowCustomInput(!showCustomInput)}
+          className={`flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl transition-all duration-300 ${
+            activeTheme.id === "custom" || showCustomInput
+              ? "bg-brand-card border border-brand-accent shadow-sm" 
+              : "hover:bg-brand-card/50 border border-transparent opacity-60 hover:opacity-100"
+          }`}
+        >
+          <span className="text-2xl">🎵</span>
+          <span className="text-[10px] uppercase tracking-wider text-brand-text whitespace-nowrap">Custom</span>
+        </button>
+
         {BUILT_IN_THEMES.map((theme) => (
           <button
             key={theme.id}
@@ -83,19 +96,6 @@ export default function FocusThemeSelector({ activeTheme, onSelectTheme, customU
             <span className="text-[10px] uppercase tracking-wider text-brand-text whitespace-nowrap">{theme.name}</span>
           </button>
         ))}
-
-        {/* Custom Audio Button */}
-        <button
-          onClick={() => setShowCustomInput(!showCustomInput)}
-          className={`flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl transition-all duration-300 ${
-            activeTheme.id === "custom" || showCustomInput
-              ? "bg-brand-card border border-brand-accent shadow-sm" 
-              : "hover:bg-brand-card/50 border border-transparent opacity-60 hover:opacity-100"
-          }`}
-        >
-          <span className="text-2xl">🎵</span>
-          <span className="text-[10px] uppercase tracking-wider text-brand-text whitespace-nowrap">Custom</span>
-        </button>
       </div>
 
       {/* Custom Audio Input */}
