@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Explicitly declare turbopack config so Next.js 16 doesn't error
+  // when next-pwa injects a webpack config alongside Turbopack
+  turbopack: {},
   images: {
     remotePatterns: [
       {
