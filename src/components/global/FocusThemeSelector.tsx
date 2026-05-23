@@ -98,7 +98,7 @@ export default function FocusThemeSelector({
       
       {/* Visual Themes Row */}
       <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-4 block text-center">Room Visuals</span>
-      <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar justify-start md:justify-center items-center">
+      <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar justify-start items-center">
         
         <button
           onClick={() => setShowPanel(showPanel === "bgYoutube" ? "none" : "bgYoutube")}
@@ -119,7 +119,7 @@ export default function FocusThemeSelector({
           <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
         </label>
 
-        <div className="w-px h-8 bg-brand-border/50 mx-2" />
+        <div className="w-px h-8 bg-brand-border/50 flex-shrink-0 mx-2" />
 
         {BUILT_IN_THEMES.map((theme) => (
           <button
@@ -128,7 +128,7 @@ export default function FocusThemeSelector({
               onSelectTheme(theme);
               setShowPanel("none");
             }}
-            className={`flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl transition-all duration-300 ${
+            className={`flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl transition-all duration-300 flex-shrink-0 ${
               activeTheme.id === theme.id 
                 ? "bg-brand-card border border-brand-accent shadow-sm" 
                 : "hover:bg-brand-card/50 border border-transparent opacity-60 hover:opacity-100"
@@ -142,7 +142,7 @@ export default function FocusThemeSelector({
 
       {/* Audio Options Row */}
       <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-4 mt-6 block text-center">Room Audio</span>
-      <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar justify-center items-center">
+      <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar justify-start items-center">
         
         <button
           onClick={() => { setAudioMode("none"); setLocalAudioFile(null); }}

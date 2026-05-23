@@ -98,9 +98,18 @@ export default function FocusTimer({ onTimerActiveChange }: { onTimerActiveChang
   };
 
   const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
-    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    
+    const hStr = h.toString().padStart(2, "0");
+    const mStr = m.toString().padStart(2, "0");
+    const sStr = s.toString().padStart(2, "0");
+    
+    if (h > 0) {
+      return `${hStr}:${mStr}:${sStr}`;
+    }
+    return `00:${mStr}:${sStr}`;
   };
 
   const totalTime = mode === "custom" ? customMinutes * 60 : MODES[mode].minutes * 60;
@@ -176,7 +185,7 @@ export default function FocusTimer({ onTimerActiveChange }: { onTimerActiveChang
                 type="number" 
                 value={customMinutes} 
                 onChange={handleCustomChange}
-                className="bg-transparent text-7xl md:text-8xl font-serif text-brand-text tracking-tight w-32 md:w-40 text-center focus:outline-none border-b-2 border-brand-accent/50 focus:border-brand-accent transition-colors"
+                className="bg-transparent text-6xl md:text-7xl font-serif text-brand-text tracking-tight w-24 md:w-32 text-center focus:outline-none border-b-2 border-brand-accent/50 focus:border-brand-accent transition-colors"
                 min="1"
                 max="999"
               />
@@ -187,7 +196,7 @@ export default function FocusTimer({ onTimerActiveChange }: { onTimerActiveChang
               key={timeLeft}
               initial={{ opacity: 0.5, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-7xl md:text-8xl font-serif text-brand-text tracking-tight mb-2"
+              className="text-6xl md:text-7xl font-serif text-brand-text tracking-tight mb-2"
             >
               {formatTime(timeLeft)}
             </motion.span>
