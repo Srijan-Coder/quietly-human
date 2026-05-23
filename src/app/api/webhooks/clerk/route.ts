@@ -103,6 +103,42 @@ export async function POST(req: Request) {
           `,
         });
         console.log(`Welcome email sent successfully to ${email}`);
+
+        // -------------------------------------------------------------
+        // SCHEDULE THE 7-DAY SEQUENCE VIA QSTASH
+        // -------------------------------------------------------------
+        if (process.env.QSTASH_TOKEN && process.env.NEXT_PUBLIC_APP_URL) {
+          const { Client } = await import('@upstash/qstash');
+          const qstash = new Client({ token: process.env.QSTASH_TOKEN });
+          
+          const sequenceUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/email/sequence`;
+
+          // Day 3
+          await qstash.publishJSON({
+            url: sequenceUrl,
+            body: { email, name, day: 3 },
+            delay: "3d",
+          });
+
+          // Day 5
+          await qstash.publishJSON({
+            url: sequenceUrl,
+            body: { email, name, day: 5 },
+            delay: "5d",
+          });
+
+          // Day 7
+          await qstash.publishJSON({
+            url: sequenceUrl,
+            body: { email, name, day: 7 },
+            delay: "7d",
+          });
+
+          console.log(`7-Day email sequence scheduled for ${email}`);
+        } else {
+          console.warn("Skipping email sequence scheduling: QSTASH_TOKEN or NEXT_PUBLIC_APP_URL missing.");
+        }
+
       } catch (error) {
         console.error("Failed to send welcome email via Gmail:", error);
       }
