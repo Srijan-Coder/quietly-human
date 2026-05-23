@@ -17,6 +17,24 @@ export const letterType = defineType({
       options: { source: 'title' },
     }),
     defineField({
+      name: 'guestName',
+      title: 'Guest Author Name (Community Submission)',
+      type: 'string',
+    }),
+    defineField({
+      name: 'guestEmail',
+      title: 'Guest Author Email (Private)',
+      type: 'string',
+      description: 'Admin only. This is never displayed on the website.',
+    }),
+    defineField({
+      name: 'isApproved',
+      title: 'Approved for Public Display',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Toggle this ON to publish. Community submissions default to false.',
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Date Sent',
       type: 'datetime',

@@ -1,5 +1,5 @@
 import { client } from "@/sanity/lib/client";
-import { postsQuery } from "@/sanity/lib/queries";
+import { groq } from "next-sanity";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
 import { CategoryFilter } from "@/components/global/CategoryFilter";
@@ -21,7 +21,13 @@ export default async function BlogPage(props: {
   const currentCategory = searchParams?.category as string | undefined;
   let posts = [];
   try {
-    posts = await client.fetch(postsQuery);
+    posts = await client.fetch(groq`*[_type == "post" && isApproved != false] | order(publishedAt desc) {
+      _id,
+      title,
+      "slug": slug.current,
+      mainImage,
+      "categories": categories[]->title
+    }`);
   } catch (error) {
     console.warn("Failed to fetch posts from Sanity (likely missing projectId):", error);
   }

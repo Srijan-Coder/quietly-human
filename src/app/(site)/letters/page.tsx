@@ -1,5 +1,5 @@
 import { client } from "@/sanity/lib/client";
-import { lettersQuery } from "@/sanity/lib/queries";
+import { groq } from "next-sanity";
 import Link from "next/link";
 
 export const revalidate = 60;
@@ -14,7 +14,12 @@ export interface Letter {
 export default async function LettersIndex() {
   let letters = [];
   try {
-    letters = await client.fetch(lettersQuery);
+    letters = await client.fetch(groq`*[_type == "letter" && isApproved != false] | order(publishedAt desc) {
+      _id,
+      title,
+      "slug": slug.current,
+      publishedAt
+    }`);
   } catch (error) {
     console.warn("Failed to fetch letters:", error);
   }
