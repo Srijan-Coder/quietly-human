@@ -1,36 +1,45 @@
 import { NextResponse } from 'next/server';
-import { client } from '@/sanity/lib/client';
+import { createClient } from "next-sanity";
+import { apiVersion, dataset, projectId } from "@/sanity/env";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { firstName, email, source } = await request.json();
+    const { email, source = "Website Form" } = await req.json();
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    if (!email || !email.includes('@')) {
+      return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
     }
 
-    // Sanity requires a Write Token to create documents.
-    // The user must add SANITY_API_TOKEN to their .env.local file in Vercel/Local.
-    const token = process.env.SANITY_API_TOKEN;
-
+    const token = process.env.SANITY_API_WRITE_TOKEN;
     if (!token) {
-      console.warn("SANITY_API_TOKEN is missing. Returning success to allow frontend animation, but email was not saved.");
-      // If we don't have a token, we pretend it succeeded so the UI animation still works for the demo.
-      return NextResponse.json({ success: true, message: 'Simulated success (No Sanity Token)' });
+      return NextResponse.json({ error: 'Server Configuration Error' }, { status: 500 });
     }
 
-    const writeClient = client.withConfig({ token });
-
-    await writeClient.create({
-      _type: 'subscriber',
-      firstName: firstName || 'Anonymous',
-      email: email,
-      source: source || 'Website',
+    const writeClient = createClient({
+      projectId,
+      dataset,
+      apiVersion,
+      useCdn: false,
+      token: token,
     });
 
-    return NextResponse.json({ success: true });
+    // Check if subscriber already exists
+    const existing = await writeClient.fetch(`*[_type == "subscriber" && email == $email][0]`, { email });
+    if (existing) {
+      return NextResponse.json({ success: true, message: "Already subscribed!" }, { status: 200 });
+    }
+
+    // Create new subscriber
+    await writeClient.create({
+      _type: "subscriber",
+      email,
+      source,
+      subscribedAt: new Date().toISOString()
+    });
+
+    return NextResponse.json({ success: true, message: "Subscribed successfully" }, { status: 200 });
   } catch (error) {
-    console.error('Subscription error:', error);
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal Server Error' }, { status: 500 });
+    console.error('Error subscribing:', error);
+    return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 });
   }
 }

@@ -20,6 +20,7 @@ const menuCategories = [
     title: "Sanctuary 🌿",
     links: [
       { name: "The Breathe Room", path: "/breathe" },
+      { name: "The 3AM Room", path: "/3am" },
       { name: "Quiet Focus", path: "/focus" },
       { name: "7-Day Reset", path: "/reset" },
       { name: "Quiet Words", path: "/quotes" },
@@ -31,6 +32,7 @@ const menuCategories = [
     title: "Explore ☁️",
     links: [
       { name: "Emotional Search", path: "/search" },
+      { name: "The Quiet Archive", path: "/archive" },
       { name: "Quiet Thoughts (Blog)", path: "/blog" },
       { name: "My Collection", path: "/collection" },
       { name: "Journey Paths", path: "/paths/behind" },

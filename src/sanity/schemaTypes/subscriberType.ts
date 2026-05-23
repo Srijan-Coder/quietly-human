@@ -2,31 +2,32 @@ import { defineField, defineType } from 'sanity'
 
 export const subscriberType = defineType({
   name: 'subscriber',
-  title: 'Subscribers (Leads)',
+  title: 'Newsletter Subscribers',
   type: 'document',
   fields: [
-    defineField({
-      name: 'firstName',
-      title: 'First Name',
-      type: 'string',
-    }),
     defineField({
       name: 'email',
       title: 'Email Address',
       type: 'string',
-      validation: (rule) => rule.required().email(),
+      validation: Rule => Rule.required().email(),
+    }),
+    defineField({
+      name: 'subscribedAt',
+      title: 'Subscribed At',
+      type: 'datetime',
+      initialValue: () => new Date().toISOString(),
     }),
     defineField({
       name: 'source',
-      title: 'Source (e.g. 7-Day Reset)',
+      title: 'Source',
       type: 'string',
-      initialValue: '7-Day Reset',
+      initialValue: 'Website Form',
     }),
   ],
   preview: {
     select: {
       title: 'email',
-      subtitle: 'firstName',
+      subtitle: 'subscribedAt',
     },
   },
 })

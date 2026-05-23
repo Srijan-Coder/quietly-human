@@ -66,6 +66,37 @@ export default function HomeContent({ testimonials, latestAdditions }: { testimo
   const [headline, setHeadline] = useState("A quiet space for tired hearts.");
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Newsletter State
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscribeMessage, setSubscribeMessage] = useState("");
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setIsSubscribing(true);
+    setSubscribeMessage("");
+    
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "Homepage Hero" })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubscribeMessage("Welcome to the sanctuary. 💌");
+        setEmail("");
+      } else {
+        setSubscribeMessage(data.error || "Something went wrong.");
+      }
+    } catch (err) {
+      setSubscribeMessage("Failed to connect.");
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
   useEffect(() => {
     const headlines = [
       "A quiet space for tired hearts.",
@@ -169,17 +200,23 @@ export default function HomeContent({ testimonials, latestAdditions }: { testimo
             transition={{ duration: 2, delay: 1.8 }}
             className="mt-12 w-full max-w-md"
           >
-            <form className="flex flex-col md:flex-row gap-2" onSubmit={(e) => { e.preventDefault(); alert("Newsletter functionality coming soon!"); }}>
+            <form className="flex flex-col md:flex-row gap-2" onSubmit={handleSubscribe}>
               <input 
                 type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Join the midnight letters (email)..." 
-                className="flex-1 bg-transparent border-b border-brand-border px-4 py-3 focus:outline-none focus:border-brand-accent transition-colors text-brand-text placeholder-brand-soft/50 text-sm text-center md:text-left"
+                className="flex-1 bg-transparent border-b border-brand-border px-4 py-3 focus:outline-none focus:border-brand-accent transition-colors text-brand-text placeholder-brand-soft/50 text-sm text-center md:text-left disabled:opacity-50"
                 required
+                disabled={isSubscribing}
               />
-              <button type="submit" className="px-6 py-3 text-xs uppercase tracking-widest text-brand-soft hover:text-brand-accent transition-colors">
-                Subscribe
+              <button type="submit" disabled={isSubscribing} className="px-6 py-3 text-xs uppercase tracking-widest text-brand-soft hover:text-brand-accent transition-colors disabled:opacity-50">
+                {isSubscribing ? "..." : "Subscribe"}
               </button>
             </form>
+            {subscribeMessage && (
+              <p className="text-xs tracking-widest uppercase text-brand-accent mt-4 font-mono">{subscribeMessage}</p>
+            )}
           </motion.div>
         </div>
 
