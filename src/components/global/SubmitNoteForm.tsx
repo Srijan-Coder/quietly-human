@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SignInButton, useUser, useAuth } from "@clerk/nextjs";
 
 export default function SubmitNoteForm() {
+  const { user } = useUser();
+  const { isLoaded, isSignedIn } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   
   const [submissionType, setSubmissionType] = useState<"note" | "blog" | "letter">("note");
@@ -18,6 +21,14 @@ export default function SubmitNoteForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-fill user info
+  useEffect(() => {
+    if (user) {
+      if (!name) setName(user.fullName || user.firstName || "");
+      if (!email) setEmail(user.primaryEmailAddress?.emailAddress || "");
+    }
+  }, [user]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -114,15 +125,28 @@ export default function SubmitNoteForm() {
             exit={{ opacity: 0, height: 0 }}
             className="w-full overflow-hidden"
           >
-            {status === "success" ? (
-              <div className="bg-brand-accent/10 border border-brand-accent rounded-2xl p-8 text-center mt-4">
-                <span className="text-2xl mb-4 block">💌</span>
-                <h3 className="font-serif text-xl text-brand-text mb-2">Safely Received.</h3>
-                <p className="text-brand-soft text-sm">
-                  Thank you for sharing your thoughts. Your submission has been securely delivered to the studio and is awaiting review.
-                </p>
+            {isLoaded && !isSignedIn && (
+              <div className="bg-brand-card border border-brand-border rounded-2xl p-8 flex flex-col items-center text-center mt-4 gap-4">
+                <p className="font-serif text-brand-text">You must be signed in to share with the community.</p>
+                <SignInButton mode="modal">
+                  <button className="px-6 py-2 bg-brand-text text-brand-bg rounded-full text-xs uppercase tracking-widest hover:bg-brand-accent transition-colors">
+                    Sign In
+                  </button>
+                </SignInButton>
               </div>
-            ) : (
+            )}
+            
+            {isLoaded && isSignedIn && (
+              <>
+              {status === "success" ? (
+                <div className="bg-brand-accent/10 border border-brand-accent rounded-2xl p-8 text-center mt-4">
+                  <span className="text-2xl mb-4 block">💌</span>
+                  <h3 className="font-serif text-xl text-brand-text mb-2">Safely Received.</h3>
+                  <p className="text-brand-soft text-sm">
+                    Thank you for sharing your thoughts. Your submission has been securely delivered to the studio and is awaiting review.
+                  </p>
+                </div>
+              ) : (
               <form onSubmit={handleSubmit} className="bg-brand-card border border-brand-border rounded-2xl p-6 md:p-8 flex flex-col gap-6 mt-4">
                 
                 {/* Type Selection */}
@@ -229,6 +253,8 @@ export default function SubmitNoteForm() {
                   </button>
                 </div>
               </form>
+            )}
+            </>
             )}
           </motion.div>
         )}

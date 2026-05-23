@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { useReadingMode } from "@/context/ReadingModeContext";
 import { GlobalSearchModal } from "./GlobalSearchModal";
+import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 
 const mainNavLinks = [
   { name: "Guides", path: "/guides" },
@@ -58,6 +59,7 @@ const menuCategories = [
 ];
 
 export default function Navbar() {
+  const { isLoaded, isSignedIn } = useAuth();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -118,6 +120,25 @@ export default function Navbar() {
           </button>
 
           <ThemeToggle />
+
+          <div className="hidden md:block">
+            {isLoaded && !isSignedIn && (
+              <SignInButton mode="modal">
+                <button className="text-sm uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">
+                  Sign In
+                </button>
+              </SignInButton>
+            )}
+            {isLoaded && isSignedIn && (
+              <UserButton 
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-8 h-8",
+                  }
+                }}
+              />
+            )}
+          </div>
 
           <button 
             onClick={() => setIsOpen(!isOpen)}

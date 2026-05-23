@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -76,40 +77,42 @@ export default async function RootLayout({
   } catch (error) { console.error(error); }
 
   return (
-    <html
-      lang="en"
-      className={`${cormorant.variable} ${inter.variable} antialiased`}
-      suppressHydrationWarning
-    >
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "Quietly Humans Studio",
-              "url": "https://quietlyhumans.space",
-              "description": "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
-            })
-          }}
-        />
-      </head>
-      <body className="min-h-screen flex flex-col font-sans bg-brand-bg text-brand-text selection:bg-brand-accent/20 selection:text-brand-text transition-colors duration-1000">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange={false}
-        >
-          <ReadingModeProvider>
-            <AnnouncementBar data={announcement} />
-            {children}
-          </ReadingModeProvider>
-          <Analytics />
-          <SpeedInsights />
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="en"
+        className={`${cormorant.variable} ${inter.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "Quietly Humans Studio",
+                "url": "https://quietlyhumans.space",
+                "description": "A cinematic digital sanctuary for emotional wellness, overthinking, and soft living.",
+              })
+            }}
+          />
+        </head>
+        <body className="min-h-screen flex flex-col font-sans bg-brand-bg text-brand-text selection:bg-brand-accent/20 selection:text-brand-text transition-colors duration-1000">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange={false}
+          >
+            <ReadingModeProvider>
+              <AnnouncementBar data={announcement} />
+              {children}
+            </ReadingModeProvider>
+            <Analytics />
+            <SpeedInsights />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
