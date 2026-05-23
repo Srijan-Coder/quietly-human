@@ -5,6 +5,7 @@ import { CustomPortableText } from "@/components/global/CustomPortableText";
 import SocialConnectCTA from "@/components/global/SocialConnectCTA";
 import ListenButton from "@/components/global/ListenButton";
 import { SaveButton } from "@/components/global/SaveButton";
+import { LikeButton } from "@/components/global/LikeButton";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
@@ -94,6 +95,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <div className="flex justify-center items-center gap-6 mb-16">
         <ListenButton />
+        <LikeButton documentId={post._id} initialLikes={post.likes} />
         <SaveButton item={{ id: post.slug, title: post.title, type: "letter", url: `/blog/${post.slug}` }} className="px-6 py-3 border border-brand-border bg-brand-card rounded-full" />
       </div>
 

@@ -68,6 +68,13 @@ export const postType = defineType({
       name: 'body',
       type: 'blockContent',
     }),
+    defineField({
+      name: 'likes',
+      title: 'Likes',
+      type: 'number',
+      initialValue: 0,
+      description: 'Number of hearts/likes from users.',
+    }),
   ],
   preview: {
     select: {

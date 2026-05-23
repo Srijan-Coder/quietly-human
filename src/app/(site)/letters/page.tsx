@@ -15,11 +15,11 @@ export interface Letter {
 export default async function LettersIndex() {
   let letters = [];
   try {
-    letters = await client.fetch(groq`*[_type == "letter" && isApproved != false] | order(publishedAt desc) {
+    letters = await client.fetch(groq`*[_type == "letter" && isApproved != false] | order(coalesce(publishedAt, _createdAt) desc) {
       _id,
       title,
       "slug": slug.current,
-      publishedAt,
+      "publishedAt": coalesce(publishedAt, _createdAt),
       guestName
     }`);
   } catch (error) {

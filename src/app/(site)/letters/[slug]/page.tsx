@@ -10,6 +10,7 @@ import { LetterPaperBox } from "@/components/global/LetterPaperBox";
 import { ClientCopyButton } from "@/components/global/ClientCopyButton";
 import SocialConnectCTA from "@/components/global/SocialConnectCTA";
 import ListenButton from "@/components/global/ListenButton";
+import { LikeButton } from "@/components/global/LikeButton";
 import { Metadata } from "next";
 
 export const revalidate = 60;
@@ -106,6 +107,7 @@ export default async function LetterPage({ params }: { params: Promise<{ slug: s
 
         <div className="flex justify-center items-center gap-6 mb-12">
           <ListenButton />
+          <LikeButton documentId={letter._id} initialLikes={letter.likes} />
           <SaveButton item={{ id: letter.slug, title: letter.title, type: "letter", url: `/letters/${letter.slug}` }} className="px-6 py-3 border border-brand-border bg-brand-card rounded-full" />
         </div>
 

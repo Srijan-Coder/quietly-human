@@ -28,7 +28,8 @@ export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][
   },
   body,
   publishedAt,
-  "authorName": author->name
+  "authorName": author->name,
+  likes
 }`;
 
 export const productsQuery = groq`*[_type == "product"] | order(_createdAt desc) {
@@ -95,7 +96,8 @@ export const letterBySlugQuery = groq`*[_type == "letter" && slug.current == $sl
   title,
   "slug": slug.current,
   publishedAt,
-  body
+  body,
+  likes
 }`;
 
 export const ebookBySlugQuery = groq`*[_type == "ebook" && slug.current == $slug][0] {

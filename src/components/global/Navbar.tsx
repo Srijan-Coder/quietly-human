@@ -10,10 +10,9 @@ import { GlobalSearchModal } from "./GlobalSearchModal";
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 
 const mainNavLinks = [
-  { name: "Guides", path: "/guides" },
-  { name: "Letters", path: "/letters" },
-  { name: "Blog", path: "/blog" },
-  { name: "Library", path: "/library" },
+  { name: "Feel", path: "/search" },
+  { name: "Read", path: "/blog" },
+  { name: "Breathe", path: "/breathe" },
 ];
 
 const menuCategories = [

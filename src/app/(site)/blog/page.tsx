@@ -22,12 +22,13 @@ export default async function BlogPage(props: {
   const currentCategory = searchParams?.category as string | undefined;
   let posts = [];
   try {
-    posts = await client.fetch(groq`*[_type == "post" && isApproved != false] | order(publishedAt desc) {
+    posts = await client.fetch(groq`*[_type == "post" && isApproved != false] | order(coalesce(publishedAt, _createdAt) desc) {
       _id,
       title,
       "slug": slug.current,
       mainImage,
       guestName,
+      "publishedAt": coalesce(publishedAt, _createdAt),
       "categories": categories[]->title
     }`);
   } catch (error) {

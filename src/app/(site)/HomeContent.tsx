@@ -149,17 +149,37 @@ export default function HomeContent({ testimonials, latestAdditions }: { testimo
             className="flex flex-col sm:flex-row gap-4 mt-4"
           >
             <Link
-              href="/library"
+              href="/search"
               className="px-8 py-4 bg-brand-text text-brand-bg rounded-full text-xs tracking-widest uppercase hover:bg-brand-accent hover:text-white transition-all duration-500 hover:scale-105"
             >
               Start Softly 🌿
             </Link>
             <Link
-              href="/search"
+              href="/breathe"
               className="px-8 py-4 border border-brand-border text-brand-text rounded-full text-xs tracking-widest uppercase hover:border-brand-accent hover:text-brand-accent transition-all duration-500"
             >
-              How are you feeling? ☁️
+              Enter Breathe Room 🕊️
             </Link>
+          </motion.div>
+
+          {/* Hero Newsletter Signup */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2, delay: 1.8 }}
+            className="mt-12 w-full max-w-md"
+          >
+            <form className="flex flex-col md:flex-row gap-2" onSubmit={(e) => { e.preventDefault(); alert("Newsletter functionality coming soon!"); }}>
+              <input 
+                type="email" 
+                placeholder="Join the midnight letters (email)..." 
+                className="flex-1 bg-transparent border-b border-brand-border px-4 py-3 focus:outline-none focus:border-brand-accent transition-colors text-brand-text placeholder-brand-soft/50 text-sm text-center md:text-left"
+                required
+              />
+              <button type="submit" className="px-6 py-3 text-xs uppercase tracking-widest text-brand-soft hover:text-brand-accent transition-colors">
+                Subscribe
+              </button>
+            </form>
           </motion.div>
         </div>
 
