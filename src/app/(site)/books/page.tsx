@@ -16,7 +16,7 @@ export interface Book {
 export default async function BooksIndexPage() {
   let books = [];
   try {
-    books = await client.fetch(groq`*[_type == "ebook"] | order(_createdAt desc) {
+    books = await client.fetch(groq`*[_type in ["ebook", "book", "product"]] | order(_createdAt desc) {
       _id,
       title,
       "slug": slug.current,
@@ -36,7 +36,7 @@ export default async function BooksIndexPage() {
       <div className="mb-16">
         <h1 className="text-5xl md:text-6xl font-serif text-brand-text mb-4">Books & Journals 📖</h1>
         <p className="text-brand-soft text-lg max-w-xl text-balance">
-          A collection of digital reading material for your healing journey. All books are completely free for community members.
+          A collection of digital reading material and products for your healing journey.
         </p>
       </div>
 
