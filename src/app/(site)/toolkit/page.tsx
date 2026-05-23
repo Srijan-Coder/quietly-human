@@ -359,6 +359,66 @@ export default function ToolkitHub() {
           </span>
         </Link>
 
+        {/* Tool 18: The Worry Postponer */}
+        <Link 
+          href="/toolkit/worry-postponer" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">📦</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">📦</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Worry Postponer
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            You are allowed to worry, just not right now. Lock your worry in a box and schedule a 15-minute window for it later today.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 19: The "Done" List */}
+        <Link 
+          href="/toolkit/done-list" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">✅</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">✅</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The "Done" List
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            For low-energy days. A reverse to-do list where you only log what you've already accomplished, no matter how small.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 20: The Grounding Sandbox */}
+        <Link 
+          href="/toolkit/grounding-sandbox" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">✨</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">✨</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Grounding Sandbox
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            Sometimes you just need to distract your hands. A calming, interactive physics sandbox to pull your mind back to the present.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
       </div>
     </div>
   );
