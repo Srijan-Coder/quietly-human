@@ -1,16 +1,14 @@
-import { Webhook } from 'svix'
-import { headers } from 'next/headers'
-import { WebhookEvent } from '@clerk/nextjs/server'
-import { Resend } from 'resend'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { Webhook } from 'svix';
+import { headers } from 'next/headers';
+import { WebhookEvent } from '@clerk/nextjs/server';
+import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
+  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    throw new Error('Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
+    throw new Error('Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
   }
 
   // Get the headers
@@ -23,17 +21,17 @@ export async function POST(req: Request) {
   if (!svix_id || !svix_timestamp || !svix_signature) {
     return new Response('Error occured -- no svix headers', {
       status: 400
-    })
+    });
   }
 
   // Get the body
-  const payload = await req.json()
+  const payload = await req.json();
   const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
 
-  let evt: WebhookEvent
+  let evt: WebhookEvent;
 
   // Verify the payload with the headers
   try {
@@ -41,12 +39,12 @@ export async function POST(req: Request) {
       "svix-id": svix_id,
       "svix-timestamp": svix_timestamp,
       "svix-signature": svix_signature,
-    }) as WebhookEvent
+    }) as WebhookEvent;
   } catch (err) {
     console.error('Error verifying webhook:', err);
     return new Response('Error occured', {
       status: 400
-    })
+    });
   }
 
   // Handle the webhook
@@ -58,11 +56,25 @@ export async function POST(req: Request) {
     if (email_addresses && email_addresses.length > 0) {
       const email = email_addresses[0].email_address;
       const name = first_name || "there";
+
+      if (!process.env.GMAIL_APP_PASSWORD) {
+        console.error("Missing GMAIL_APP_PASSWORD in environment variables.");
+        return new Response('Server configuration error', { status: 500 });
+      }
+
+      // Configure Nodemailer for Gmail
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'srijanpandey2025@gmail.com',
+          pass: process.env.GMAIL_APP_PASSWORD,
+        },
+      });
       
       try {
-        await resend.emails.send({
-          from: 'Srijan <hello@quietlyhumans.space>', // The user will need to verify this domain in Resend
-          to: [email],
+        await transporter.sendMail({
+          from: '"Quietly Humans" <srijanpandey2025@gmail.com>',
+          to: email,
           subject: 'Welcome to the Sanctuary',
           html: `
             <div style="font-family: 'Georgia', serif; color: #1a1a1a; max-width: 500px; margin: 0 auto; line-height: 1.6; padding: 20px;">
@@ -92,10 +104,10 @@ export async function POST(req: Request) {
         });
         console.log(`Welcome email sent successfully to ${email}`);
       } catch (error) {
-        console.error("Failed to send welcome email:", error);
+        console.error("Failed to send welcome email via Gmail:", error);
       }
     }
   }
 
-  return new Response('', { status: 200 })
+  return new Response('', { status: 200 });
 }
