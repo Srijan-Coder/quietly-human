@@ -6,6 +6,8 @@ import Link from "next/link";
 import AmbientBackground from "@/components/global/AmbientBackground";
 import { EmotionalPath } from "@/components/global/EmotionalPath";
 import { TestimonialCarousel, type Testimonial } from "@/components/global/TestimonialCarousel";
+import Image from "next/image";
+import { urlFor } from "@/sanity/lib/image";
 
 export default function HomeContent({ testimonials, ebooks, products }: { testimonials: Testimonial[], ebooks?: any[], products?: any[] }) {
   const fadeUp: Variants = {
@@ -350,7 +352,7 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
                   Premium resources, guided journals, and digital dashboards designed to help you live softly and intentionally.
                 </p>
                 <Link
-                  href={premiumProducts[currentPremiumSlide].slug !== "#" ? `/products/${premiumProducts[currentPremiumSlide].slug}` : "/library"}
+                  href={premiumProducts[currentPremiumSlide].slug !== "#" ? `/books/${premiumProducts[currentPremiumSlide].slug}` : "/library"}
                   className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-all duration-500 rounded-full text-xs tracking-widest uppercase mt-auto"
                 >
                   Explore the Studio ☕
@@ -404,11 +406,22 @@ export default function HomeContent({ testimonials, ebooks, products }: { testim
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-20"
                     style={{ background: "radial-gradient(ellipse at 50% 20%, var(--color-accent), transparent 70%)", opacity: 0.06 }}
                   />
-                  <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4">{book.tag}</span>
-                  <span className="font-serif text-xl text-brand-muted px-8 text-center">{book.title}</span>
+                  {book.coverImage?.asset ? (
+                    <Image
+                      src={urlFor(book.coverImage).width(400).height(533).url()}
+                      alt={book.title}
+                      fill
+                      className="object-cover w-full h-full opacity-90 relative z-10"
+                    />
+                  ) : (
+                    <>
+                      <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 relative z-10">{book.tag}</span>
+                      <span className="font-serif text-xl text-brand-muted px-8 text-center relative z-10">{book.title}</span>
+                    </>
+                  )}
                 </motion.div>
                 <h3 className="font-serif text-2xl text-brand-text mb-2 group-hover:text-brand-accent transition-colors">{book.title}</h3>
                 <Link href={book.slug ? `/books/${book.slug}` : "/library"} className="text-xs uppercase tracking-widest text-brand-soft group-hover:text-brand-accent transition-colors">

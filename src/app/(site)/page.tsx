@@ -15,9 +15,9 @@ export default async function Home() {
   let ebooks = [];
   try {
     ebooks = await client.fetch(
-      groq`*[_type == "ebook"] | order(_createdAt desc)[0...3] {
+      groq`*[_type == "book"] | order(_createdAt desc)[0...3] {
         title,
-        "tag": emotionTags[0],
+        "tag": tagline,
         "slug": slug.current
       }`
     );
@@ -26,7 +26,7 @@ export default async function Home() {
   let products = [];
   try {
     products = await client.fetch(
-      groq`*[_type == "product"] | order(_createdAt desc)[0...3] {
+      groq`*[_type == "book" && bookFormat == "premium"] | order(_createdAt desc)[0...3] {
         title,
         price,
         "slug": slug.current
