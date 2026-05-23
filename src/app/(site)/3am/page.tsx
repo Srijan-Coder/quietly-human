@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 
 interface Candle {
   id: number;
@@ -15,6 +16,9 @@ interface Candle {
 export default function ThreeAMRoom() {
   const [activeUsers, setActiveUsers] = useState(0);
   const [candles, setCandles] = useState<Candle[]>([]);
+  const [hasLeftCandle, setHasLeftCandle] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
+  const roomRef = useRef<HTMLDivElement>(null);
 
   // The Algorithmic "Live" Counter
   useEffect(() => {
@@ -70,13 +74,53 @@ export default function ThreeAMRoom() {
     };
     
     setCandles(prev => [...prev, newCandle]);
+    setHasLeftCandle(true);
     
     // Simulate real user interaction by incrementing the live counter!
     setActiveUsers(prev => prev + 1);
   };
 
+  const shareMoment = async () => {
+    if (!roomRef.current) return;
+    setIsSharing(true);
+    try {
+      const canvas = await html2canvas(roomRef.current, {
+        backgroundColor: "#050505",
+        scale: 2, // High resolution
+        logging: false,
+      });
+      
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        
+        const file = new File([blob], "3am-room.png", { type: "image/png" });
+        
+        // Try native Web Share API first (Instagram Stories on mobile)
+        if (navigator.share && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "The 3AM Room",
+            text: "You are not the only one awake.",
+          });
+        } else {
+          // Fallback to download for desktop
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "3am-room.png";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }, "image/png");
+    } catch (error) {
+      console.error("Failed to share:", error);
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-[#050505] z-[100] flex flex-col justify-center items-center text-[#e0e0e0] overflow-hidden font-serif">
+    <div ref={roomRef} className="fixed inset-0 bg-[#050505] z-[100] flex flex-col justify-center items-center text-[#e0e0e0] overflow-hidden font-serif">
       {/* Candles Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <AnimatePresence>
@@ -140,12 +184,29 @@ export default function ThreeAMRoom() {
             </p>
           </div>
 
-          <button 
-            onClick={leaveCandle}
-            className="px-6 py-4 border border-[#333] hover:border-[#fca311] hover:text-[#fca311] rounded-full text-[10px] uppercase tracking-[0.2em] transition-all duration-700 bg-black/50 backdrop-blur-md"
-          >
-            Leave a light for someone else 🕯️
-          </button>
+          <div className="flex flex-col items-center gap-4">
+            <button 
+              onClick={leaveCandle}
+              className="px-6 py-4 border border-[#333] hover:border-[#fca311] hover:text-[#fca311] rounded-full text-[10px] uppercase tracking-[0.2em] transition-all duration-700 bg-black/50 backdrop-blur-md"
+            >
+              Leave a light for someone else 🕯️
+            </button>
+            
+            <AnimatePresence>
+              {hasLeftCandle && (
+                <motion.button
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  onClick={shareMoment}
+                  disabled={isSharing}
+                  className="px-4 py-2 text-[#aaa] hover:text-[#fff] text-[10px] uppercase tracking-widest transition-colors disabled:opacity-50"
+                >
+                  {isSharing ? "Capturing..." : "Share this moment"}
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
       </div>
     </div>

@@ -14,7 +14,7 @@ export const revalidate = 60;
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const book = await client.fetch(
-    groq`*[_type == "ebook" && slug.current == $slug][0]{ title, author, coverImage }`,
+    groq`*[_type in ["ebook", "book", "product"] && slug.current == $slug][0]{ title, author, coverImage }`,
     { slug: resolvedParams.slug }
   );
 
@@ -48,7 +48,7 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
   const { userId } = await auth();
   
   const book = await client.fetch(
-    groq`*[_type == "ebook" && slug.current == $slug][0]{
+    groq`*[_type in ["ebook", "book", "product"] && slug.current == $slug][0]{
       _id,
       title,
       "slug": slug.current,
