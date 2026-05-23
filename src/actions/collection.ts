@@ -20,6 +20,14 @@ export async function syncCollectionToClerk(collection: CollectionItem[]) {
       }
     });
 
+    // Also sync to Sanity Database so the admin can see it
+    const sanityUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "http://localhost:3000";
+    await fetch(`${sanityUrl}/api/collection`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ savedItems: collection })
+    });
+
     return { success: true };
   } catch (error) {
     console.error("Failed to sync collection to Clerk:", error);

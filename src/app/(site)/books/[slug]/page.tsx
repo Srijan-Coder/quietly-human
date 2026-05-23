@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { SecureDownloadButton } from "@/components/global/SecureDownloadButton";
 import { SaveButton } from "@/components/global/SaveButton";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 export const revalidate = 60;
 
@@ -128,22 +129,31 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
           )}
 
           <div className="pt-8 border-t border-brand-border">
-            {book.fileUrl ? (
-              <SecureDownloadButton fileUrl={book.fileUrl} />
-            ) : book.notionUrl ? (
-              <a 
-                href={book.notionUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-8 py-4 bg-brand-text text-brand-bg rounded-full text-sm uppercase tracking-widest hover:bg-brand-accent transition-colors shadow-lg"
-              >
-                Open in Notion
-              </a>
-            ) : (
-              <button disabled className="px-8 py-4 bg-brand-card text-brand-soft border border-brand-border rounded-full text-sm uppercase tracking-widest cursor-not-allowed">
-                File not available
-              </button>
-            )}
+            <SignedIn>
+              {book.fileUrl ? (
+                <SecureDownloadButton fileUrl={book.fileUrl} />
+              ) : book.notionUrl ? (
+                <a 
+                  href={book.notionUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-8 py-4 bg-brand-text text-brand-bg rounded-full text-sm uppercase tracking-widest hover:bg-brand-accent transition-colors shadow-lg"
+                >
+                  Open in Notion
+                </a>
+              ) : (
+                <button disabled className="px-8 py-4 bg-brand-card text-brand-soft border border-brand-border rounded-full text-sm uppercase tracking-widest cursor-not-allowed">
+                  File not available
+                </button>
+              )}
+            </SignedIn>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="px-8 py-4 bg-brand-accent text-white rounded-full text-sm uppercase tracking-widest hover:bg-brand-text transition-colors shadow-lg">
+                  Create Account to Download
+                </button>
+              </SignInButton>
+            </SignedOut>
           </div>
           <p className="text-xs text-brand-soft mt-4 italic">
             * This file is securely encrypted. You must be signed into your community account to download.
