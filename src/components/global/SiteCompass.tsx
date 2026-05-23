@@ -9,31 +9,31 @@ const mapCategories = [
   {
     title: "I need comfort...",
     links: [
+      { name: "Enter The 3AM Room", path: "/3am" },
       { name: "Take the Heart Quiz", path: "/quiz" },
       { name: "Read a Midnight Letter", path: "/letters" },
-      { name: "Explore the Pillars", path: "/guides" },
     ]
   },
   {
     title: "I want to read...",
     links: [
       { name: "Quiet Thoughts (Blog)", path: "/blog" },
-      { name: "Free Ebooks & Journals", path: "/books" },
-      { name: "My Collection", path: "/collection" },
+      { name: "Books & Shop", path: "/books" },
+      { name: "The Quiet Archive", path: "/archive" },
     ]
   },
   {
     title: "I feel lost...",
     links: [
-      { name: "Start the 7-Day Reset", path: "/reset" },
       { name: "Search by Emotion", path: "/search" },
+      { name: "The Soft Toolkit", path: "/toolkit" },
       { name: "Enter The Breathe Room", path: "/breathe" },
     ]
   },
   {
     title: "I want to connect...",
     links: [
-      { name: "Meet Srijan", path: "/about" },
+      { name: "My Collection", path: "/collection" },
       { name: "Reader Notes", path: "/testimonials" },
       { name: "Link-in-Bio", path: "/links" },
     ]
