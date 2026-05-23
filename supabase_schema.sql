@@ -36,6 +36,7 @@ CREATE TABLE public.posts (
   author_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   type text NOT NULL CHECK (type IN ('letter', 'quote', 'blog')),
   title text,
+  slug text UNIQUE,
   content text NOT NULL,
   candle_count integer DEFAULT 0,
   is_draft boolean DEFAULT false,
