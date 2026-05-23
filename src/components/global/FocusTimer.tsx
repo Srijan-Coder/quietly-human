@@ -223,6 +223,23 @@ export default function FocusTimer({ onTimerActiveChange }: { onTimerActiveChang
             </svg>
           )}
         </button>
+
+        {/* Fullscreen Toggle */}
+        <button 
+          onClick={() => {
+            if (!document.fullscreenElement) {
+              document.documentElement.requestFullscreen().catch(err => console.log(err));
+            } else {
+              document.exitFullscreen();
+            }
+          }}
+          className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-brand-card/80 backdrop-blur-md border border-brand-border rounded-full hover:border-brand-accent hover:text-brand-accent transition-all duration-300 text-brand-text shadow-sm hover:shadow-md"
+          title="Toggle Full Screen"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+          </svg>
+        </button>
       </div>
 
     </div>
