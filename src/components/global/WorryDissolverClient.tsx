@@ -112,9 +112,9 @@ export default function WorryDissolverClient() {
           return (
             <motion.span
               key={index}
-              initial={props.initial}
-              animate={props.animate}
-              transition={props.transition}
+              initial={props.initial as any}
+              animate={props.animate as any}
+              transition={props.transition as any}
               className="inline-block"
             >
               {char === " " ? "\u00A0" : char}
