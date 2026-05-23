@@ -3,7 +3,7 @@ import { groq } from "next-sanity";
 import { type Testimonial } from "@/components/global/TestimonialCarousel";
 import SubmitNoteForm from "@/components/global/SubmitNoteForm";
 
-export const revalidate = 60;
+export const revalidate = 0; // Set to 0 so new submissions show up instantly without caching delay
 export const metadata = { title: "Reader Notes — Quietly Humans" };
 
 export default async function TestimonialsPage() {
