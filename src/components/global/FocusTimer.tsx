@@ -179,7 +179,7 @@ export default function FocusTimer({ onTimerActiveChange, isZenMode, onZenModeTo
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 4, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
               className={`absolute inset-0 blur-3xl pointer-events-none ${timerShape === "circle" ? "rounded-full" : "rounded-3xl"}`}
-              style={{ backgroundColor: timerColor }}
+              style={{ backgroundColor: timerColor, willChange: "transform, opacity" }}
             />
           )}
         </AnimatePresence>

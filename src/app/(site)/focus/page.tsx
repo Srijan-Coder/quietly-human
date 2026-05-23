@@ -118,7 +118,7 @@ export default function FocusPage() {
               className="object-cover"
             />
             {/* Dark Overlay so text is readable */}
-            <div className={`absolute inset-0 bg-brand-bg transition-opacity duration-1000 ${isZenMode ? "opacity-30 backdrop-blur-none" : "opacity-60 backdrop-blur-[2px]"}`} />
+            <div className={`absolute inset-0 bg-brand-bg transition-opacity duration-1000 ${isZenMode ? "opacity-30" : "opacity-60"}`} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -144,7 +144,7 @@ export default function FocusPage() {
               className="w-full h-full pointer-events-none"
             />
           </div>
-          <div className={`absolute inset-0 bg-brand-bg transition-opacity duration-1000 ${isZenMode ? "opacity-30 backdrop-blur-none" : "opacity-60 backdrop-blur-[2px]"}`} />
+          <div className={`absolute inset-0 bg-brand-bg transition-opacity duration-1000 ${isZenMode ? "opacity-30" : "opacity-60"}`} />
         </div>
       )}
 
