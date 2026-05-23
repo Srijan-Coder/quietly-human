@@ -106,14 +106,20 @@ export default function ThreeAMRoom() {
           // Fallback to download for desktop
           const url = URL.createObjectURL(blob);
           const a = document.createElement("a");
+          a.style.display = "none";
           a.href = url;
           a.download = "3am-room.png";
+          document.body.appendChild(a);
           a.click();
-          URL.revokeObjectURL(url);
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 100);
         }
       }, "image/png");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to share:", error);
+      alert("Failed to create the image. Please try again.");
     } finally {
       setIsSharing(false);
     }
