@@ -83,40 +83,42 @@ export default function ThreeAMRoom() {
   const shareMoment = async () => {
     if (!roomRef.current) return;
     setIsSharing(true);
+    
     try {
-      const canvas = await html2canvas(roomRef.current, {
-        backgroundColor: "#050505",
-        scale: 2, // High resolution
-        logging: false,
-      });
+      // Use html-to-image which handles modern CSS (filters/glows) much better
+      const { toBlob } = await import('html-to-image');
       
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        
-        const file = new File([blob], "3am-room.png", { type: "image/png" });
-        
-        // Try native Web Share API first (Instagram Stories on mobile)
-        if (navigator.share && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: "The 3AM Room",
-            text: "You are not the only one awake.",
-          });
-        } else {
-          // Fallback to download for desktop
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.style.display = "none";
-          a.href = url;
-          a.download = "3am-room.png";
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-          }, 100);
-        }
-      }, "image/png");
+      const blob = await toBlob(roomRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        backgroundColor: "#050505",
+      });
+
+      if (!blob) throw new Error("Generated blob is null");
+      
+      const file = new File([blob], "3am-room.png", { type: "image/png" });
+      
+      // Try native Web Share API first (Instagram Stories on mobile)
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "The 3AM Room",
+          text: "You are not the only one awake.",
+        });
+      } else {
+        // Fallback to download for desktop
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "3am-room.png";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 100);
+      }
     } catch (error: any) {
       console.error("Failed to share:", error);
       alert("Failed to create the image. Please try again.");
