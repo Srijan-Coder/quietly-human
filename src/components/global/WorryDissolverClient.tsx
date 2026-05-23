@@ -12,7 +12,7 @@ export default function WorryDissolverClient() {
     if (!text.trim()) return;
     setStage("dissolving");
 
-    // Wait for the dissolve animation to finish before showing the final message
+    // Wait for the smoke dissolve animation to finish before showing the final message
     setTimeout(() => {
       setStage("released");
     }, 4000);
@@ -21,6 +21,42 @@ export default function WorryDissolverClient() {
   const reset = () => {
     setText("");
     setStage("typing");
+  };
+
+  // Helper to render text as individual animated spans
+  const renderSmokeText = () => {
+    const chars = text.split("");
+    return (
+      <div className="w-full text-brand-text font-serif text-lg md:text-xl p-4 text-center min-h-[150px] leading-relaxed break-words whitespace-pre-wrap">
+        {chars.map((char, index) => {
+          const randomDelay = Math.random() * 2;
+          const randomX = (Math.random() - 0.5) * 100;
+          const randomRotation = (Math.random() - 0.5) * 90;
+          
+          return (
+            <motion.span
+              key={index}
+              initial={{ opacity: 1, y: 0, x: 0, rotate: 0, filter: "blur(0px)" }}
+              animate={{ 
+                opacity: 0, 
+                y: -100 - Math.random() * 50, 
+                x: randomX, 
+                rotate: randomRotation,
+                filter: "blur(10px)"
+              }}
+              transition={{ 
+                duration: 2 + Math.random() * 1.5, 
+                delay: randomDelay, 
+                ease: "easeOut" 
+              }}
+              className="inline-block"
+            >
+              {char === " " ? "\u00A0" : char}
+            </motion.span>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -33,7 +69,7 @@ export default function WorryDissolverClient() {
             key="typing"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, filter: "blur(20px)", scale: 1.1, transition: { duration: 3, ease: "easeInOut" } }}
+            exit={{ opacity: 0, transition: { duration: 0.5 } }}
             className="w-full flex flex-col items-center"
           >
             <h2 className="font-serif text-2xl md:text-3xl text-brand-text mb-8 text-center text-balance">
@@ -58,7 +94,17 @@ export default function WorryDissolverClient() {
           </motion.div>
         )}
 
-        {/* Stage 2 & 3: The Release Message */}
+        {/* Stage 2: Dissolving (Smoke Effect) */}
+        {stage === "dissolving" && (
+          <motion.div
+            key="dissolving"
+            className="w-full flex flex-col items-center"
+          >
+            {renderSmokeText()}
+          </motion.div>
+        )}
+
+        {/* Stage 3: The Release Message */}
         {stage === "released" && (
           <motion.div
             key="released"

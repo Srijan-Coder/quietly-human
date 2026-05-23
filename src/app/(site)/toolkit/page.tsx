@@ -39,33 +39,45 @@ export default function ToolkitHub() {
           </span>
         </Link>
 
-        {/* Placeholder for Tool 2 */}
-        <div className="block bg-brand-card/50 border border-brand-border border-dashed rounded-2xl p-8 opacity-60">
-          <div className="text-3xl mb-6 grayscale">🪨</div>
-          <h2 className="font-serif text-2xl text-brand-soft mb-4">
+        {/* Tool 2: The Daily Anchor */}
+        <Link 
+          href="/toolkit/daily-anchor" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🪨</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🪨</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
             The Daily Anchor
           </h2>
-          <p className="text-brand-soft text-sm mb-8">
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
             Set a single word as your intention for the day, carved into digital stone.
           </p>
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft bg-brand-bg px-3 py-1 rounded-full border border-brand-border">
-            Coming Soon
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
           </span>
-        </div>
+        </Link>
 
-        {/* Placeholder for Tool 3 */}
-        <div className="block bg-brand-card/50 border border-brand-border border-dashed rounded-2xl p-8 opacity-60">
-          <div className="text-3xl mb-6 grayscale">🕰️</div>
-          <h2 className="font-serif text-2xl text-brand-soft mb-4">
+        {/* Tool 3: Panic Redirector */}
+        <Link 
+          href="/toolkit/panic-redirector" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🕰️</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🕰️</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
             Panic Redirector
           </h2>
-          <p className="text-brand-soft text-sm mb-8">
-            A guided visual and audio exercise to break thought spirals using the 5-4-3-2-1 grounding method.
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            A guided visual exercise to break thought spirals using the 5-4-3-2-1 clinical grounding method.
           </p>
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft bg-brand-bg px-3 py-1 rounded-full border border-brand-border">
-            In Development
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
           </span>
-        </div>
+        </Link>
 
       </div>
     </div>
