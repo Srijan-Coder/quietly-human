@@ -2,43 +2,75 @@
 
 import { useState, useEffect, useRef } from "react";
 import FocusTimer from "@/components/global/FocusTimer";
-import FocusThemeSelector, { Theme, BUILT_IN_THEMES } from "@/components/global/FocusThemeSelector";
+import FocusThemeSelector, { VisualTheme, BUILT_IN_THEMES } from "@/components/global/FocusThemeSelector";
 import YouTube from "react-youtube";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 export default function FocusPage() {
-  const [activeTheme, setActiveTheme] = useState<Theme>(BUILT_IN_THEMES[0]);
-  const [customUrl, setCustomUrl] = useState("");
+  const [activeTheme, setActiveTheme] = useState<VisualTheme>(BUILT_IN_THEMES[0]);
+  
+  // Audio state
+  const [audioMode, setAudioMode] = useState<"none" | "youtube" | "local">("none");
+  const [audioYoutubeId, setAudioYoutubeId] = useState("");
+  const [localAudioFile, setLocalAudioFile] = useState<string | null>(null);
+  
+  // Controls
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(50);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+  
   const [isClient, setIsClient] = useState(false);
-  const playerRef = useRef<any>(null);
+  
+  // Refs
+  const audioYtRef = useRef<any>(null);
+  const bgYtRef = useRef<any>(null);
+  const htmlAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     setIsClient(true);
-    const savedCustomUrl = localStorage.getItem("quietly_custom_youtube");
-    if (savedCustomUrl) {
-      setCustomUrl(savedCustomUrl);
+    const savedAudioYt = localStorage.getItem("quietly_custom_audio_yt");
+    if (savedAudioYt) {
+      setAudioMode("youtube");
+      setAudioYoutubeId(savedAudioYt);
     }
   }, []);
 
-  const handleSetCustomUrl = (url: string) => {
-    setCustomUrl(url);
-    localStorage.setItem("quietly_custom_youtube", url);
+  // Sync play/pause with Timer
+  useEffect(() => {
+    if (isTimerActive) {
+      if (audioYtRef.current && !isMuted) audioYtRef.current.playVideo();
+      if (bgYtRef.current) bgYtRef.current.playVideo();
+      if (htmlAudioRef.current && !isMuted) htmlAudioRef.current.play();
+    } else {
+      if (audioYtRef.current) audioYtRef.current.pauseVideo();
+      if (bgYtRef.current) bgYtRef.current.pauseVideo();
+      if (htmlAudioRef.current) htmlAudioRef.current.pause();
+    }
+  }, [isTimerActive, isMuted]);
+
+  // Sync volume
+  useEffect(() => {
+    const vol = isMuted ? 0 : volume;
+    if (audioYtRef.current) audioYtRef.current.setVolume(vol);
+    if (htmlAudioRef.current) htmlAudioRef.current.volume = vol / 100;
+  }, [volume, isMuted]);
+
+  const handleAudioYtReady = (event: any) => {
+    audioYtRef.current = event.target;
+    event.target.setVolume(isMuted ? 0 : volume);
+    if (!isTimerActive) event.target.pauseVideo();
   };
 
-  const handleReady = (event: any) => {
-    playerRef.current = event.target;
-    event.target.setVolume(volume);
+  const handleBgYtReady = (event: any) => {
+    bgYtRef.current = event.target;
+    event.target.mute(); // BG video is always muted
+    if (!isTimerActive) event.target.pauseVideo();
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVol = parseInt(e.target.value);
     setVolume(newVol);
-    if (playerRef.current) {
-      playerRef.current.setVolume(newVol);
-    }
     if (newVol === 0) setIsMuted(true);
     else setIsMuted(false);
   };
@@ -46,11 +78,9 @@ export default function FocusPage() {
   const toggleMute = () => {
     if (isMuted) {
       setIsMuted(false);
-      if (volume === 0) setVolume(50); // Restore to 50 if it was 0
-      if (playerRef.current) playerRef.current.unMute();
+      if (volume === 0) setVolume(50);
     } else {
       setIsMuted(true);
-      if (playerRef.current) playerRef.current.mute();
     }
   };
 
@@ -61,24 +91,51 @@ export default function FocusPage() {
       
       {/* Background Image Transition */}
       <AnimatePresence mode="popLayout">
-        <motion.div
-          key={activeTheme.bgImage}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 2 }}
-          className="absolute inset-0 z-0 pointer-events-none"
-        >
-          <Image
-            src={activeTheme.bgImage}
-            alt="Room Background"
-            fill
-            className="object-cover"
-          />
-          {/* Dark Overlay so text is readable */}
-          <div className="absolute inset-0 bg-brand-bg/60 backdrop-blur-[2px]" />
-        </motion.div>
+        {activeTheme.bgImage && !activeTheme.youtubeId && (
+          <motion.div
+            key={activeTheme.bgImage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 2 }}
+            className="absolute inset-0 z-0 pointer-events-none"
+          >
+            <Image
+              src={activeTheme.bgImage}
+              alt="Room Background"
+              fill
+              className="object-cover"
+            />
+            {/* Dark Overlay so text is readable */}
+            <div className="absolute inset-0 bg-brand-bg/60 backdrop-blur-[2px]" />
+          </motion.div>
+        )}
       </AnimatePresence>
+
+      {/* Muted YouTube Background Video */}
+      {activeTheme.youtubeId && (
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex items-center justify-center">
+          <div className="w-[150vw] h-[150vh] opacity-80">
+            <YouTube 
+              videoId={activeTheme.youtubeId} 
+              opts={{ 
+                width: '100%',
+                height: '100%',
+                playerVars: { 
+                  autoplay: 1, 
+                  loop: 1, 
+                  playlist: activeTheme.youtubeId,
+                  controls: 0,
+                  mute: 1
+                } 
+              }} 
+              onReady={handleBgYtReady}
+              className="w-full h-full pointer-events-none"
+            />
+          </div>
+          <div className="absolute inset-0 bg-brand-bg/60 backdrop-blur-[2px]" />
+        </div>
+      )}
 
       {/* Radial glow */}
       <div
@@ -98,7 +155,7 @@ export default function FocusPage() {
             document.exitFullscreen();
           }
         }}
-        className="absolute top-32 left-6 md:left-12 z-50 p-3 rounded-full border border-brand-border bg-brand-card/80 backdrop-blur-md text-brand-text hover:border-brand-accent transition-colors shadow-sm flex items-center gap-2"
+        className="absolute top-6 left-6 md:top-12 md:left-12 z-50 p-3 rounded-full border border-brand-border bg-brand-card/80 backdrop-blur-md text-brand-text hover:border-brand-accent transition-colors shadow-sm flex items-center gap-2"
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
           <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
@@ -106,26 +163,36 @@ export default function FocusPage() {
         <span className="text-[10px] uppercase tracking-widest hidden md:block">Full Screen</span>
       </button>
 
-      {/* Hidden Audio Player */}
-      {activeTheme.youtubeId && (
+      {/* Hidden Audio Players */}
+      {audioMode === "youtube" && audioYoutubeId && (
         <div className="hidden">
           <YouTube 
-            videoId={activeTheme.youtubeId} 
+            videoId={audioYoutubeId} 
             opts={{ 
               playerVars: { 
-                autoplay: 1, 
+                autoplay: isTimerActive ? 1 : 0, 
                 loop: 1, 
-                playlist: activeTheme.youtubeId,
+                playlist: audioYoutubeId,
                 controls: 0 
               } 
             }} 
-            onReady={handleReady}
+            onReady={handleAudioYtReady}
           />
         </div>
       )}
 
+      {audioMode === "local" && localAudioFile && (
+        <audio 
+          ref={htmlAudioRef} 
+          src={localAudioFile} 
+          loop 
+          className="hidden" 
+          autoPlay={isTimerActive && !isMuted}
+        />
+      )}
+
       {/* Audio Controls */}
-      <div className="absolute top-32 right-6 md:right-12 z-50 flex items-center gap-4 bg-brand-card/80 backdrop-blur-md border border-brand-border rounded-full p-2 shadow-sm">
+      <div className="absolute top-6 right-6 md:top-12 md:right-12 z-50 flex items-center gap-4 bg-brand-card/80 backdrop-blur-md border border-brand-border rounded-full p-2 shadow-sm">
         <button 
           onClick={toggleMute}
           className="p-2 rounded-full text-brand-text hover:text-brand-accent transition-colors flex items-center justify-center"
@@ -150,7 +217,7 @@ export default function FocusPage() {
         />
       </div>
 
-      <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col items-center justify-center relative z-10 px-6">
+      <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col items-center justify-center relative z-10 px-6 pt-16">
         <motion.span 
           key={activeTheme.name}
           initial={{ opacity: 0, y: 5 }}
@@ -165,13 +232,16 @@ export default function FocusPage() {
           A space to drop your shoulders, set your intention, and do your deep work gently.
         </p>
 
-        <FocusTimer />
+        <FocusTimer onTimerActiveChange={setIsTimerActive} />
         
         <FocusThemeSelector 
           activeTheme={activeTheme} 
           onSelectTheme={setActiveTheme} 
-          customUrl={customUrl}
-          onSetCustomUrl={handleSetCustomUrl}
+          audioMode={audioMode}
+          setAudioMode={setAudioMode}
+          audioYoutubeId={audioYoutubeId}
+          setAudioYoutubeId={setAudioYoutubeId}
+          setLocalAudioFile={setLocalAudioFile}
         />
       </div>
     </div>

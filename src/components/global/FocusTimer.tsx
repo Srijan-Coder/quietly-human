@@ -12,7 +12,7 @@ const MODES: Record<string, { label: string, minutes: number }> = {
   custom: { label: "Custom", minutes: 0 },
 };
 
-export default function FocusTimer() {
+export default function FocusTimer({ onTimerActiveChange }: { onTimerActiveChange?: (isActive: boolean) => void }) {
   const [mode, setMode] = useState<TimerMode>("focus");
   const [customMinutes, setCustomMinutes] = useState(60);
   const [timeLeft, setTimeLeft] = useState(MODES.focus.minutes * 60);
@@ -36,17 +36,19 @@ export default function FocusTimer() {
       }, 1000);
     } else if (timeLeft === 0 && isActive) {
       setIsActive(false);
+      if (onTimerActiveChange) onTimerActiveChange(false);
       playSoftChime();
     }
 
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive, timeLeft]);
+  }, [isActive, timeLeft, onTimerActiveChange]);
 
   const switchMode = (newMode: TimerMode) => {
     setMode(newMode);
     setIsActive(false);
+    if (onTimerActiveChange) onTimerActiveChange(false);
     if (newMode === "custom") {
       setTimeLeft(customMinutes * 60);
     } else {
@@ -58,7 +60,9 @@ export default function FocusTimer() {
     if (timeLeft === 0) {
       setTimeLeft(mode === "custom" ? customMinutes * 60 : MODES[mode].minutes * 60);
     }
-    setIsActive(!isActive);
+    const newActiveState = !isActive;
+    setIsActive(newActiveState);
+    if (onTimerActiveChange) onTimerActiveChange(newActiveState);
   };
 
   const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
