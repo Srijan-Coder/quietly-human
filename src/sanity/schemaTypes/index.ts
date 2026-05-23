@@ -18,10 +18,12 @@ import { blogSeriesType } from './blogSeriesType'
 import { socialLinkType } from './socialLinkType'
 import { seoEmotionPageType } from './seoEmotionPageType'
 
+import { bookType } from './bookType'
+
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     blockContentType, categoryType, postType, authorType,
-    productType, guideType, letterType, ebookType,
+    productType, guideType, letterType, ebookType, bookType,
     subscriberType, leadMagnetSettings,
     quoteType, resourceType, testimonialType, announcementType,
     blogSeriesType, socialLinkType, seoEmotionPageType,

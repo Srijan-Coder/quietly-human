@@ -112,6 +112,41 @@ export const ebookBySlugQuery = groq`*[_type == "ebook" && slug.current == $slug
   chapters
 }`;
 
+export const booksQuery = groq`*[_type == "book"] | order(_createdAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  author,
+  bookFormat,
+  tagline,
+  coverImage {
+    ...,
+    "alt": alt
+  }
+}`;
+
+export const bookBySlugQuery = groq`*[_type == "book" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  author,
+  bookFormat,
+  tagline,
+  description,
+  coverImage {
+    ...,
+    "alt": alt
+  },
+  "fileUrl": ebookFile.asset->url,
+  notionUrl,
+  chapters,
+  price,
+  purchaseUrl,
+  whatsIncluded,
+  purchaseLinks,
+  demoChapter
+}`;
+
 export const leadMagnetSettingsQuery = groq`*[_type == "leadMagnetSettings"][0] {
   notionLink,
   driveLink,
