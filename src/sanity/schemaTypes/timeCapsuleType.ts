@@ -24,6 +24,18 @@ export const timeCapsuleType = defineType({
       initialValue: 'A quiet human',
     }),
     defineField({
+      name: 'userId',
+      title: 'Clerk User ID',
+      type: 'string',
+      description: 'Used to link the capsule to the user dashboard',
+    }),
+    defineField({
+      name: 'userEmail',
+      title: 'User Email',
+      type: 'string',
+      description: 'Used for automated email delivery on unlock date',
+    }),
+    defineField({
       name: 'createdAt',
       title: 'Written On',
       type: 'datetime',
