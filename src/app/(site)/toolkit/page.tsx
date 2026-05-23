@@ -179,6 +179,86 @@ export default function ToolkitHub() {
           </span>
         </Link>
 
+        {/* Tool 9: The Task Atomizer */}
+        <Link 
+          href="/toolkit/task-atomizer" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🔨</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🔨</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Task Atomizer
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            For task paralysis. Shatter an overwhelming task into micro-steps, and enter a hyper-focus mode that hides everything but the very next step.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 10: The Air Lock */}
+        <Link 
+          href="/toolkit/air-lock" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🚪</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🚪</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Air Lock
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            A digital decompression chamber. A guided 2-minute transition to help you mentally disconnect from work before entering rest mode.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 11: The Dopamine Menu */}
+        <Link 
+          href="/toolkit/dopamine-menu" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🍽️</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🍽️</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Dopamine Menu
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            When you feel the urge to doomscroll, consult your menu. Get a random "Chef's Recommendation" for healthy, low-friction stimulation.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 12: The Energy Battery */}
+        <Link 
+          href="/toolkit/energy-battery" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🔋</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🔋</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Energy Battery
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            Manage your daily capacity based on Spoon Theory. Set your energy level, assign costs to tasks, and prevent burnout before it happens.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
       </div>
     </div>
   );
