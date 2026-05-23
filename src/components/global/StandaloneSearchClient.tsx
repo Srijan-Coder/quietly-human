@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { searchSanctuary, GlobalSearchResult } from "@/actions/search";
 
 export function StandaloneSearchClient() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const initialQuery = searchParams.get("q") || "";
   
   const [query, setQuery] = useState(initialQuery);
@@ -36,7 +37,8 @@ export function StandaloneSearchClient() {
       case "post": return `/blog/${slug}`;
       case "letter": return `/letters/${slug}`;
       case "guide": return `/guides/${slug}`;
-      case "ebook": return `/read/${slug}`;
+      case "ebook": return `/books/${slug}`;
+      case "book": return `/books/${slug}`;
       default: return "#";
     }
   };
@@ -47,12 +49,23 @@ export function StandaloneSearchClient() {
       case "letter": return "Letter";
       case "guide": return "Guide";
       case "ebook": return "Book";
+      case "book": return "Book";
       default: return type;
     }
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center relative">
+      <button 
+        onClick={() => router.back()}
+        className="absolute -top-16 right-0 md:-top-24 opacity-60 hover:opacity-100 transition-opacity p-2 flex items-center gap-2 text-xs uppercase tracking-widest text-brand-text"
+      >
+        <span>Close</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
       <div className="w-full max-w-3xl mx-auto flex flex-col">
         <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 block text-center">Sanctuary Search</span>
         <input
