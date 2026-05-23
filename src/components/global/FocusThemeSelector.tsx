@@ -100,13 +100,6 @@ export default function FocusThemeSelector({
       <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-4 block text-center">Room Visuals</span>
       <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar justify-start md:justify-center items-center">
         
-        {/* Custom Visual Buttons */}
-        <label className="cursor-pointer flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl hover:bg-brand-card/50 border border-brand-border/30 opacity-60 hover:opacity-100 transition-all duration-300">
-          <span className="text-2xl">🖼️</span>
-          <span className="text-[10px] uppercase tracking-wider text-brand-text whitespace-nowrap">Image</span>
-          <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-        </label>
-
         <button
           onClick={() => setShowPanel(showPanel === "bgYoutube" ? "none" : "bgYoutube")}
           className={`flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl transition-all duration-300 ${
@@ -118,6 +111,13 @@ export default function FocusThemeSelector({
           <span className="text-2xl">🎬</span>
           <span className="text-[10px] uppercase tracking-wider text-brand-text whitespace-nowrap">YT Video</span>
         </button>
+
+        {/* Custom Visual Buttons */}
+        <label className="cursor-pointer flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl hover:bg-brand-card/50 border border-brand-border/30 opacity-60 hover:opacity-100 transition-all duration-300">
+          <span className="text-2xl">🖼️</span>
+          <span className="text-[10px] uppercase tracking-wider text-brand-text whitespace-nowrap">Image</span>
+          <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+        </label>
 
         <div className="w-px h-8 bg-brand-border/50 mx-2" />
 

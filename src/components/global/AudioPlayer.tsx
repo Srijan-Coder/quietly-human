@@ -2,62 +2,130 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import YouTube from "react-youtube";
 
 type Track = {
   id: string;
   name: string;
-  url: string; // The user will need to put these mp3s in the public folder, e.g. /audio/rain.mp3
+  url: string; 
 };
 
 const tracks: Track[] = [
   { id: "rain", name: "Midnight Rain", url: "/audio/rain.mp3" },
   { id: "piano", name: "Soft Piano", url: "/audio/piano.mp3" },
   { id: "cafe", name: "Quiet Cafe", url: "/audio/cafe.mp3" },
-  { id: "study", name: "Deep Focus (Study Mode)", url: "/audio/study.mp3" },
+  { id: "study", name: "Deep Focus", url: "/audio/study.mp3" },
 ];
 
 export function AudioPlayer() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTrack, setActiveTrack] = useState<Track | null>(null);
+  
+  // Custom states
+  const [audioMode, setAudioMode] = useState<"none" | "default" | "local" | "youtube">("none");
+  const [youtubeId, setYoutubeId] = useState("");
+  const [localUrl, setLocalUrl] = useState<string | null>(null);
+  const [ytInput, setYtInput] = useState("");
+  const [showYtInput, setShowYtInput] = useState(false);
+
   const [isPlaying, setIsPlaying] = useState(false);
+  
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const ytRef = useRef<any>(null);
 
-  // Handle play/pause when state or track changes
   useEffect(() => {
-    if (activeTrack && audioRef.current) {
-      audioRef.current.src = activeTrack.url;
-      if (isPlaying) {
-        audioRef.current.play().catch((e) => {
-          console.warn("Autoplay blocked by browser. User must interact first.", e);
-          setIsPlaying(false);
-        });
-      }
+    const savedYt = localStorage.getItem("quietly_global_yt_audio");
+    if (savedYt) {
+      setYoutubeId(savedYt);
     }
-  }, [activeTrack, isPlaying]);
+  }, []);
 
+  // Sync HTML5 Audio
   useEffect(() => {
     if (audioRef.current) {
-      if (isPlaying) {
+      if (isPlaying && (audioMode === "default" || audioMode === "local")) {
         audioRef.current.play().catch(() => setIsPlaying(false));
       } else {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, audioMode, activeTrack, localUrl]);
 
-  const togglePlay = (track: Track) => {
-    if (activeTrack?.id === track.id) {
+  // Sync YouTube Audio
+  useEffect(() => {
+    if (ytRef.current) {
+      if (isPlaying && audioMode === "youtube") {
+        ytRef.current.playVideo();
+      } else {
+        ytRef.current.pauseVideo();
+      }
+    }
+  }, [isPlaying, audioMode, youtubeId]);
+
+  const togglePlayDefault = (track: Track) => {
+    if (activeTrack?.id === track.id && audioMode === "default") {
       setIsPlaying(!isPlaying);
     } else {
       setActiveTrack(track);
+      setAudioMode("default");
+      if (audioRef.current) {
+        audioRef.current.src = track.url;
+      }
       setIsPlaying(true);
     }
   };
 
+  const handleLocalUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setLocalUrl(url);
+      setAudioMode("local");
+      if (audioRef.current) {
+        audioRef.current.src = url;
+      }
+      setActiveTrack({ id: "local", name: "Local Audio", url });
+      setIsPlaying(true);
+    }
+  };
+
+  const handleYtSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    let id = ytInput;
+    try {
+      if (ytInput.includes("v=")) id = ytInput.split("v=")[1].split("&")[0];
+      else if (ytInput.includes("youtu.be/")) id = ytInput.split("youtu.be/")[1].split("?")[0];
+    } catch {}
+
+    setYoutubeId(id);
+    localStorage.setItem("quietly_global_yt_audio", id);
+    setAudioMode("youtube");
+    setActiveTrack({ id: "youtube", name: "YouTube Stream", url: "" });
+    setIsPlaying(true);
+    setShowYtInput(false);
+    setYtInput("");
+  };
+
+  const toggleGlobalPlay = () => {
+    if (audioMode === "none" && activeTrack) {
+      setAudioMode(activeTrack.id === "youtube" ? "youtube" : activeTrack.id === "local" ? "local" : "default");
+    }
+    setIsPlaying(!isPlaying);
+  };
+
   return (
     <>
-      {/* Invisible Global Audio Element */}
       <audio ref={audioRef} loop />
+      
+      {youtubeId && (
+        <div className="hidden">
+          <YouTube 
+            videoId={youtubeId} 
+            opts={{ playerVars: { autoplay: 0, loop: 1, playlist: youtubeId, controls: 0 } }} 
+            onReady={(e) => { ytRef.current = e.target; if (isPlaying && audioMode === "youtube") e.target.playVideo(); }}
+          />
+        </div>
+      )}
 
       {/* Floating UI */}
       <div className="fixed bottom-6 left-6 z-50 flex flex-col-reverse items-start gap-4">
@@ -89,14 +157,15 @@ export function AudioPlayer() {
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="bg-brand-card/90 backdrop-blur-xl border border-brand-border p-4 rounded-2xl shadow-lg w-64 origin-bottom-left"
             >
-              <h3 className="text-[10px] uppercase tracking-widest opacity-50 mb-4 px-2">Ambient Layer</h3>
-              <div className="flex flex-col gap-1">
+              <h3 className="text-[10px] uppercase tracking-widest opacity-50 mb-4 px-2">Site Background Audio</h3>
+              
+              <div className="flex flex-col gap-1 mb-4">
                 {tracks.map((track) => {
-                  const isActive = activeTrack?.id === track.id;
+                  const isActive = activeTrack?.id === track.id && audioMode === "default";
                   return (
                     <button
                       key={track.id}
-                      onClick={() => togglePlay(track)}
+                      onClick={() => togglePlayDefault(track)}
                       className={`text-left px-3 py-2 rounded-lg text-xs tracking-wide transition-colors flex items-center justify-between ${
                         isActive && isPlaying
                           ? "bg-brand-accent/10 text-brand-accent"
@@ -105,18 +174,9 @@ export function AudioPlayer() {
                     >
                       <span>{track.name}</span>
                       {isActive && isPlaying && (
-                        <motion.div 
-                          className="flex gap-[2px] items-end h-3"
-                          initial="hidden"
-                          animate="playing"
-                        >
+                        <motion.div className="flex gap-[2px] items-end h-3" initial="hidden" animate="playing">
                           {[0, 1, 2].map((i) => (
-                            <motion.div
-                              key={i}
-                              className="w-[2px] bg-brand-accent rounded-full"
-                              animate={{ height: ["4px", "12px", "4px"] }}
-                              transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.2 }}
-                            />
+                            <motion.div key={i} className="w-[2px] bg-brand-accent rounded-full" animate={{ height: ["4px", "12px", "4px"] }} transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.2 }} />
                           ))}
                         </motion.div>
                       )}
@@ -125,15 +185,42 @@ export function AudioPlayer() {
                 })}
               </div>
 
+              <div className="border-t border-brand-border/50 pt-2 flex flex-col gap-1">
+                <label className={`cursor-pointer text-left px-3 py-2 rounded-lg text-xs tracking-wide transition-colors flex items-center justify-between ${audioMode === "local" && isPlaying ? "bg-brand-accent/10 text-brand-accent" : "hover:bg-brand-bg text-brand-soft hover:text-brand-text"}`}>
+                  <span>Upload Local MP3</span>
+                  <input type="file" accept="audio/*" className="hidden" onChange={handleLocalUpload} />
+                  {audioMode === "local" && isPlaying && (
+                    <motion.div className="flex gap-[2px] items-end h-3" initial="hidden" animate="playing">
+                      {[0, 1, 2].map((i) => <motion.div key={i} className="w-[2px] bg-brand-accent rounded-full" animate={{ height: ["4px", "12px", "4px"] }} transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.2 }} /> )}
+                    </motion.div>
+                  )}
+                </label>
+
+                <button onClick={() => setShowYtInput(!showYtInput)} className={`text-left px-3 py-2 rounded-lg text-xs tracking-wide transition-colors flex items-center justify-between ${audioMode === "youtube" && isPlaying ? "bg-brand-accent/10 text-brand-accent" : "hover:bg-brand-bg text-brand-soft hover:text-brand-text"}`}>
+                  <span>YouTube Link</span>
+                  {audioMode === "youtube" && isPlaying && (
+                    <motion.div className="flex gap-[2px] items-end h-3" initial="hidden" animate="playing">
+                      {[0, 1, 2].map((i) => <motion.div key={i} className="w-[2px] bg-brand-accent rounded-full" animate={{ height: ["4px", "12px", "4px"] }} transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.2 }} /> )}
+                    </motion.div>
+                  )}
+                </button>
+              </div>
+
+              <AnimatePresence>
+                {showYtInput && (
+                  <motion.form initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} onSubmit={handleYtSubmit} className="mt-2 flex gap-2">
+                    <input type="text" placeholder="Paste YT URL..." value={ytInput} onChange={(e) => setYtInput(e.target.value)} className="w-full bg-brand-bg border border-brand-border rounded px-2 py-1 text-xs text-brand-text" />
+                    <button type="submit" className="bg-brand-text text-brand-bg px-3 rounded text-[10px] uppercase tracking-widest">Set</button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
               {activeTrack && (
                 <div className="mt-4 px-2 pt-4 border-t border-brand-border flex items-center justify-between">
                   <span className="text-[10px] text-brand-soft truncate max-w-[120px]">
                     Playing: {activeTrack.name}
                   </span>
-                  <button 
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="text-[10px] uppercase tracking-widest text-brand-accent hover:opacity-70"
-                  >
+                  <button onClick={toggleGlobalPlay} className="text-[10px] uppercase tracking-widest text-brand-accent hover:opacity-70">
                     {isPlaying ? "Pause" : "Play"}
                   </button>
                 </div>
@@ -141,7 +228,6 @@ export function AudioPlayer() {
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
     </>
   );
