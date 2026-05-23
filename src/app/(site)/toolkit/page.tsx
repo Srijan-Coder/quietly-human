@@ -119,6 +119,66 @@ export default function ToolkitHub() {
           </span>
         </Link>
 
+        {/* Tool 6: The Control Sorter */}
+        <Link 
+          href="/toolkit/control-sorter" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">⚖️</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">⚖️</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The Control Sorter
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            A visual exercise in the Dichotomy of Control. Sort your anxieties, and watch the uncontrollable ones disintegrate.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 7: Leaves on a Stream */}
+        <Link 
+          href="/toolkit/leaves-on-stream" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🍃</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🍃</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            Leaves on a Stream
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            An Acceptance and Commitment Therapy (ACT) exercise. Place intrusive thoughts on a leaf and watch them float away.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
+        {/* Tool 8: The View From Above */}
+        <Link 
+          href="/toolkit/view-from-above" 
+          className="group block bg-brand-card border border-brand-border rounded-2xl p-8 hover:border-brand-accent transition-colors relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="text-6xl">🔭</span>
+          </div>
+          <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all">🔭</div>
+          <h2 className="font-serif text-2xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors relative z-10">
+            The View From Above
+          </h2>
+          <p className="text-brand-soft text-sm mb-8 relative z-10">
+            A Stoic visualization. Type a localized stressor, and smoothly zoom out to cosmic scale to put it in perspective.
+          </p>
+          <span className="text-xs uppercase tracking-widest text-brand-text group-hover:text-brand-accent transition-colors relative z-10">
+            Open Tool →
+          </span>
+        </Link>
+
       </div>
     </div>
   );
