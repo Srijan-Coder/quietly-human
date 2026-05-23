@@ -43,7 +43,7 @@ export default function CustomCursor() {
   }, [mouseX, mouseY]);
 
   return (
-    <div className="hidden md:block pointer-events-none z-[9999] fixed inset-0">
+    <div className="hidden md:block pointer-events-none fixed inset-0" style={{ zIndex: 2147483647 }}>
       {/* Outer Ring */}
       <motion.div
         className="fixed top-0 left-0 border border-brand-accent rounded-full border-dashed"
