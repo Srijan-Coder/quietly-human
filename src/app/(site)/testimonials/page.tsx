@@ -1,6 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import { type Testimonial } from "@/components/global/TestimonialCarousel";
+import SubmitNoteForm from "@/components/global/SubmitNoteForm";
 
 export const revalidate = 60;
 export const metadata = { title: "Reader Notes — Quietly Humans" };
@@ -8,7 +9,7 @@ export const metadata = { title: "Reader Notes — Quietly Humans" };
 export default async function TestimonialsPage() {
   let testimonials: Testimonial[] = [];
   try {
-    testimonials = await client.fetch(groq`*[_type == "testimonial"] | order(order asc, _createdAt desc)`);
+    testimonials = await client.fetch(groq`*[_type == "testimonial" && isApproved == true] | order(order asc, _createdAt desc)`);
   } catch (error) { console.error(error); }
 
   return (
@@ -41,12 +42,15 @@ export default async function TestimonialsPage() {
         </div>
         
         {testimonials.length === 0 && (
-          <div className="text-center py-24 border border-dashed border-brand-border rounded-2xl">
+          <div className="text-center py-24 border border-dashed border-brand-border rounded-2xl mb-8">
             <p className="font-serif italic text-brand-soft">
-              No reader notes yet. Add some in your Studio.
+              No reader notes yet. Be the first to leave a trace.
             </p>
           </div>
         )}
+
+        <SubmitNoteForm />
+
       </div>
     </div>
   );
