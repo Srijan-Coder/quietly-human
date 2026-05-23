@@ -179,7 +179,7 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
               <div className="flex flex-col gap-4">
                 {userId ? (
                   <div className="flex flex-wrap gap-4">
-                    {book.fileUrl && <SecureDownloadButton fileUrl={book.fileUrl} />}
+                    {book.fileUrl && <SecureDownloadButton fileUrl={book.fileUrl} title={book.title} />}
                     {book.notionUrl && (
                       <a 
                         href={book.notionUrl}
