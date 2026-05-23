@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import CandleButton from "./CandleButton";
+import GentleAd from "@/components/global/GentleAd";
 
 type Props = { params: Promise<{ username: string, slug: string }> };
 
@@ -75,6 +76,8 @@ export default async function PostPage({ params }: Props) {
         <p className="text-sm text-brand-soft font-sans mb-4">Did these words help you?</p>
         <CandleButton targetId={post.id} targetType="post" initialCount={post.candle_count || 0} />
       </div>
+
+      <GentleAd />
     </div>
   );
 }

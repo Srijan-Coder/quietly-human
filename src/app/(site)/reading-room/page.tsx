@@ -1,6 +1,7 @@
 import { supabaseClient } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
+import GentleAd from "@/components/global/GentleAd";
 
 export const metadata = {
   title: "The Reading Room | Quietly Humans",
@@ -90,6 +91,8 @@ export default async function ReadingRoomPage() {
           </div>
         )}
       </div>
+      
+      <GentleAd />
     </div>
   );
 }

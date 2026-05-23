@@ -1,24 +1,13 @@
--- Run this in your Supabase SQL Editor
-
 -- 1. Create Profiles Table
-CREATE TABLE public.profiles (
-  id uuid NOT NULL, -- This should match the Clerk User ID, wait Clerk uses string IDs (e.g. user_2...). Supabase uses UUIDs by default. We should change this to TEXT.
-  username text UNIQUE NOT NULL,
-  display_name text,
-  bio text,
-  avatar_url text,
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
-  CONSTRAINT profiles_pkey PRIMARY KEY (id)
-);
-
--- Actually, if ID is text (from Clerk):
-DROP TABLE IF EXISTS public.profiles;
+DROP TABLE IF EXISTS public.profiles CASCADE;
 CREATE TABLE public.profiles (
   id text NOT NULL PRIMARY KEY, -- Clerk User ID
   username text UNIQUE NOT NULL,
   display_name text,
   bio text,
   avatar_url text,
+  stripe_customer_id text,
+  is_premium boolean DEFAULT false,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
