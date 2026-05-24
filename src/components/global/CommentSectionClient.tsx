@@ -28,7 +28,7 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
 
   const fetchComments = async () => {
     try {
-      const res = await fetch(`/api/comments?postId=${postId}`);
+      const res = await fetch(`/api/public-thoughts?postId=${postId}`);
       const data = await res.json();
       if (data.comments) setComments(data.comments);
     } catch (e) {
@@ -44,7 +44,7 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
     if (!newComment.trim() || !user) return;
     setIsSubmitting(true);
     try {
-      const res = await fetch("/api/comments", {
+      const res = await fetch("/api/public-thoughts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ postId, content: newComment })
@@ -53,8 +53,14 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
         setNewComment("");
         fetchComments();
       } else {
-        const errorData = await res.json();
-        alert(`Failed to post thought: ${errorData.error || 'Unknown error'}`);
+        let errorMessage = "Unknown error";
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch(err) {
+          errorMessage = "Server returned an invalid response.";
+        }
+        alert(`Failed to post thought: ${errorMessage}`);
       }
     } catch (e: any) {
       console.error(e);
@@ -72,7 +78,7 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
     
     // Optimistic UI updates could go here
     try {
-      await fetch(`/api/comments/${id}/action`, {
+      await fetch(`/api/public-thoughts/${id}/action`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action })
