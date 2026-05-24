@@ -61,10 +61,13 @@ export async function searchSanctuary(query: string): Promise<GlobalSearchResult
 
   try {
     // 2. Search Supabase Profiles (Creators)
+    // Strip '@' if the user types it
+    const profileSearchQuery = safeQuery.startsWith('@') ? safeQuery.substring(1) : safeQuery;
+
     const { data: profiles } = await supabaseClient
       .from('profiles')
       .select('id, username, display_name, avatar_url, bio')
-      .or(`username.ilike.%${safeQuery}%,display_name.ilike.%${safeQuery}%`)
+      .or(`username.ilike.%${profileSearchQuery}%,display_name.ilike.%${profileSearchQuery}%`)
       .limit(5);
 
     if (profiles && profiles.length > 0) {
