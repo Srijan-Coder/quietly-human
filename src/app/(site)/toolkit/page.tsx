@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Soft Toolkit — Quietly Humans",
-  description: "Interactive tools designed to dissolve anxiety, organize thoughts, and bring stillness to a chaotic mind.",
+  title: "20 Free Mental Health Tools — Soft Toolkit | Quietly Humans",
+  description: "Interactive tools for anxiety, ADHD, overthinking and panic. Based on CBT, DBT, ACT, and clinical psychology. Used by thousands daily.",
 };
 
 const tools = [

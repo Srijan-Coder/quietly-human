@@ -8,11 +8,13 @@ export default async function Home() {
   const { count: postsCount } = await supabaseClient.from("posts").select("*", { count: "exact", head: true });
   const { count: notesCount } = await supabaseClient.from("pilgrim_notes").select("*", { count: "exact", head: true });
   const { count: candlesCount } = await supabaseClient.from("candles").select("*", { count: "exact", head: true });
+  const { count: membersCount } = await supabaseClient.from("profiles").select("*", { count: "exact", head: true });
 
   const stats = {
     posts: postsCount || 0,
     notes: notesCount || 0,
-    candles: candlesCount || 0
+    candles: candlesCount || 0,
+    members: membersCount || 0,
   };
 
   // Fetch 3 latest pilgrim notes
@@ -30,7 +32,7 @@ export default async function Home() {
     .order("created_at", { ascending: false })
     .limit(6);
 
-  // Fetch top 6 creators (by post count or just profiles)
+  // Fetch top 6 creators
   const { data: topCreators } = await supabaseClient
     .from("profiles")
     .select("id, username, display_name, avatar_url, bio, is_premium")

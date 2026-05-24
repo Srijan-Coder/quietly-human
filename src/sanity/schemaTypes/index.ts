@@ -16,6 +16,7 @@ import { announcementType } from './announcementType'
 import { blogSeriesType } from './blogSeriesType'
 import { socialLinkType } from './socialLinkType'
 import { seoEmotionPageType } from './seoEmotionPageType'
+import { aboutPageType } from './aboutPageType'
 
 import { bookType } from './bookType'
 import { timeCapsuleType } from './timeCapsuleType'
@@ -29,5 +30,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     subscriberType, leadMagnetSettings,
     quoteType, resourceType, announcementType,
     blogSeriesType, socialLinkType, seoEmotionPageType, timeCapsuleType, userCollectionType, sharedKitType,
+    aboutPageType,
   ],
 }

@@ -4,8 +4,8 @@ import ReadingRoomClient from "./ReadingRoomClient";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const metadata = {
-  title: "The Reading Room | Quietly Humans",
-  description: "A daily curated feed of quiet thoughts and midnight letters.",
+  title: "The Reading Room — Curated Essays & Midnight Letters | Quietly Humans",
+  description: "A feed without the noise. Read curated essays, midnight letters, and journals from quiet minds.",
 };
 
 export const revalidate = 60; // Revalidate every minute

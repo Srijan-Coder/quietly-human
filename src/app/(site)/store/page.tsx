@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
-  title: "The Quiet Store | Quietly Humans",
+  title: "The Quiet Store — Books, Journals & Notion Templates | Quietly Humans",
+  description: "Digital products for soft living. Journals, Notion templates, ebooks, and tools created by quiet minds.",
 };
 
 export const revalidate = 60; // Revalidate every minute
