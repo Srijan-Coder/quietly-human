@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase";
 import { rateLimiter } from "@/lib/rate-limit";
 import { z } from "zod";
 import { sanitizeText } from "@/lib/sanitize";
-
-const supabaseAdmin = createClient(
-  (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co"),
-  (process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder")
-);
 
 const profileSchema = z.object({
   displayName: z.string().min(1).max(50).optional(),
