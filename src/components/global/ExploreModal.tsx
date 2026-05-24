@@ -11,6 +11,7 @@ const sections = [
       { title: "The Quiet Store", path: "/store", emoji: "🏷️", desc: "Books, journals, Notion templates & digital products." },
       { title: "The Library", path: "/library", emoji: "📚", desc: "Browse the full archive of published writings." },
       { title: "Quotes", path: "/quotes", emoji: "💬", desc: "A collection of quiet words from quiet minds." },
+      { title: "Books", path: "/books", emoji: "📕", desc: "Free ebooks, premium editions & physical books." },
     ]
   },
   {
@@ -29,6 +30,7 @@ const sections = [
       { title: "Write", path: "/write", emoji: "✍️", desc: "Publish Quiet Thoughts, Letters, Guides & Books." },
       { title: "Pilgrim Wall", path: "/pilgrim", emoji: "🕯️", desc: "Leave an anonymous note on the community wall." },
       { title: "Settings", path: "/settings", emoji: "⚙️", desc: "Customize your profile, bio, links & theme." },
+      { title: "Start Here", path: "/start", emoji: "🧭", desc: "New? Learn what Quietly Humans is all about." },
     ]
   },
   {
@@ -44,39 +46,53 @@ export function ExploreModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      // Stop Lenis smooth scrolling when modal is open
+      document.documentElement.classList.add("lenis-stopped");
     } else {
       document.body.style.overflow = "";
+      document.documentElement.classList.remove("lenis-stopped");
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.classList.remove("lenis-stopped");
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-brand-bg"
-      style={{ overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+      data-lenis-prevent
+      className="fixed inset-0 z-[100]"
+      style={{
+        backgroundColor: "var(--color-bg, #0d0d0d)",
+        overflowY: "scroll",
+        WebkitOverflowScrolling: "touch",
+        overscrollBehavior: "contain",
+      }}
     >
       {/* Close button — sticky at top */}
-      <div className="sticky top-0 z-[110] flex justify-end p-4 md:p-6">
+      <div className="sticky top-0 z-[110] flex justify-end p-4 md:p-6" style={{ backgroundColor: "var(--color-bg, #0d0d0d)" }}>
         <button
           onClick={onClose}
-          className="text-xs uppercase tracking-widest text-brand-soft hover:text-brand-accent transition-colors bg-brand-bg/80 backdrop-blur-sm px-4 py-2 rounded-full border border-brand-border"
+          className="text-xs uppercase tracking-widest hover:text-amber-400 transition-colors px-4 py-2 rounded-full border"
+          style={{ color: "var(--color-soft, #999)", borderColor: "var(--color-border, #333)", backgroundColor: "var(--color-bg, #0d0d0d)" }}
         >
-          Close ✕
+          ✕ Close
         </button>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 pb-24">
-        <div className="text-center mb-12">
-          <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 block font-bold">Explore Everything</span>
-          <h2 className="text-3xl md:text-4xl font-serif text-brand-text">Every quiet room, in one place.</h2>
+      <div className="max-w-5xl mx-auto px-4 md:px-6 pb-32">
+        <div className="text-center mb-10">
+          <span className="text-[10px] uppercase tracking-widest mb-3 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>Explore Everything</span>
+          <h2 className="text-3xl md:text-4xl font-serif" style={{ color: "var(--color-text, #EBE5DF)" }}>Every quiet room, in one place.</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
           {sections.map((section) => (
             <div key={section.label}>
-              <h3 className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 font-bold border-b border-brand-border pb-3">
+              <h3 className="text-[10px] uppercase tracking-widest mb-4 font-bold border-b pb-3"
+                style={{ color: "var(--color-accent, #C9A46A)", borderColor: "var(--color-border, #333)" }}>
                 {section.label}
               </h3>
               <div className="flex flex-col gap-1">
@@ -85,18 +101,13 @@ export function ExploreModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     key={item.path}
                     href={item.path}
                     onClick={onClose}
-                    className="flex items-center gap-4 p-3 md:p-4 rounded-xl hover:bg-brand-card border border-transparent hover:border-brand-border transition-colors group active:scale-[0.98]"
+                    className="flex items-center gap-3 p-3 rounded-xl transition-colors group active:scale-[0.98]"
+                    style={{ color: "var(--color-text, #EBE5DF)" }}
                   >
-                    <span className="text-xl md:text-2xl shrink-0">
-                      {item.emoji}
-                    </span>
+                    <span className="text-xl shrink-0">{item.emoji}</span>
                     <div className="min-w-0">
-                      <p className="text-brand-text font-bold group-hover:text-brand-accent transition-colors text-sm truncate">
-                        {item.title}
-                      </p>
-                      <p className="text-[11px] text-brand-soft mt-0.5 leading-relaxed line-clamp-1">
-                        {item.desc}
-                      </p>
+                      <p className="font-bold text-sm truncate group-hover:text-amber-400 transition-colors">{item.title}</p>
+                      <p className="text-[11px] mt-0.5 leading-relaxed line-clamp-1" style={{ color: "var(--color-soft, #999)" }}>{item.desc}</p>
                     </div>
                   </Link>
                 ))}

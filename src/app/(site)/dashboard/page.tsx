@@ -94,6 +94,58 @@ export default async function DashboardPage() {
         <SubscriberListClient subscribers={subscribers || []} />
       </div>
 
+      {/* Creator Guide — How to Use QH */}
+      <div className="mb-16 rounded-[2rem] p-8 md:p-10" style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
+        <div className="flex items-center gap-3 mb-6">
+          <span className="text-2xl">🧭</span>
+          <h2 className="text-2xl font-serif" style={{ color: "var(--color-text, #EBE5DF)" }}>Creator Guide — How to Grow on Quietly Humans</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
+          {/* Step 1 */}
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+            <span className="text-[10px] uppercase tracking-widest font-bold mb-2 block" style={{ color: "var(--color-accent, #C9A46A)" }}>Step 1 — Write</span>
+            <h3 className="text-lg font-serif mb-2" style={{ color: "var(--color-text, #EBE5DF)" }}>Publish Content</h3>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--color-soft, #A39E99)" }}>
+              Click <strong>&ldquo;Write New&rdquo;</strong> above to publish. You can write: <strong>Quiet Thoughts</strong> (short blog posts), <strong>Midnight Letters</strong> (emotional essays), <strong>Pillar Guides</strong> (long-form guides), or <strong>Books</strong> (full ebooks).
+            </p>
+          </div>
+
+          {/* Step 2 */}
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+            <span className="text-[10px] uppercase tracking-widest font-bold mb-2 block" style={{ color: "var(--color-accent, #C9A46A)" }}>Step 2 — Build Your Room</span>
+            <h3 className="text-lg font-serif mb-2" style={{ color: "var(--color-text, #EBE5DF)" }}>Customize Your Profile</h3>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--color-soft, #A39E99)" }}>
+              Go to <Link href="/settings" className="text-amber-400 underline">Settings</Link> → set your display name, bio, avatar, and <strong>pin your products</strong> (Gumroad links, Notion templates, ebooks). These show on your public creator room.
+            </p>
+          </div>
+
+          {/* Step 3 */}
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+            <span className="text-[10px] uppercase tracking-widest font-bold mb-2 block" style={{ color: "var(--color-accent, #C9A46A)" }}>Step 3 — Monetize</span>
+            <h3 className="text-lg font-serif mb-2" style={{ color: "var(--color-text, #EBE5DF)" }}>Sell Digital Products</h3>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--color-soft, #A39E99)" }}>
+              Upload products to <strong>Gumroad</strong> (Notion templates, ebooks, journals). Pin them to your profile in Settings → Pins. Readers find you via the Reading Room, visit your room, and buy directly. <strong>0% platform fee during beta.</strong>
+            </p>
+          </div>
+
+          {/* Step 4 */}
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+            <span className="text-[10px] uppercase tracking-widest font-bold mb-2 block" style={{ color: "var(--color-accent, #C9A46A)" }}>Step 4 — Grow</span>
+            <h3 className="text-lg font-serif mb-2" style={{ color: "var(--color-text, #EBE5DF)" }}>Get Discovered</h3>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--color-soft, #A39E99)" }}>
+              Your posts appear in the <strong>Reading Room feed</strong> and the homepage <strong>Trending Writings</strong>. Readers can <strong>light candles</strong> (our version of likes), <strong>follow you</strong>, and <strong>subscribe</strong> to your newsletter. More candles = more visibility.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 p-4 rounded-xl text-center" style={{ backgroundColor: "rgba(201,164,106,0.08)", border: "1px solid rgba(201,164,106,0.2)" }}>
+          <p className="text-sm" style={{ color: "var(--color-accent, #C9A46A)" }}>
+            💡 <strong>Pro tip:</strong> Publish consistently (2-3 posts/week), engage with the Pilgrim Wall community, and pin your best product to your profile. Creators who do this see 5x more followers.
+          </p>
+        </div>
+      </div>
+
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
         <div className="bg-[#121212] border border-white/5 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group">

@@ -29,6 +29,8 @@ export default function Navbar() {
       items: [
         { title: "The Reading Room", path: "/reading-room", desc: "Network feed & Creator discovery." },
         { title: "The Quiet Store", path: "/store", desc: "Books, journals & digital products." },
+        { title: "Books & Ebooks", path: "/books", desc: "Free ebooks, premium & physical books." },
+        { title: "The Library", path: "/library", desc: "Full archive of published writings." },
       ]
     },
     {
@@ -37,6 +39,7 @@ export default function Navbar() {
         { title: "Soft Toolkit", path: "/toolkit", desc: "20 interactive clinical tools." },
         { title: "Breathing Room", path: "/breathe", desc: "Guided deep breathing exercises." },
         { title: "Deep Focus", path: "/focus", desc: "Pomodoro timer with soundscapes." },
+        { title: "The 3AM Room", path: "/3am", desc: "Late night sanctuary for insomniacs." },
       ]
     },
     {
@@ -44,6 +47,7 @@ export default function Navbar() {
       items: [
         { title: "Sanctuary Pass", path: "/sanctuary-pass", desc: "Unlock premium tools & quiet mode." },
         { title: "Digital Products", path: "/products", desc: "Notion templates, ebooks & more." },
+        { title: "Start Here", path: "/start", desc: "New? Learn what QH is about." },
       ]
     }
   ];
