@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { ShareToolButton } from "./ShareToolButton";
 
 const steps = [
   { count: 5, action: "things you can see", instruction: "Look around you. Notice five things you can see." },
@@ -132,6 +133,14 @@ export default function PanicRedirectorClient() {
               >
                 Back to Toolkit
               </Link>
+            </div>
+            
+            <div className="mt-8">
+              <ShareToolButton 
+                url="https://quietlyhumans.space/toolkit/panic-redirector"
+                title="Panic Redirector | Quietly Humans"
+                text="I found this quiet room on the internet. It really helps when your brain won't shut up. Use this guided tool to pull yourself back to the present:"
+              />
             </div>
           </motion.div>
         )}

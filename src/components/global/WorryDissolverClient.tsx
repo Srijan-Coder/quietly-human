@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { ShareToolButton } from "./ShareToolButton";
 
 type AnimationStyle = "smoke" | "burn" | "drop" | "wind" | "shatter" | "fade";
 
@@ -214,6 +215,14 @@ export default function WorryDissolverClient() {
               >
                 Back to Toolkit
               </Link>
+            </div>
+            
+            <div className="mt-8">
+              <ShareToolButton 
+                url="https://quietlyhumans.space/toolkit/worry-dissolver"
+                title="Worry Dissolver | Quietly Humans"
+                text="I found this quiet room on the internet. It really helps when your brain won't shut up. Drop your worries here and watch them dissolve:"
+              />
             </div>
           </motion.div>
         )}
