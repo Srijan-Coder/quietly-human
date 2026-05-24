@@ -16,11 +16,11 @@ const publishSchema = z.object({
   title: z.string().min(1).max(200),
   content: z.string().min(1).max(100000), // Max 100k chars
   type: z.string(),
-  category: z.string().optional(),
-  postTheme: z.string().optional(),
-  attachedPins: z.array(z.string()).optional(),
-  coverImageUrl: z.string().url().optional().or(z.literal("")),
-  pdfFileUrl: z.string().url().optional().or(z.literal("")),
+  category: z.string().optional().nullable(),
+  postTheme: z.string().optional().nullable(),
+  attachedPins: z.array(z.any()).optional().nullable(),
+  coverImageUrl: z.string().url().optional().or(z.literal("")).nullable(),
+  pdfFileUrl: z.string().url().optional().or(z.literal("")).nullable(),
 });
 
 export async function POST(req: Request) {
