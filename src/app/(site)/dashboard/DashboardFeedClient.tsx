@@ -126,63 +126,56 @@ export default function DashboardFeedClient({
       <div className="bg-[#121212] border border-white/5 rounded-[2rem] overflow-hidden">
         {displayedPosts && displayedPosts.length > 0 ? (
           <div className="divide-y divide-white/5">
-            <AnimatePresence mode="popLayout">
-              {displayedPosts.map((post: any) => (
-                <motion.div 
-                  layout
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3 }}
-                  key={post.id} 
-                  className="p-6 md:p-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:bg-white/5 transition-colors group"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-[9px] uppercase tracking-widest text-brand-accent bg-brand-accent/10 px-2 py-0.5 rounded-full border border-brand-accent/20">
-                        {categories.find(c => c.id === post.type)?.label || post.type}
-                      </span>
-                      {feedSource !== "me" && post.author_id !== currentUserId && (
-                        <div className="flex items-center gap-1.5 opacity-60">
-                          {post.profiles?.avatar_url && (
-                            <Image src={post.profiles.avatar_url} alt="author" width={16} height={16} className="rounded-full" />
-                          )}
-                          <span className="text-[10px] text-white">@{post.profiles?.username || "unknown"}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <Link href={`/room/${post.profiles?.username || currentUsername}/${post.slug || post.id}`} className="text-xl font-serif text-white group-hover:text-brand-accent transition-colors block mb-2">
-                      {post.title}
-                    </Link>
-                    
-                    <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans opacity-70">
-                      Published {new Date(post.published_at || post.created_at).toLocaleDateString()}
+            {displayedPosts.map((post: any) => (
+              <div 
+                key={post.id} 
+                className="p-6 md:p-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:bg-white/5 transition-colors group animate-fade-in-up"
+              >
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[9px] uppercase tracking-widest text-brand-accent bg-brand-accent/10 px-2 py-0.5 rounded-full border border-brand-accent/20">
+                      {categories.find(c => c.id === post.type)?.label || post.type}
                     </span>
-                  </div>
-
-                  {/* Actions or Stats */}
-                  <div className="shrink-0">
-                    {post.author_id === currentUserId ? (
-                      <DashboardPostActionsClient 
-                        postId={post.id} 
-                        slug={post.slug} 
-                        username={currentUsername} 
-                        candleCount={post.candle_count || 0} 
-                      />
-                    ) : (
-                      <div className="flex items-center gap-4 text-xs font-sans text-brand-soft">
-                        <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">🕯️ {post.candle_count || 0}</span>
-                        <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">👁️ {post.view_count || Math.floor(Math.random() * 500) + 12}</span>
-                        <Link href={`/room/${post.profiles?.username || 'unknown'}/${post.slug || post.id}`} className="text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all px-6 py-2.5 rounded-full font-bold ml-2">
-                          Read
-                        </Link>
+                    {feedSource !== "me" && post.author_id !== currentUserId && (
+                      <div className="flex items-center gap-1.5 opacity-60">
+                        {post.profiles?.avatar_url && (
+                          <Image src={post.profiles.avatar_url} alt="author" width={16} height={16} className="rounded-full" />
+                        )}
+                        <span className="text-[10px] text-white">@{post.profiles?.username || "unknown"}</span>
                       </div>
                     )}
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  
+                  <Link href={`/room/${post.profiles?.username || currentUsername}/${post.slug || post.id}`} className="text-xl font-serif text-white group-hover:text-brand-accent transition-colors block mb-2">
+                    {post.title}
+                  </Link>
+                  
+                  <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans opacity-70">
+                    Published {new Date(post.published_at || post.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+
+                {/* Actions or Stats */}
+                <div className="shrink-0">
+                  {post.author_id === currentUserId ? (
+                    <DashboardPostActionsClient 
+                      postId={post.id} 
+                      slug={post.slug} 
+                      username={currentUsername} 
+                      candleCount={post.candle_count || 0} 
+                    />
+                  ) : (
+                    <div className="flex items-center gap-4 text-xs font-sans text-brand-soft">
+                      <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">🕯️ {post.candle_count || 0}</span>
+                      <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">👁️ {post.view_count || Math.floor(Math.random() * 500) + 12}</span>
+                      <Link href={`/room/${post.profiles?.username || 'unknown'}/${post.slug || post.id}`} className="text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all px-6 py-2.5 rounded-full font-bold ml-2">
+                        Read
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="p-16 text-center flex flex-col items-center justify-center">
