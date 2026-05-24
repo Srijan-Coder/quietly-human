@@ -68,13 +68,18 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
     } catch { setSubStatus("error"); }
   };
 
-  // Use fallback posts if DB returns empty
-  const displayPosts = latestPosts.length > 0 ? latestPosts : fallbackPosts;
-  const displayNotes = latestNotes.length > 0 ? latestNotes : [
-    { id: "fn1", content: "I've been carrying this weight for so long. Leaving it here feels right." },
-    { id: "fn2", content: "It's 2AM and I just needed someone to tell me it's going to be okay." },
-    { id: "fn3", content: "I'm learning that rest is not the enemy. Thank you for this space." },
-  ];
+  // Use fallback posts if DB returns empty or is partially filled
+  const displayPosts = latestPosts.length >= 6 
+    ? latestPosts 
+    : [...latestPosts, ...fallbackPosts.slice(latestPosts.length, 6)];
+
+  const displayNotes = latestNotes.length >= 3
+    ? latestNotes
+    : [...latestNotes, ...[
+        { id: "fn1", content: "I've been carrying this weight for so long. Leaving it here feels right." },
+        { id: "fn2", content: "It's 2AM and I just needed someone to tell me it's going to be okay." },
+        { id: "fn3", content: "I'm learning that rest is not the enemy. Thank you for this space." },
+      ].slice(latestNotes.length, 3)];
 
   // Merge DB products with static (all go to internal pages now)
   const allProducts = storeProducts;
