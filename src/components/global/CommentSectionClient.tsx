@@ -49,18 +49,22 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ postId, content: newComment })
       });
+
+      // Guard: Vercel can return HTML on errors — never call .json() blindly
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        console.error("Server returned non-JSON:", res.status, res.statusText);
+        alert("Failed to post thought: Server error. Please try again in a moment.");
+        return;
+      }
+
+      const data = await res.json();
+
       if (res.ok) {
         setNewComment("");
         fetchComments();
       } else {
-        let errorMessage = "Unknown error";
-        try {
-          const errorData = await res.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch(err) {
-          errorMessage = "Server returned an invalid response.";
-        }
-        alert(`Failed to post thought: ${errorMessage}`);
+        alert(`Failed to post thought: ${data.error || "Unknown error"}`);
       }
     } catch (e: any) {
       console.error(e);
