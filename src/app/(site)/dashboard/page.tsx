@@ -37,52 +37,58 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32 font-serif">
-      <header className="mb-12 border-b border-brand-border pb-8 flex justify-between items-end">
+      <header className="mb-16 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/5">
         <div>
-          <h1 className="text-4xl text-brand-text mb-2">Creator Dashboard</h1>
-          <p className="text-brand-soft text-sm uppercase tracking-widest font-sans">
+          <h1 className="text-4xl md:text-5xl text-white mb-2 font-serif">Creator Dashboard</h1>
+          <p className="text-brand-soft text-xs uppercase tracking-widest font-sans flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
             Welcome back, @{profile.username}.
           </p>
         </div>
-        <Link href="/write" className="bg-brand-text text-brand-bg px-6 py-2 rounded-full uppercase tracking-widest text-xs font-bold hover:bg-brand-accent hover:text-white transition-colors font-sans">
+        <Link href="/write" className="bg-white text-black px-6 py-3 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.1)]">
           + Write New
         </Link>
       </header>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-        <div className="bg-brand-card border border-brand-border p-6 rounded-2xl flex flex-col justify-center items-center text-center">
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-2">Total Posts</span>
-          <span className="text-4xl text-brand-text">{posts?.length || 0}</span>
+        <div className="bg-[#121212] border border-white/5 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-3 z-10">Total Posts</span>
+          <span className="text-5xl font-serif text-white z-10">{posts?.length || 0}</span>
         </div>
-        <div className="bg-brand-card border border-brand-border p-6 rounded-2xl flex flex-col justify-center items-center text-center">
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-2">Total Candles Lit</span>
-          <span className="text-4xl text-brand-accent flex items-center gap-2">🕯️ {totalCandles}</span>
+        <div className="bg-[#121212] border border-brand-accent/20 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group shadow-[0_0_30px_rgba(252,163,17,0.05)]">
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-3 z-10">Total Candles Lit</span>
+          <span className="text-5xl font-serif text-brand-accent flex items-center gap-3 z-10">
+            <span className="text-3xl">🕯️</span> {totalCandles}
+          </span>
         </div>
-        <div className="bg-brand-card border border-brand-border p-6 rounded-2xl flex flex-col justify-center items-center text-center">
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-2">Quiet Followers</span>
-          <span className="text-4xl text-brand-text">{followersCount || 0}</span>
+        <div className="bg-[#121212] border border-white/5 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-3 z-10">Quiet Followers</span>
+          <span className="text-5xl font-serif text-white z-10">{followersCount || 0}</span>
         </div>
       </div>
 
       {/* Recent Posts */}
-      <h2 className="text-xl text-brand-text mb-6">Your Writings</h2>
-      <div className="bg-brand-card border border-brand-border rounded-2xl overflow-hidden">
+      <h2 className="text-2xl font-serif text-white mb-6">Your Writings</h2>
+      <div className="bg-[#121212] border border-white/5 rounded-[2rem] overflow-hidden">
         {posts && posts.length > 0 ? (
-          <div className="divide-y divide-brand-border/50">
+          <div className="divide-y divide-white/5">
             {posts.map((post: any) => (
-              <div key={post.id} className="p-6 flex justify-between items-center hover:bg-brand-bg/50 transition-colors">
+              <div key={post.id} className="p-6 md:p-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:bg-white/5 transition-colors group">
                 <div>
-                  <Link href={`/room/${profile.username}/${post.slug}`} className="text-lg text-brand-text font-bold hover:text-brand-accent transition-colors block mb-1">
+                  <Link href={`/room/${profile.username}/${post.slug}`} className="text-xl font-serif text-white group-hover:text-brand-accent transition-colors block mb-2">
                     {post.title}
                   </Link>
-                  <span className="text-xs text-brand-soft font-sans">
-                    {new Date(post.created_at).toLocaleDateString()}
+                  <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans opacity-70">
+                    Published {new Date(post.created_at).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="flex items-center gap-6">
-                  <span className="text-sm font-sans text-brand-soft">🕯️ {post.candle_count}</span>
-                  <Link href={`/room/${profile.username}/${post.slug}`} className="text-xs uppercase tracking-widest text-brand-soft hover:text-brand-text transition-colors font-sans border border-brand-border px-4 py-2 rounded-full">
+                  <span className="text-sm font-sans text-brand-soft bg-black/50 px-4 py-2 rounded-full border border-white/5">🕯️ {post.candle_count}</span>
+                  <Link href={`/room/${profile.username}/${post.slug}`} className="text-[10px] uppercase tracking-widest text-white hover:text-black hover:bg-white transition-all font-sans border border-white/20 px-6 py-2.5 rounded-full">
                     View
                   </Link>
                 </div>
@@ -90,8 +96,12 @@ export default async function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="p-12 text-center text-brand-soft italic">
-            You haven't published anything yet.
+          <div className="p-16 text-center flex flex-col items-center justify-center">
+            <span className="text-4xl opacity-30 mb-6 block grayscale">🍃</span>
+            <p className="text-brand-soft italic text-lg mb-6">You haven't published anything yet.</p>
+            <Link href="/write" className="text-[10px] uppercase tracking-widest text-white border-b border-white/30 pb-1 hover:border-white transition-colors">
+              Write your first thought
+            </Link>
           </div>
         )}
       </div>

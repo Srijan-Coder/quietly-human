@@ -77,55 +77,63 @@ export default function WriteEditorClient() {
         </div>
       )}
 
-      {/* Editor Controls */}
-      <div className="flex justify-between items-end gap-4 flex-wrap">
-        <div className="flex flex-col gap-2 flex-1 min-w-[200px]">
-          <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans">Type of writing</label>
-          <select 
-            value={type} 
-            onChange={e => setType(e.target.value)}
-            className="bg-brand-bg border border-brand-border rounded-lg p-3 text-brand-text focus:outline-none focus:border-brand-accent font-sans text-sm appearance-none cursor-pointer"
-          >
-            <option value="letter">Midnight Letter (Long form)</option>
-            <option value="quote">Quiet Quote (Short thought)</option>
-            <option value="blog">Journal Entry (Updates/Thoughts)</option>
-          </select>
-        </div>
+      <div className="bg-[#121212] border border-white/5 rounded-[2rem] p-8 md:p-12 shadow-2xl relative overflow-hidden group">
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
         
-        <div className="text-[10px] uppercase tracking-widest text-brand-soft/50 font-sans hidden sm:block mb-3">
-          {saveStatus}
+        {/* Editor Controls */}
+        <div className="flex justify-between items-end gap-4 flex-wrap relative z-10 mb-12 border-b border-white/5 pb-8">
+          <div className="flex flex-col gap-3 flex-1 min-w-[200px]">
+            <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
+              Type of writing
+            </label>
+            <select 
+              value={type} 
+              onChange={e => setType(e.target.value)}
+              className="bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent font-sans text-sm appearance-none cursor-pointer hover:bg-white/5 transition-colors"
+            >
+              <option value="letter">Midnight Letter (Long form)</option>
+              <option value="quote">Quiet Quote (Short thought)</option>
+              <option value="blog">Journal Entry (Updates/Thoughts)</option>
+            </select>
+          </div>
+          
+          <div className="text-[10px] uppercase tracking-widest text-brand-soft/50 font-sans hidden sm:flex items-center gap-2 mb-4">
+            <span className="animate-pulse">●</span> {saveStatus}
+          </div>
         </div>
-      </div>
 
-      {/* Title Input */}
-      <input
-        type="text"
-        placeholder="Title..."
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        className="w-full bg-transparent border-none outline-none text-4xl text-brand-text font-serif placeholder:text-brand-border"
-      />
+        {/* Title Input */}
+        <input
+          type="text"
+          placeholder="Title..."
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          className="w-full bg-transparent border-none outline-none text-4xl md:text-5xl text-white font-serif placeholder:text-white/20 mb-8 relative z-10"
+        />
 
-      {/* Content Input */}
-      <textarea
-        placeholder="Write what is heavy on your mind..."
-        value={content}
-        onChange={e => setContent(e.target.value)}
-        className="w-full bg-transparent border-none outline-none text-xl text-brand-soft font-serif placeholder:text-brand-border/50 resize-none min-h-[50vh] leading-relaxed"
-      />
+        {/* Content Input */}
+        <textarea
+          placeholder="Write what is heavy on your mind..."
+          value={content}
+          onChange={e => setContent(e.target.value)}
+          className="w-full bg-transparent border-none outline-none text-xl md:text-2xl text-brand-soft font-serif placeholder:text-white/10 resize-none min-h-[50vh] leading-relaxed relative z-10"
+        />
 
-      {/* Action Bar (Fixed to bottom for mobile, inline for desktop) */}
-      <div className="fixed sm:static bottom-6 left-6 right-6 sm:mt-12 flex justify-between items-center bg-brand-card/90 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none p-4 sm:p-0 rounded-full sm:rounded-none border sm:border-none border-brand-border z-50 shadow-xl sm:shadow-none">
-        <span className="text-[10px] sm:hidden uppercase tracking-widest text-brand-soft line-clamp-1 flex-1 pr-4">
-          {saveStatus.replace('Draft saved at ', '')}
-        </span>
-        <button
-          onClick={handlePublish}
-          disabled={isPublishing}
-          className="ml-auto px-8 py-3 bg-brand-text text-brand-bg rounded-full text-xs uppercase tracking-widest hover:bg-brand-accent hover:text-white transition-all font-bold disabled:opacity-50"
-        >
-          {isPublishing ? "Publishing..." : "Publish to Sanctuary"}
-        </button>
+        {/* Action Bar */}
+        <div className="fixed sm:absolute bottom-6 left-6 right-6 sm:bottom-12 sm:left-12 sm:right-12 flex justify-between items-center bg-black/90 sm:bg-transparent backdrop-blur-xl sm:backdrop-blur-none p-4 sm:p-0 rounded-2xl sm:rounded-none border sm:border-none border-white/10 z-50 shadow-2xl sm:shadow-none">
+          <span className="text-[10px] sm:hidden uppercase tracking-widest text-brand-soft line-clamp-1 flex-1 pr-4 flex items-center gap-2">
+            <span className="animate-pulse text-brand-accent">●</span> Saved
+          </span>
+          <button
+            onClick={handlePublish}
+            disabled={isPublishing}
+            className="ml-auto px-8 py-4 bg-white text-black rounded-full text-xs uppercase tracking-widest hover:scale-105 transition-transform font-bold disabled:opacity-50 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+          >
+            {isPublishing ? "Publishing..." : "Publish to Sanctuary"}
+          </button>
+        </div>
       </div>
     </div>
   );
