@@ -26,6 +26,15 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [error, setError] = useState("");
+
+  const showError = (msg: string) => {
+    setError(msg);
+    setTimeout(() => {
+      setError("");
+    }, 5000);
+  };
+
   const fetchComments = async () => {
     try {
       const res = await fetch(`/api/public-thoughts?postId=${postId}`);
@@ -54,7 +63,7 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
       const contentType = res.headers.get("content-type") || "";
       if (!contentType.includes("application/json")) {
         console.error("Server returned non-JSON:", res.status, res.statusText);
-        alert("Failed to post thought: Server error. Please try again in a moment.");
+        showError("Failed to post thought: Server error. Please try again in a moment.");
         return;
       }
 
@@ -64,11 +73,11 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
         setNewComment("");
         fetchComments();
       } else {
-        alert(`Failed to post thought: ${data.error || "Unknown error"}`);
+        showError(data.error || "Failed to post thought.");
       }
     } catch (e: any) {
       console.error(e);
-      alert(`Network error: ${e.message}`);
+      showError(`Network error: ${e.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -76,7 +85,7 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
 
   const handleAction = async (id: string, action: "heart" | "pin" | "candle") => {
     if (!user) {
-      alert("Please sign in to interact.");
+      showError("Please sign in to interact.");
       return;
     }
     
@@ -108,17 +117,35 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
             placeholder="Share a quiet thought..."
             className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white font-serif resize-none focus:outline-none focus:border-brand-accent min-h-[120px]"
           />
-          <button 
-            onClick={handleSubmit} 
-            disabled={isSubmitting || !newComment.trim()}
-            className="self-end px-8 py-3 bg-white text-black rounded-full text-[10px] uppercase tracking-widest font-bold disabled:opacity-50 hover:scale-105 transition-transform"
-          >
-            {isSubmitting ? "Sending..." : "Send Thought"}
-          </button>
+          <div className="flex justify-between items-center">
+            {error ? (
+              <span className="text-xs text-red-400 font-sans tracking-wide animate-pulse">
+                {error}
+              </span>
+            ) : (
+              <span />
+            )}
+            <button 
+              onClick={handleSubmit} 
+              disabled={isSubmitting || !newComment.trim()}
+              className="px-8 py-3 bg-white text-black rounded-full text-[10px] uppercase tracking-widest font-bold disabled:opacity-50 hover:scale-105 transition-transform"
+            >
+              {isSubmitting ? "Sending..." : "Send Thought"}
+            </button>
+          </div>
         </div>
       ) : (
-        <div className="mb-12 p-8 bg-black/50 border border-white/5 rounded-2xl text-center">
-          <p className="text-brand-soft font-sans text-sm">Please sign in to share your thoughts.</p>
+        <div className="mb-12 flex flex-col gap-4">
+          <div className="p-8 bg-black/50 border border-white/5 rounded-2xl text-center">
+            <p className="text-brand-soft font-sans text-sm">Please sign in to share your thoughts.</p>
+          </div>
+          {error && (
+            <div className="text-center">
+              <span className="text-xs text-red-400 font-sans tracking-wide animate-pulse">
+                {error}
+              </span>
+            </div>
+          )}
         </div>
       )}
 

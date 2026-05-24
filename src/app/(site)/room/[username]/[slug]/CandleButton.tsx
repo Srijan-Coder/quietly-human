@@ -7,6 +7,7 @@ export default function CandleButton({ targetId, targetType, initialCount }: { t
   const [count, setCount] = useState(initialCount);
   const [isLit, setIsLit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { isSignedIn } = useAuth();
 
   // In a real app we'd fetch initial isLit status from Supabase here
@@ -14,7 +15,8 @@ export default function CandleButton({ targetId, targetType, initialCount }: { t
 
   const handleLight = async () => {
     if (!isSignedIn) {
-      alert("Please sign in to light a candle.");
+      setError("Please sign in to light a candle.");
+      setTimeout(() => setError(""), 4000);
       return;
     }
 
@@ -43,18 +45,25 @@ export default function CandleButton({ targetId, targetType, initialCount }: { t
   };
 
   return (
-    <button 
-      onClick={handleLight}
-      disabled={loading || isLit}
-      className={`flex flex-col items-center gap-2 group transition-all duration-700 ${isLit ? 'opacity-100 scale-110' : 'opacity-60 hover:opacity-100'}`}
-      title="Light a candle to show you were here"
-    >
-      <span className={`text-4xl filter transition-all duration-1000 ${isLit ? 'drop-shadow-[0_0_15px_rgba(252,163,17,0.8)]' : 'grayscale group-hover:grayscale-0'}`}>
-        🕯️
-      </span>
-      <span className={`text-xs font-sans tracking-widest ${isLit ? 'text-brand-accent font-bold' : 'text-brand-soft'}`}>
-        {count}
-      </span>
-    </button>
+    <div className="flex flex-col items-center gap-2">
+      <button 
+        onClick={handleLight}
+        disabled={loading || isLit}
+        className={`flex flex-col items-center gap-2 group transition-all duration-700 ${isLit ? 'opacity-100 scale-110' : 'opacity-60 hover:opacity-100'} cursor-pointer`}
+        title="Light a candle to show you were here"
+      >
+        <span className={`text-4xl filter transition-all duration-1000 ${isLit ? 'drop-shadow-[0_0_15px_rgba(252,163,17,0.8)]' : 'grayscale group-hover:grayscale-0'}`}>
+          🕯️
+        </span>
+        <span className={`text-xs font-sans tracking-widest ${isLit ? 'text-brand-accent font-bold' : 'text-brand-soft'}`}>
+          {count}
+        </span>
+      </button>
+      {error && (
+        <span className="text-[10px] text-red-400 font-sans tracking-wider animate-pulse">
+          {error}
+        </span>
+      )}
+    </div>
   );
 }

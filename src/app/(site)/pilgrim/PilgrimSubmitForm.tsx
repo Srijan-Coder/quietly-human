@@ -14,7 +14,7 @@ export default function PilgrimSubmitForm({ onSuccess }: { onSuccess?: () => voi
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSignedIn) {
-      alert("Please sign in to leave a note.");
+      setError("Please sign in to leave a note.");
       return;
     }
     if (!content.trim() || content.length > 300) {
