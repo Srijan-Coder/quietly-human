@@ -18,7 +18,7 @@ export default async function NotificationsPage() {
     .from("notifications")
     .select(`
       id, type, is_read, created_at, target_id,
-      profiles!notifications_actor_id_fkey ( username, display_name )
+      profiles!notifications_actor_id_fkey ( username, display_name, avatar_url )
     `)
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })

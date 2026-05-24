@@ -101,9 +101,36 @@ export default async function PostPage({ params }: Props) {
     <div className={`min-h-screen pt-32 px-6 md:px-12 w-full pb-32 font-serif relative ${themeBg} bg-brand-bg text-brand-text transition-colors duration-1000`}>
       <div className="max-w-2xl mx-auto w-full relative">
         <Link href={`/room/${username}`} className="absolute -top-12 left-0 text-sm text-brand-soft hover:text-brand-text transition-colors">
-          ← {profile.display_name || username}'s Room
+          ← {profile.display_name || username}&apos;s Room
         </Link>
         <ViewTracker postId={post.id} />
+
+        {/* JSON-LD Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": post.title,
+              "description": post.excerpt || "",
+              "author": {
+                "@type": "Person",
+                "name": profile.display_name || username,
+                "url": `${BASE_URL}/room/${username}`,
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Quietly Humans",
+                "url": BASE_URL,
+              },
+              "datePublished": post.published_at,
+              "url": `${BASE_URL}/room/${username}/${post.slug || post.id}`,
+              "image": post.cover_image_url || undefined,
+            }),
+          }}
+        />
+
 
         <header className="mb-12 border-b border-brand-border/30 pb-12 text-center">
           <div className="flex justify-center gap-3 mb-6">
