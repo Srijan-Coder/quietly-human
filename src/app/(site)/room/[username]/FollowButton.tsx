@@ -4,7 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 
-export default function FollowButton({ targetUserId, initialIsFollowing }: { targetUserId: string, initialIsFollowing: boolean }) {
+export default function FollowButton({
+  targetUserId,
+  initialIsFollowing,
+}: {
+  targetUserId: string;
+  initialIsFollowing: boolean;
+}) {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [loading, setLoading] = useState(false);
   const { isSignedIn } = useAuth();
@@ -12,46 +18,53 @@ export default function FollowButton({ targetUserId, initialIsFollowing }: { tar
 
   const handleFollow = async () => {
     if (!isSignedIn) {
-      alert("Please sign in to follow creators.");
+      router.push("/onboarding");
       return;
     }
 
     setLoading(true);
-    // Optimistic update
-    setIsFollowing(!isFollowing);
+    setIsFollowing(!isFollowing); // optimistic
 
     try {
       const res = await fetch("/api/follow", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetUserId, action: isFollowing ? "unfollow" : "follow" })
+        body: JSON.stringify({
+          targetUserId,
+          action: isFollowing ? "unfollow" : "follow",
+        }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to follow");
-      }
-      
-      router.refresh(); // Refresh to update server components (follower count)
-    } catch (error) {
-      // Revert optimistic update
-      setIsFollowing(isFollowing);
-      alert("Failed to update follow status.");
+      if (!res.ok) throw new Error("Failed");
+
+      router.refresh();
+    } catch {
+      setIsFollowing(isFollowing); // revert
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <button 
+    <button
       onClick={handleFollow}
       disabled={loading}
-      className={`px-6 py-2 rounded-full text-xs uppercase tracking-widest transition-all font-bold ${
-        isFollowing 
-          ? "bg-brand-card text-brand-soft border border-brand-border hover:bg-brand-bg hover:text-red-400" 
-          : "bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white"
-      }`}
+      className="px-8 py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:scale-105 disabled:opacity-50"
+      style={
+        isFollowing
+          ? {
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              color: "rgba(255,255,255,0.5)",
+            }
+          : {
+              background: "rgba(255,255,255,0.9)",
+              color: "#0d0d0d",
+              boxShadow: "0 0 30px rgba(255,255,255,0.12)",
+            }
+      }
     >
-      {isFollowing ? (loading ? "..." : "Following") : (loading ? "..." : "Follow")}
+      {loading ? "…" : isFollowing ? "Following" : "Follow"}
     </button>
   );
 }

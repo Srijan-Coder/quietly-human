@@ -8,28 +8,30 @@ import SubscribeFormClient from "@/components/global/SubscribeFormClient";
 
 type Props = { params: Promise<{ username: string }> };
 
+const typeLabels: Record<string, string> = {
+  "quiet-thought": "Quiet Thought",
+  "midnight-letter": "Midnight Letter",
+  "pillar-guide": "Pillar Guide",
+  "book": "Book",
+};
+
 export default async function CreatorRoomPage({ params }: Props) {
   const { username } = await params;
   const user = await currentUser();
 
-  // Fetch the creator's profile
   const { data: profile } = await supabaseClient
     .from("profiles")
     .select("*")
     .eq("username", username)
     .single();
 
-  if (!profile) {
-    notFound();
-  }
+  if (!profile) notFound();
 
-  // Fetch followers count
   const { count: followersCount } = await supabaseClient
     .from("follows")
     .select("*", { count: "exact", head: true })
     .eq("following_id", profile.id);
 
-  // Check if current user is following
   let isFollowing = false;
   if (user) {
     const { data: follow } = await supabaseClient
@@ -41,163 +43,360 @@ export default async function CreatorRoomPage({ params }: Props) {
     if (follow) isFollowing = true;
   }
 
-  // Fetch their published posts
   const { data: posts } = await supabaseClient
     .from("posts")
-    .select("id, title, type, published_at, candle_count, slug")
+    .select("id, title, type, published_at, candle_count, slug, excerpt")
     .eq("author_id", profile.id)
     .eq("is_draft", false)
-    .order("published_at", { ascending: false });
+    .order("candle_count", { ascending: false });
 
   const isOwnProfile = user?.id === profile.id;
+  const totalCandles = posts?.reduce((sum, p) => sum + (p.candle_count || 0), 0) || 0;
+  const totalPosts = posts?.length || 0;
 
-  // Log the page view asynchronously (fire and forget)
+  // Log page view (fire and forget)
   import("@/lib/supabase").then(({ supabaseAdmin }) => {
-    supabaseAdmin.from("page_views").insert({ 
-      profile_id: profile.id, 
-      path: `/room/${username}` 
+    supabaseAdmin.from("page_views").insert({
+      profile_id: profile.id,
+      path: `/room/${username}`,
     }).then();
   });
 
-  // Map theme to Tailwind background color
-  const getThemeClasses = (theme: string) => {
-    switch(theme) {
-      case 'midnight-blue': return 'bg-[#0a0f1c]';
-      case 'forest-green': return 'bg-[#0a120c]';
-      case 'crimson': return 'bg-[#1a0a0a]';
-      case 'sepia': return 'bg-[#1c1812]';
-      default: return 'bg-[#121212]';
-    }
+  // Accent colour per theme
+  const accentGlow: Record<string, string> = {
+    "midnight-blue": "rgba(59,130,246,0.18)",
+    "forest-green": "rgba(34,197,94,0.15)",
+    "crimson": "rgba(239,68,68,0.15)",
+    "sepia": "rgba(201,164,106,0.18)",
+    default: "rgba(201,164,106,0.18)",
   };
-
-  const themeBg = getThemeClasses(profile.room_theme || 'dark');
+  const themeBg: Record<string, string> = {
+    "midnight-blue": "#080d18",
+    "forest-green": "#070f09",
+    "crimson": "#120505",
+    "sepia": "#0f0c08",
+    default: "#0d0d0d",
+  };
+  const bgColor = themeBg[profile.room_theme || "default"] ?? themeBg.default;
+  const glowColor = accentGlow[profile.room_theme || "default"] ?? accentGlow.default;
 
   return (
-    <div className={`min-h-screen ${themeBg} text-white font-sans overflow-x-hidden relative pb-32 transition-colors duration-1000`}>
-      {/* Dynamic Ambiance Background Glow */}
-      <div className={`absolute top-0 left-0 right-0 h-[600px] bg-gradient-to-b from-white/5 to-transparent pointer-events-none opacity-50 blur-3xl`} />
+    <div
+      className="min-h-screen text-white font-sans overflow-x-hidden relative pb-40"
+      style={{ backgroundColor: bgColor }}
+    >
+      {/* ── Full‑bleed ambient gradient ── */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{
+          background: `radial-gradient(ellipse 80% 60% at 50% -10%, ${glowColor} 0%, transparent 65%)`,
+        }}
+      />
+      {/* Secondary bottom glow */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{
+          background: `radial-gradient(ellipse 60% 40% at 80% 100%, ${glowColor} 0%, transparent 60%)`,
+          opacity: 0.5,
+        }}
+      />
 
-      <div className="relative z-10 pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full">
-        
-        {/* Profile Header (Full-width Hero) */}
-        <header className="flex flex-col items-center text-center pb-16">
-          <div className="relative group animate-fade-in-up" style={{ animationDelay: '0s' }}>
-            <div className={`absolute -inset-8 bg-brand-accent/20 rounded-full blur-3xl animate-pulse-glow`} />
-            <div className={`absolute -inset-4 bg-gradient-to-tr from-brand-accent/30 via-transparent to-brand-accent/30 rounded-full blur-2xl opacity-60 animate-[spin_10s_linear_infinite]`} />
-            
+      {/* ── Subtle grain texture ── */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      <div className="relative z-10">
+
+        {/* ══════════════════════════════════════
+            HERO — full width, cinematic
+        ══════════════════════════════════════ */}
+        <section className="relative min-h-[92vh] flex flex-col items-center justify-center px-6 text-center pt-28 pb-16">
+
+          {/* Thin top rule */}
+          <div className="absolute top-24 left-0 right-0 h-px bg-white/5" />
+
+          {/* Avatar with layered glow */}
+          <div className="relative mb-8 animate-fade-in-up" style={{ animationDelay: "0s" }}>
+            {/* outer soft ring */}
+            <div
+              className="absolute inset-0 rounded-full blur-2xl scale-150"
+              style={{ background: glowColor, opacity: 0.7 }}
+            />
+            {/* spinning accent ring */}
+            <div
+              className="absolute -inset-1 rounded-full opacity-40"
+              style={{
+                background: `conic-gradient(from 0deg, transparent 0%, ${glowColor} 30%, transparent 60%)`,
+                animation: "spin 8s linear infinite",
+              }}
+            />
             {profile.avatar_url ? (
-              <Image src={profile.avatar_url} alt={profile.username} width={130} height={130} className="rounded-full mb-6 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.1)] relative z-10" />
+              <Image
+                src={profile.avatar_url}
+                alt={profile.display_name || profile.username}
+                width={140}
+                height={140}
+                className="rounded-full relative z-10 border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.8)]"
+              />
             ) : (
-              <div className="w-[130px] h-[130px] rounded-full mb-6 bg-[#1a1a1a] border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex items-center justify-center text-5xl font-serif text-white relative z-10">
-                {profile.display_name?.charAt(0) || profile.username.charAt(0)}
+              <div className="w-[140px] h-[140px] rounded-full relative z-10 border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.8)] flex items-center justify-center text-6xl font-serif"
+                style={{ background: "linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%)" }}>
+                {(profile.display_name || profile.username).charAt(0).toUpperCase()}
               </div>
             )}
           </div>
-          
-          <h1 className="text-5xl md:text-7xl font-serif text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+
+          {/* Creator name */}
+          <h1
+            className="font-serif leading-none mb-3 animate-fade-in-up"
+            style={{
+              fontSize: "clamp(3rem, 9vw, 7rem)",
+              animationDelay: "0.1s",
+              background: "linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.65) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
             {profile.display_name || profile.username}
           </h1>
-          <p className="text-xs font-sans tracking-[0.2em] uppercase text-brand-soft mb-8 flex items-center gap-4 bg-black/40 px-6 py-2.5 rounded-full border border-white/10 backdrop-blur-md animate-fade-in-up shadow-lg" style={{ animationDelay: '0.2s' }}>
+
+          {/* Handle + stats pill */}
+          <div
+            className="flex items-center gap-5 px-6 py-2.5 rounded-full mb-6 text-[11px] uppercase tracking-[0.22em] font-sans text-white/50 animate-fade-in-up"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              backdropFilter: "blur(12px)",
+              animationDelay: "0.2s",
+            }}
+          >
             <span>@{profile.username}</span>
-            <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse-glow"></span>
-            <span>{followersCount || 0} Followers</span>
-          </p>
-          
+            <span className="w-px h-3 bg-white/20" />
+            <span>{followersCount ?? 0} followers</span>
+            <span className="w-px h-3 bg-white/20" />
+            <span>{totalPosts} writings</span>
+            <span className="w-px h-3 bg-white/20" />
+            <span>🕯️ {totalCandles}</span>
+          </div>
+
+          {/* Bio */}
           {profile.bio && (
-            <p className="text-brand-soft max-w-2xl mx-auto text-xl md:text-2xl font-serif italic mb-10 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <p
+              className="font-serif italic text-white/55 max-w-xl mx-auto leading-relaxed mb-10 animate-fade-in-up"
+              style={{ fontSize: "clamp(1rem, 2.5vw, 1.35rem)", animationDelay: "0.3s" }}
+            >
               "{profile.bio}"
             </p>
           )}
 
-          <div className="flex flex-col items-center gap-8 w-full animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <div className="flex gap-4">
-              {isOwnProfile ? (
-                <Link href="/settings" className="bg-white text-black px-8 py-4 rounded-full text-xs uppercase tracking-[0.2em] font-bold hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
-                  Edit Room
-                </Link>
-              ) : (
-                <FollowButton targetUserId={profile.id} initialIsFollowing={isFollowing} />
-              )}
-            </div>
-
-            {profile.pins && profile.pins.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-3">
-                {profile.pins.map((pin: any, i: number) => (
-                  <a key={i} href={`/api/analytics/click?url=${encodeURIComponent(pin.url)}&profile_id=${profile.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white/5 border border-white/10 text-white px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold hover:bg-white/10 transition-colors">
-                    <span>{pin.title}</span>
-                  </a>
-                ))}
-              </div>
+          {/* Action buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-10 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
+            {isOwnProfile ? (
+              <Link
+                href="/settings"
+                className="px-8 py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all"
+                style={{
+                  background: "rgba(255,255,255,0.9)",
+                  color: "#0d0d0d",
+                  boxShadow: "0 0 30px rgba(255,255,255,0.12)",
+                }}
+              >
+                Edit Room
+              </Link>
+            ) : (
+              <FollowButton targetUserId={profile.id} initialIsFollowing={isFollowing} />
             )}
 
-            <div className="max-w-md w-full">
-              <SubscribeFormClient creatorId={profile.id} creatorName={profile.display_name || profile.username} />
-            </div>
+            {/* Quick-links to pins */}
+            {profile.pins?.slice(0, 3).map((pin: any, i: number) => (
+              <a
+                key={i}
+                href={`/api/analytics/click?url=${encodeURIComponent(pin.url)}&profile_id=${profile.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 rounded-full text-[11px] uppercase tracking-widest font-bold transition-all hover:scale-105"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: "rgba(255,255,255,0.7)",
+                }}
+              >
+                {pin.emoji ? `${pin.emoji} ` : ""}{pin.title}
+              </a>
+            ))}
           </div>
-        </header>
 
-        {/* Creator Pins (Gradient Cards) */}
+          {/* Subscribe form — compact, centred */}
+          <div className="w-full max-w-lg animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
+            <SubscribeFormClient
+              creatorId={profile.id}
+              creatorName={profile.display_name || profile.username}
+            />
+          </div>
+
+          {/* Scroll cue */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
+            <span className="text-[9px] uppercase tracking-[0.3em] font-sans">Writings</span>
+            <div className="w-px h-8 bg-white/40" style={{ animation: "float 2s ease-in-out infinite" }} />
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════
+            PINNED PRODUCTS (if any)
+        ══════════════════════════════════════ */}
         {profile.pins && profile.pins.length > 0 && (
-          <div className="mb-24">
-            <h2 className="text-[10px] uppercase tracking-widest text-brand-soft mb-6 flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-accent"></span> Pinned by Creator
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <section className="max-w-5xl mx-auto px-6 mb-20">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-px flex-1 bg-white/6" />
+              <span className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-sans">Pinned</span>
+              <div className="h-px flex-1 bg-white/6" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {profile.pins.map((pin: any, idx: number) => (
-                <a key={idx} href={`/api/analytics/click?url=${encodeURIComponent(pin.url)}&profile_id=${profile.id}`} target="_blank" rel="noopener noreferrer" className="group block bg-[#121212] border border-white/5 rounded-[1.5rem] overflow-hidden hover:border-brand-accent/50 transition-all duration-500 shadow-sm relative">
-                  <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                  <div className="h-32 bg-black/40 relative flex items-center justify-center p-4 text-center border-b border-white/5 group-hover:bg-white/5 transition-colors">
-                    <span className="text-5xl filter grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110">
+                <a
+                  key={idx}
+                  href={`/api/analytics/click?url=${encodeURIComponent(pin.url)}&profile_id=${profile.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1"
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                  }}
+                >
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ background: `radial-gradient(circle at 50% 0%, ${glowColor}, transparent 70%)` }}
+                  />
+                  <div className="p-6 text-center relative z-10">
+                    <span className="text-4xl block mb-3 transition-transform duration-500 group-hover:scale-110">
                       {pin.emoji || "🔗"}
                     </span>
-                  </div>
-                  <div className="p-6 relative z-10">
-                    <h3 className="text-white mb-2 font-serif text-lg group-hover:text-brand-accent transition-colors">{pin.title}</h3>
-                    <p className="text-[10px] uppercase tracking-widest text-brand-soft truncate">{pin.subtitle}</p>
+                    <h3 className="text-sm font-serif text-white/80 group-hover:text-white transition-colors leading-tight mb-1">
+                      {pin.title}
+                    </h3>
+                    {pin.subtitle && (
+                      <p className="text-[10px] text-white/35 uppercase tracking-wider">{pin.subtitle}</p>
+                    )}
                   </div>
                 </a>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Published Content (Masonry Grid) */}
-        <div>
-          <h2 className="text-[10px] uppercase tracking-widest text-brand-soft mb-6 flex items-center gap-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-accent"></span> Published Writings
-          </h2>
-          
+        {/* ══════════════════════════════════════
+            WRITINGS
+        ══════════════════════════════════════ */}
+        <section className="max-w-5xl mx-auto px-6">
+          <div className="flex items-center gap-4 mb-12">
+            <div className="h-px flex-1 bg-white/6" />
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-sans">Published Writings</span>
+            <div className="h-px flex-1 bg-white/6" />
+          </div>
+
           {posts && posts.length > 0 ? (
-            <div className="columns-1 md:columns-2 gap-6 space-y-6">
-              {posts.map(post => (
-                <Link key={post.id} href={`/room/${username}/${post.slug || post.id}`} className="break-inside-avoid group block bg-[#121212] border border-white/5 p-8 rounded-[2rem] hover:border-brand-accent/50 transition-all duration-500 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                  
-                  <div className="relative z-10">
-                    <span className="text-[9px] uppercase tracking-widest text-brand-accent bg-brand-accent/10 border border-brand-accent/20 px-3 py-1 rounded-full mb-6 inline-block">
-                      {post.type}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {posts.map((post, i) => (
+                <Link
+                  key={post.id}
+                  href={`/room/${username}/${post.slug || post.id}`}
+                  className="group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
+                  style={{
+                    background: "rgba(255,255,255,0.025)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    animationDelay: `${i * 0.07}s`,
+                  }}
+                >
+                  {/* Hover glow */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                    style={{ background: `radial-gradient(ellipse at 50% 0%, ${glowColor}, transparent 65%)` }}
+                  />
+
+                  <div className="p-7 flex flex-col flex-1 relative z-10">
+                    {/* Type badge */}
+                    <span
+                      className="text-[9px] uppercase tracking-[0.22em] font-bold mb-5 inline-block w-fit px-3 py-1 rounded-full"
+                      style={{
+                        background: `${glowColor}`,
+                        border: `1px solid ${glowColor}`,
+                        color: "rgba(255,255,255,0.7)",
+                      }}
+                    >
+                      {typeLabels[post.type] || post.type}
                     </span>
-                    <h3 className="text-2xl text-white mb-4 leading-snug font-serif group-hover:text-brand-accent transition-colors">
+
+                    <h3 className="font-serif text-xl md:text-2xl leading-snug text-white/85 group-hover:text-white transition-colors duration-300 mb-3 flex-1">
                       {post.title || "Untitled Thought"}
                     </h3>
-                  </div>
-                  
-                  <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center relative z-10">
-                    <span className="text-[10px] uppercase tracking-widest text-white/40">{new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
-                    <span className="text-xs text-white/50 font-sans flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-white/5">
-                      <span className="text-sm">🕯️</span> {post.candle_count || 0}
-                    </span>
+
+                    {post.excerpt && (
+                      <p className="text-sm text-white/35 font-serif italic line-clamp-2 mb-5 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                    )}
+
+                    <div className="flex items-center justify-between pt-5 border-t border-white/6 mt-auto">
+                      <span className="text-[10px] text-white/25 font-sans tracking-wider">
+                        {new Date(post.published_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                      <span
+                        className="flex items-center gap-1.5 text-[11px] text-white/40 px-3 py-1 rounded-full font-sans"
+                        style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
+                      >
+                        🕯️ {post.candle_count || 0}
+                      </span>
+                    </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="text-center py-32 border border-white/5 border-dashed rounded-[2rem] bg-[#121212]/50">
-              <span className="text-4xl opacity-30 block mb-6 grayscale">🪶</span>
-              <p className="text-brand-soft font-serif italic text-xl">The room is quiet. No writings published yet.</p>
+            <div
+              className="text-center py-32 rounded-3xl"
+              style={{ border: "1px dashed rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.015)" }}
+            >
+              <span className="text-5xl block mb-6 opacity-20">🪶</span>
+              <p className="font-serif italic text-white/30 text-xl">The room is quiet. No writings yet.</p>
+              {isOwnProfile && (
+                <Link
+                  href="/write"
+                  className="inline-block mt-8 px-8 py-3 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all hover:scale-105"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.7)" }}
+                >
+                  Write your first piece →
+                </Link>
+              )}
             </div>
           )}
-        </div>
+        </section>
+
+        {/* ══════════════════════════════════════
+            BOTTOM CTA BAND
+        ══════════════════════════════════════ */}
+        {!isOwnProfile && (
+          <section className="max-w-2xl mx-auto px-6 mt-24 text-center">
+            <p className="font-serif italic text-white/20 text-sm mb-4">
+              — Explore more quiet rooms —
+            </p>
+            <Link
+              href="/reading-room"
+              className="text-[11px] uppercase tracking-[0.25em] text-white/35 hover:text-white/70 transition-colors font-sans border-b border-white/10 hover:border-white/40 pb-px"
+            >
+              Visit the Reading Room →
+            </Link>
+          </section>
+        )}
       </div>
     </div>
   );
