@@ -136,7 +136,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
 
           {stats.members > 0 && (
             <p className="mt-8 text-[10px] uppercase tracking-widest text-brand-soft">
-              Join {stats.members.toLocaleString()}+ quiet humans
+              Join {stats.members.toLocaleString("en-US")}+ quiet humans
             </p>
           )}
         </div>
@@ -145,12 +145,12 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       {/* ===== 2. LIVE PULSE ===== */}
       <section className="relative w-full py-3 overflow-hidden z-20 border-t border-b border-brand-border bg-brand-card">
         <div className="flex whitespace-nowrap animate-marquee gap-12 text-[10px] md:text-xs font-sans tracking-widest uppercase text-brand-soft">
-          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString()} candles lit</span>
-          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
-          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.posts.toLocaleString()} writings published</span>
-          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.members.toLocaleString()} quiet humans</span>
-          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString()} candles lit</span>
-          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString("en-US")} candles lit</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString("en-US")} pilgrim notes</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.posts.toLocaleString("en-US")} writings published</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.members.toLocaleString("en-US")} quiet humans</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString("en-US")} candles lit</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString("en-US")} pilgrim notes</span>
         </div>
       </section>
 
@@ -337,7 +337,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
             )}
             {subStatus === "error" && <p className="text-red-400 text-xs mt-3">Something went wrong. Please try again.</p>}
             <p className="text-[10px] mt-4 uppercase tracking-widest text-brand-soft">
-              {stats.members > 0 ? `${stats.members.toLocaleString()}+ quiet humans already inside` : "Join the quiet revolution"}
+              {stats.members > 0 ? `${stats.members.toLocaleString("en-US")}+ quiet humans already inside` : "Join the quiet revolution"}
             </p>
           </div>
         </div>
