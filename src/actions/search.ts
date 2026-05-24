@@ -44,7 +44,7 @@ export async function searchSanctuary(query: string): Promise<GlobalSearchResult
         title: p.title,
         subtitle: p.excerpt,
         slug: { current: p.slug || p.id },
-        username: p.profiles?.username
+        username: Array.isArray(p.profiles) ? p.profiles[0]?.username : (p.profiles as any)?.username
       }));
       results = [...postResults];
     }
