@@ -13,8 +13,8 @@ const supabaseAdmin = createClient(
 const profileSchema = z.object({
   displayName: z.string().min(1).max(50).optional(),
   username: z.string().min(3).max(30).regex(/^[a-zA-Z0-9_]+$/).optional(),
-  avatarUrl: z.string().url().optional(),
-  bio: z.string().max(200).optional(),
+  avatarUrl: z.string().url().or(z.literal("")).nullable().optional(),
+  bio: z.string().max(200).nullable().optional(),
 });
 
 export async function POST(req: Request) {
@@ -87,11 +87,11 @@ export async function POST(req: Request) {
     }
 
     if (avatarUrl !== undefined) {
-      updates.avatar_url = avatarUrl;
+      updates.avatar_url = (avatarUrl === "" || avatarUrl === null) ? null : avatarUrl;
     }
 
     if (bio !== undefined) {
-      updates.bio = sanitizeText(bio);
+      updates.bio = (bio === "" || bio === null) ? null : sanitizeText(bio);
     }
 
     if (Object.keys(updates).length > 0) {

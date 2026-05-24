@@ -135,6 +135,11 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
         })
       });
 
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        throw new Error("Server returned an invalid response. Please try again in a moment.");
+      }
+
       const data = await res.json();
 
       if (!res.ok) {
