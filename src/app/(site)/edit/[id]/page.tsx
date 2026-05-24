@@ -34,9 +34,9 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
   }
 
   return (
-    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32">
-      <header className="mb-12 border-b border-white/5 pb-8">
-        <h1 className="text-4xl text-white mb-2 font-serif">Refine Your Words</h1>
+    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32 bg-brand-bg text-brand-text">
+      <header className="mb-12 border-b border-brand-border pb-8">
+        <h1 className="text-4xl text-brand-text mb-2 font-serif">Refine Your Words</h1>
         <p className="text-brand-soft text-sm uppercase tracking-widest font-sans">
           Editing: {post.title || "Untitled"}
         </p>

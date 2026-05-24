@@ -80,8 +80,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
   const allProducts = storeProducts;
 
   return (
-    <div className="relative min-h-screen w-full font-sans selection:bg-amber-600 selection:text-white overflow-hidden"
-      style={{ backgroundColor: "var(--color-bg, #0d0d0d)", color: "var(--color-text, #EBE5DF)" }}>
+    <div className="relative min-h-screen w-full font-sans selection:bg-amber-600 selection:text-white overflow-hidden bg-brand-bg text-brand-text">
       <AmbientBackground />
       
       {/* ===== 1. HERO ===== */}
@@ -91,10 +90,9 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-6 flex items-center gap-3"
-            style={{ color: "var(--color-soft, #A39E99)" }}
+            className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-6 flex items-center gap-3 text-brand-soft"
           >
-            <span className="w-2 h-2 rounded-full animate-pulse-glow" style={{ backgroundColor: "var(--color-accent, #C9A46A)" }} />
+            <span className="w-2 h-2 rounded-full animate-pulse-glow bg-brand-accent" />
             {greeting}
           </motion.p>
           
@@ -102,8 +100,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-serif tracking-tight leading-[1.1] mb-6"
-            style={{ color: "var(--color-text, #EBE5DF)" }}
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-serif tracking-tight leading-[1.1] mb-6 text-brand-text"
           >
             The quietest corner <br className="hidden md:block"/> of the internet.
           </motion.h1>
@@ -112,30 +109,28 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="text-base md:text-xl max-w-2xl leading-relaxed mb-8 font-serif italic px-4"
-            style={{ color: "var(--color-soft, #A39E99)" }}
+            className="text-base md:text-xl max-w-2xl leading-relaxed mb-8 font-serif italic px-4 text-brand-soft"
           >
             A digital sanctuary for overthinkers. Write midnight letters, use clinical toolkits, and remember how to breathe.
           </motion.p>
 
           <div className="flex flex-col items-center gap-3 w-full px-4">
-            <Link href="/onboarding" className="w-full sm:w-auto px-8 py-4 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform shadow-lg text-center"
-              style={{ backgroundColor: "var(--color-text, #EBE5DF)", color: "var(--color-bg, #0d0d0d)" }}>
+            <Link href="/onboarding" className="w-full sm:w-auto px-8 py-4 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform shadow-lg text-center bg-brand-text text-brand-bg">
               Enter Sanctuary
             </Link>
             <div className="flex items-center gap-4">
-              <Link href="/reading-room" className="text-[10px] uppercase tracking-widest transition-colors" style={{ color: "var(--color-soft, #A39E99)" }}>
+              <Link href="/reading-room" className="text-[10px] uppercase tracking-widest transition-colors text-brand-soft hover:text-brand-text">
                 Reading Room
               </Link>
-              <span style={{ color: "var(--color-border, #333)" }}>·</span>
-              <Link href="/start" className="text-[10px] uppercase tracking-widest font-bold transition-colors" style={{ color: "var(--color-accent, #C9A46A)" }}>
+              <span className="text-brand-border">·</span>
+              <Link href="/start" className="text-[10px] uppercase tracking-widest font-bold transition-colors text-brand-accent hover:text-brand-text">
                 New here? Start here →
               </Link>
             </div>
           </div>
 
           {stats.members > 0 && (
-            <p className="mt-8 text-[10px] uppercase tracking-widest" style={{ color: "var(--color-soft, #A39E99)" }}>
+            <p className="mt-8 text-[10px] uppercase tracking-widest text-brand-soft">
               Join {stats.members.toLocaleString()}+ quiet humans
             </p>
           )}
@@ -143,14 +138,14 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       </section>
 
       {/* ===== 2. LIVE PULSE ===== */}
-      <section className="relative w-full py-3 overflow-hidden z-20" style={{ borderTop: "1px solid var(--color-border, #2E2A27)", borderBottom: "1px solid var(--color-border, #2E2A27)", backgroundColor: "var(--color-card, #171717)" }}>
-        <div className="flex whitespace-nowrap animate-marquee gap-12 text-[10px] md:text-xs font-sans tracking-widest uppercase" style={{ color: "var(--color-soft, #A39E99)" }}>
-          <span className="flex items-center gap-2"><span style={{ color: "var(--color-accent, #C9A46A)" }}>✦</span> {stats.candles.toLocaleString()} candles lit</span>
-          <span className="flex items-center gap-2"><span style={{ color: "var(--color-accent, #C9A46A)" }}>✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
-          <span className="flex items-center gap-2"><span style={{ color: "var(--color-accent, #C9A46A)" }}>✦</span> {stats.posts.toLocaleString()} writings published</span>
-          <span className="flex items-center gap-2"><span style={{ color: "var(--color-accent, #C9A46A)" }}>✦</span> {stats.members.toLocaleString()} quiet humans</span>
-          <span className="flex items-center gap-2"><span style={{ color: "var(--color-accent, #C9A46A)" }}>✦</span> {stats.candles.toLocaleString()} candles lit</span>
-          <span className="flex items-center gap-2"><span style={{ color: "var(--color-accent, #C9A46A)" }}>✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
+      <section className="relative w-full py-3 overflow-hidden z-20 border-t border-b border-brand-border bg-brand-card">
+        <div className="flex whitespace-nowrap animate-marquee gap-12 text-[10px] md:text-xs font-sans tracking-widest uppercase text-brand-soft">
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString()} candles lit</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.posts.toLocaleString()} writings published</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.members.toLocaleString()} quiet humans</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString()} candles lit</span>
+          <span className="flex items-center gap-2"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
         </div>
       </section>
 
@@ -158,11 +153,10 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-16 md:py-24">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
           <div>
-            <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>Latest from the sanctuary</span>
-            <h2 className="text-3xl md:text-4xl font-serif" style={{ color: "var(--color-text, #EBE5DF)" }}>Trending Writings</h2>
+            <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold text-brand-accent">Latest from the sanctuary</span>
+            <h2 className="text-3xl md:text-4xl font-serif text-brand-text">Trending Writings</h2>
           </div>
-          <Link href="/reading-room" className="text-[10px] uppercase tracking-widest pb-1 font-bold shrink-0"
-            style={{ color: "var(--color-accent, #C9A46A)", borderBottom: "1px solid var(--color-accent, #C9A46A)" }}>
+          <Link href="/reading-room" className="text-[10px] uppercase tracking-widest pb-1 font-bold shrink-0 text-brand-accent border-b border-brand-accent hover:text-brand-text">
             View All →
           </Link>
         </div>
@@ -170,25 +164,22 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {displayPosts.map((post: any) => (
             <Link key={post.id} href={post.slug ? `/read/${post.slug}` : `/reading-room`}
-              className="group p-5 rounded-2xl transition-all flex flex-col"
-              style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
+              className="group p-5 rounded-2xl transition-all flex flex-col bg-brand-card border border-brand-border hover:border-brand-accent/50 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[9px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full"
-                  style={{ color: "var(--color-accent, #C9A46A)", backgroundColor: "rgba(201,164,106,0.1)", border: "1px solid rgba(201,164,106,0.2)" }}>
+                <span className="text-[9px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full text-brand-accent bg-brand-accent/10 border border-brand-accent/20">
                   {categoryLabels[post.type] || post.type}
                 </span>
-                <span className="text-[10px]" style={{ color: "var(--color-soft, #A39E99)" }}>🕯️ {post.candle_count || 0}</span>
+                <span className="text-[10px] text-brand-soft">🕯️ {post.candle_count || 0}</span>
               </div>
-              <h3 className="text-lg font-serif mb-2 line-clamp-2 leading-snug group-hover:text-amber-400 transition-colors"
-                style={{ color: "var(--color-text, #EBE5DF)" }}>
+              <h3 className="text-lg font-serif mb-2 line-clamp-2 leading-snug group-hover:text-brand-accent transition-colors text-brand-text">
                 {post.title}
               </h3>
-              {post.excerpt && <p className="text-sm line-clamp-2 mb-4 font-serif italic flex-grow" style={{ color: "var(--color-soft, #A39E99)" }}>{post.excerpt}</p>}
-              <div className="flex items-center gap-2 mt-auto pt-3" style={{ borderTop: "1px solid var(--color-border, #2E2A27)" }}>
-                <div className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold" style={{ backgroundColor: "rgba(201,164,106,0.2)", color: "var(--color-text, #EBE5DF)" }}>
+              {post.excerpt && <p className="text-sm line-clamp-2 mb-4 font-serif italic flex-grow text-brand-soft">{post.excerpt}</p>}
+              <div className="flex items-center gap-2 mt-auto pt-3 border-t border-brand-border/40">
+                <div className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold bg-brand-accent/20 text-brand-text">
                   {post.profiles?.display_name?.charAt(0) || "S"}
                 </div>
-                <span className="text-[10px] uppercase tracking-widest" style={{ color: "var(--color-soft, #A39E99)" }}>@{post.profiles?.username}</span>
+                <span className="text-[10px] uppercase tracking-widest text-brand-soft">@{post.profiles?.username}</span>
               </div>
             </Link>
           ))}
@@ -197,33 +188,30 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
 
       {/* ===== 4. BENTO GRID ===== */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Link href="/toolkit" className="md:col-span-2 p-6 md:p-10 rounded-2xl flex flex-col justify-between group transition-colors"
-          style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
+        <Link href="/toolkit" className="md:col-span-2 p-6 md:p-10 rounded-2xl flex flex-col justify-between group transition-colors bg-brand-card border border-brand-border hover:border-brand-accent/50">
           <div className="mb-6">
-            <span className="text-[10px] uppercase tracking-widest mb-3 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>Interactive Toolkit</span>
-            <h2 className="text-2xl md:text-4xl font-serif mb-3" style={{ color: "var(--color-text, #EBE5DF)" }}>The Soft Toolkit</h2>
-            <p className="text-sm max-w-md" style={{ color: "var(--color-soft, #A39E99)" }}>20 psychological tools for worry, panic, ADHD & overthinking. Based on CBT, DBT & clinical psychology.</p>
+            <span className="text-[10px] uppercase tracking-widest mb-3 block font-bold text-brand-accent">Interactive Toolkit</span>
+            <h2 className="text-2xl md:text-4xl font-serif mb-3 text-brand-text">The Soft Toolkit</h2>
+            <p className="text-sm max-w-md text-brand-soft">20 psychological tools for worry, panic, ADHD & overthinking. Based on CBT, DBT & clinical psychology.</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 md:p-5 rounded-xl" style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+            <div className="p-3 md:p-5 rounded-xl bg-brand-bg border border-brand-border text-brand-text hover:border-brand-accent/50 transition-colors">
               <span className="text-xl mb-1 block">🌫️</span>
-              <h3 className="text-xs font-serif" style={{ color: "var(--color-text, #EBE5DF)" }}>Worry Dissolver</h3>
+              <h3 className="text-xs font-serif text-brand-text">Worry Dissolver</h3>
             </div>
-            <div className="p-3 md:p-5 rounded-xl" style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+            <div className="p-3 md:p-5 rounded-xl bg-brand-bg border border-brand-border text-brand-text hover:border-brand-accent/50 transition-colors">
               <span className="text-xl mb-1 block">🕰️</span>
-              <h3 className="text-xs font-serif" style={{ color: "var(--color-text, #EBE5DF)" }}>Panic Redirector</h3>
+              <h3 className="text-xs font-serif text-brand-text">Panic Redirector</h3>
             </div>
           </div>
         </Link>
-        <Link href="/pilgrim" className="p-6 md:p-10 rounded-2xl flex flex-col group transition-colors"
-          style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
-          <span className="text-[10px] uppercase tracking-widest mb-3 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>Community Wall</span>
-          <h2 className="text-2xl font-serif mb-2" style={{ color: "var(--color-text, #EBE5DF)" }}>Pilgrim Notes</h2>
-          <p className="text-sm mb-4" style={{ color: "var(--color-soft, #A39E99)" }}>Anonymous thoughts from quiet humans.</p>
+        <Link href="/pilgrim" className="p-6 md:p-10 rounded-2xl flex flex-col group transition-colors bg-brand-card border border-brand-border hover:border-brand-accent/50">
+          <span className="text-[10px] uppercase tracking-widest mb-3 block font-bold text-brand-accent">Community Wall</span>
+          <h2 className="text-2xl font-serif mb-2 text-brand-text">Pilgrim Notes</h2>
+          <p className="text-sm mb-4 text-brand-soft">Anonymous thoughts from quiet humans.</p>
           <div className="flex flex-col gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
             {displayNotes.map((note: any) => (
-              <div key={note.id} className="p-3 rounded-xl text-xs italic font-serif line-clamp-2"
-                style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)", color: "var(--color-soft, #A39E99)" }}>
+              <div key={note.id} className="p-3 rounded-xl text-xs italic font-serif line-clamp-2 bg-brand-bg border border-brand-border text-brand-soft">
                 &ldquo;{note.content.substring(0, 60)}...&rdquo;
               </div>
             ))}
@@ -234,20 +222,18 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       {/* ===== 5. TESTIMONIALS ===== */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20">
         <div className="text-center mb-8">
-          <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>Social Proof</span>
-          <h2 className="text-3xl md:text-4xl font-serif" style={{ color: "var(--color-text, #EBE5DF)" }}>What quiet humans say</h2>
+          <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold text-brand-accent">Social Proof</span>
+          <h2 className="text-3xl md:text-4xl font-serif text-brand-text">What quiet humans say</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {testimonials.map((t, i) => (
-            <div key={i} className="p-6 md:p-8 rounded-2xl"
-              style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
-              <p className="font-serif italic text-base md:text-lg leading-relaxed mb-4" style={{ color: "var(--color-text, #EBE5DF)" }}>
+            <div key={i} className="p-6 md:p-8 rounded-2xl bg-brand-card border border-brand-border">
+              <p className="font-serif italic text-base md:text-lg leading-relaxed mb-4 text-brand-text">
                 &ldquo;{t.quote}&rdquo;
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold" style={{ color: "var(--color-soft, #A39E99)" }}>— {t.name}</span>
-                <span className="text-[9px] uppercase tracking-widest px-2 py-1 rounded-full"
-                  style={{ color: "var(--color-soft, #A39E99)", backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+                <span className="text-sm font-bold text-brand-soft">— {t.name}</span>
+                <span className="text-[9px] uppercase tracking-widest px-2 py-1 rounded-full text-brand-soft bg-brand-bg border border-brand-border/40">
                   {t.source}
                 </span>
               </div>
@@ -258,20 +244,17 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
 
       {/* ===== 6. ABOUT THE CREATOR ===== */}
       <section className="max-w-4xl mx-auto px-4 md:px-6 py-12 md:py-20">
-        <div className="p-6 md:p-10 rounded-2xl flex flex-col md:flex-row items-center gap-6 md:gap-10"
-          style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
-          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center text-3xl md:text-4xl shrink-0"
-            style={{ backgroundColor: "rgba(201,164,106,0.1)", border: "2px solid rgba(201,164,106,0.3)" }}>
+        <div className="p-6 md:p-10 rounded-2xl flex flex-col md:flex-row items-center gap-6 md:gap-10 bg-brand-card border border-brand-border">
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center text-3xl md:text-4xl shrink-0 bg-brand-accent/10 border-2 border-brand-accent/30">
             🧑‍💻
           </div>
           <div className="text-center md:text-left">
-            <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>The human behind this</span>
-            <h3 className="text-2xl md:text-3xl font-serif mb-3" style={{ color: "var(--color-text, #EBE5DF)" }}>Hi, I&apos;m Srijan.</h3>
-            <p className="text-sm md:text-base leading-relaxed mb-4" style={{ color: "var(--color-soft, #A39E99)" }}>
+            <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold text-brand-accent">The human behind this</span>
+            <h3 className="text-2xl md:text-3xl font-serif mb-3 text-brand-text">Hi, I&apos;m Srijan.</h3>
+            <p className="text-sm md:text-base leading-relaxed mb-4 text-brand-soft">
               I built Quietly Humans because I needed it to exist. As an overthinker who has spent too many nights at 3AM staring at ceilings, I wanted to create a space that actually understands what it feels like to think too much.
             </p>
-            <Link href="/about" className="text-[10px] uppercase tracking-widest font-bold transition-colors"
-              style={{ color: "var(--color-accent, #C9A46A)", borderBottom: "1px solid var(--color-accent, #C9A46A)" }}>
+            <Link href="/about" className="text-[10px] uppercase tracking-widest font-bold transition-colors text-brand-accent border-b border-brand-accent hover:text-brand-text">
               Read my full story →
             </Link>
           </div>
@@ -282,41 +265,34 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
           <div>
-            <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>Shop</span>
-            <h2 className="text-3xl md:text-4xl font-serif" style={{ color: "var(--color-text, #EBE5DF)" }}>The Quiet Store</h2>
-            <p className="mt-2 text-sm max-w-lg" style={{ color: "var(--color-soft, #A39E99)" }}>Books, journals, Notion templates, memberships & digital tools.</p>
+            <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold text-brand-accent">Shop</span>
+            <h2 className="text-3xl md:text-4xl font-serif text-brand-text">The Quiet Store</h2>
+            <p className="mt-2 text-sm max-w-lg text-brand-soft">Books, journals, Notion templates, memberships & digital tools.</p>
           </div>
-          <Link href="/store" className="text-[10px] uppercase tracking-widest pb-1 font-bold shrink-0"
-            style={{ color: "var(--color-accent, #C9A46A)", borderBottom: "1px solid var(--color-accent, #C9A46A)" }}>Browse All →</Link>
+          <Link href="/store" className="text-[10px] uppercase tracking-widest pb-1 font-bold shrink-0 text-brand-accent border-b border-brand-accent hover:text-brand-text">Browse All →</Link>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
           {allProducts.slice(0, 6).map((product, idx) => {
             const isFree = product.price === "Free";
             return (
               <Link key={idx} href={product.url}
-                className="group rounded-2xl overflow-hidden transition-all flex flex-col"
-                style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
-                <div className="h-28 md:h-36 flex items-center justify-center relative transition-colors"
-                  style={{ backgroundColor: "var(--color-bg, #0d0d0d)", borderBottom: "1px solid var(--color-border, #2E2A27)" }}>
+                className="group rounded-2xl overflow-hidden transition-all flex flex-col bg-brand-card border border-brand-border hover:border-brand-accent/50 shadow-sm hover:shadow-md">
+                <div className="h-28 md:h-36 flex items-center justify-center relative transition-colors bg-brand-bg border-b border-brand-border">
                   <span className="text-3xl md:text-4xl grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110">{product.emoji}</span>
-                  <span className="absolute top-2 left-2 text-[8px] uppercase tracking-widest px-2 py-0.5 rounded-full"
-                    style={{ color: "var(--color-soft, #A39E99)", backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)" }}>
+                  <span className="absolute top-2 left-2 text-[8px] uppercase tracking-widest px-2 py-0.5 rounded-full text-brand-soft bg-brand-bg border border-brand-border/40">
                     {product.tag}
                   </span>
-                  <span className={`absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full ${isFree ? "text-green-400" : ""}`}
-                    style={isFree ? { backgroundColor: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)" } : { color: "var(--color-accent, #C9A46A)", backgroundColor: "rgba(201,164,106,0.1)", border: "1px solid rgba(201,164,106,0.2)" }}>
+                  <span className={`absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full ${isFree ? "text-green-500 bg-green-500/10 border border-green-500/25" : "text-brand-accent bg-brand-accent/10 border border-brand-accent/25"}`}>
                     {product.price}
                   </span>
                 </div>
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-sm md:text-base font-serif mb-1 line-clamp-2 leading-snug group-hover:text-amber-400 transition-colors"
-                    style={{ color: "var(--color-text, #EBE5DF)" }}>
+                  <h3 className="text-sm md:text-base font-serif mb-1 line-clamp-2 leading-snug group-hover:text-brand-accent transition-colors text-brand-text">
                     {product.title}
                   </h3>
-                  <p className="text-[11px] line-clamp-2 flex-grow" style={{ color: "var(--color-soft, #A39E99)" }}>{product.desc}</p>
-                  <div className="mt-3 pt-3" style={{ borderTop: "1px solid var(--color-border, #2E2A27)" }}>
-                    <span className={`text-[10px] uppercase tracking-widest font-bold ${isFree ? "text-green-400" : ""}`}
-                      style={isFree ? {} : { color: "var(--color-accent, #C9A46A)" }}>
+                  <p className="text-[11px] line-clamp-2 flex-grow text-brand-soft">{product.desc}</p>
+                  <div className="mt-3 pt-3 border-t border-brand-border/40">
+                    <span className={`text-[10px] uppercase tracking-widest font-bold ${isFree ? "text-green-500" : "text-brand-accent group-hover:text-brand-text"}`}>
                       {isFree ? "Get Free →" : "View Details →"}
                     </span>
                   </div>
@@ -329,36 +305,33 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
 
       {/* ===== 8. NEWSLETTER + LEAD MAGNET ===== */}
       <section className="max-w-4xl mx-auto px-4 md:px-6 py-12 md:py-20">
-        <div className="p-8 md:p-12 rounded-2xl text-center relative overflow-hidden"
-          style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
+        <div className="p-8 md:p-12 rounded-2xl text-center relative overflow-hidden bg-brand-card border border-brand-border shadow-sm">
           <div className="relative z-10">
             <span className="text-3xl md:text-4xl mb-4 block">📬</span>
-            <h2 className="text-2xl md:text-3xl font-serif mb-3" style={{ color: "var(--color-text, #EBE5DF)" }}>The Quiet Letter</h2>
-            <p className="text-sm md:text-base mb-2 max-w-lg mx-auto" style={{ color: "var(--color-soft, #A39E99)" }}>
+            <h2 className="text-2xl md:text-3xl font-serif mb-3 text-brand-text">The Quiet Letter</h2>
+            <p className="text-sm md:text-base mb-2 max-w-lg mx-auto text-brand-soft">
               Soft essays for tired hearts, sent twice a month. No spam, no hustle, no noise.
             </p>
-            <p className="text-xs md:text-sm font-bold mb-6" style={{ color: "var(--color-accent, #C9A46A)" }}>
+            <p className="text-xs md:text-sm font-bold mb-6 text-brand-accent">
               🎁 Sign up and get &ldquo;The 7-Day Soft Reset&rdquo; — a free journaling kit (PDF)
             </p>
 
             {subStatus === "success" ? (
-              <div className="rounded-xl p-6 font-serif italic text-green-400" style={{ backgroundColor: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)" }}>
+              <div className="rounded-xl p-6 font-serif italic text-green-500 bg-green-500/10 border border-green-500/25">
                 Welcome to the sanctuary. Check your inbox for the free journaling kit. 🌿
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" required
-                  className="flex-1 rounded-full px-5 py-3 text-sm outline-none transition-colors"
-                  style={{ backgroundColor: "var(--color-bg, #0d0d0d)", border: "1px solid var(--color-border, #2E2A27)", color: "var(--color-text, #EBE5DF)" }} />
+                  className="flex-1 rounded-full px-5 py-3 text-sm outline-none transition-colors bg-brand-bg border border-brand-border text-brand-text focus:border-brand-accent" />
                 <button type="submit" disabled={subStatus === "loading"}
-                  className="px-6 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform disabled:opacity-50 shrink-0"
-                  style={{ backgroundColor: "var(--color-text, #EBE5DF)", color: "var(--color-bg, #0d0d0d)" }}>
+                  className="px-6 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform disabled:opacity-50 shrink-0 bg-brand-text text-brand-bg">
                   {subStatus === "loading" ? "Joining..." : "Join Free"}
                 </button>
               </form>
             )}
             {subStatus === "error" && <p className="text-red-400 text-xs mt-3">Something went wrong. Please try again.</p>}
-            <p className="text-[10px] mt-4 uppercase tracking-widest" style={{ color: "var(--color-soft, #A39E99)" }}>
+            <p className="text-[10px] mt-4 uppercase tracking-widest text-brand-soft">
               {stats.members > 0 ? `${stats.members.toLocaleString()}+ quiet humans already inside` : "Join the quiet revolution"}
             </p>
           </div>
@@ -368,17 +341,16 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       {/* ===== 9. EXPLORE ALL ROOMS ===== */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16">
         <div className="text-center mb-8">
-          <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold" style={{ color: "var(--color-accent, #C9A46A)" }}>Explore</span>
-          <h2 className="text-3xl md:text-4xl font-serif mb-3" style={{ color: "var(--color-text, #EBE5DF)" }}>Every Quiet Room</h2>
+          <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold text-brand-accent">Explore</span>
+          <h2 className="text-3xl md:text-4xl font-serif mb-3 text-brand-text">Every Quiet Room</h2>
         </div>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
           {exploreRooms.map((room) => (
             <Link key={room.path} href={room.path}
-              className="group rounded-xl p-4 text-center transition-all flex flex-col items-center"
-              style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
+              className="group rounded-xl p-4 text-center transition-all flex flex-col items-center bg-brand-card border border-brand-border hover:border-brand-accent/50">
               <span className="text-2xl mb-2 grayscale group-hover:grayscale-0 transition-all duration-300">{room.emoji}</span>
-              <h3 className="text-[11px] md:text-sm font-serif leading-tight group-hover:text-amber-400 transition-colors" style={{ color: "var(--color-text, #EBE5DF)" }}>{room.title}</h3>
-              <p className="text-[9px] uppercase tracking-widest mt-1 hidden md:block" style={{ color: "var(--color-soft, #A39E99)" }}>{room.desc}</p>
+              <h3 className="text-[11px] md:text-sm font-serif leading-tight group-hover:text-brand-accent transition-colors text-brand-text">{room.title}</h3>
+              <p className="text-[9px] uppercase tracking-widest mt-1 hidden md:block text-brand-soft">{room.desc}</p>
             </Link>
           ))}
         </div>
@@ -386,33 +358,28 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
 
       {/* ===== 10. CREATOR PITCH ===== */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-12">
-        <div className="rounded-2xl p-8 md:p-14 text-center flex flex-col items-center"
-          style={{ backgroundColor: "var(--color-card, #171717)", border: "1px solid var(--color-border, #2E2A27)" }}>
+        <div className="rounded-2xl p-8 md:p-14 text-center flex flex-col items-center bg-brand-card border border-brand-border">
           <span className="text-4xl mb-4">🖋️</span>
-          <h2 className="text-2xl md:text-3xl font-serif mb-3" style={{ color: "var(--color-text, #EBE5DF)" }}>Don&apos;t scream into the void.</h2>
-          <p className="text-sm mb-6 max-w-lg" style={{ color: "var(--color-soft, #A39E99)" }}>Build your own quiet room. Publish essays, sell digital products, and grow your audience.</p>
+          <h2 className="text-2xl md:text-3xl font-serif mb-3 text-brand-text">Don&apos;t scream into the void.</h2>
+          <p className="text-sm mb-6 max-w-lg text-brand-soft">Build your own quiet room. Publish essays, sell digital products, and grow your audience.</p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Link href="/onboarding" className="px-6 py-3 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform text-center"
-              style={{ backgroundColor: "var(--color-text, #EBE5DF)", color: "var(--color-bg, #0d0d0d)" }}>Start Writing</Link>
-            <Link href="/dashboard" className="px-6 py-3 rounded-full text-[10px] tracking-widest uppercase text-center transition-all"
-              style={{ color: "var(--color-soft, #A39E99)", border: "1px solid var(--color-border, #2E2A27)" }}>Dashboard</Link>
+            <Link href="/onboarding" className="px-6 py-3 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform text-center bg-brand-text text-brand-bg">Start Writing</Link>
+            <Link href="/dashboard" className="px-6 py-3 rounded-full text-[10px] tracking-widest uppercase text-center transition-all text-brand-soft border border-brand-border hover:text-brand-text hover:border-brand-accent">Dashboard</Link>
           </div>
         </div>
       </section>
 
       {/* ===== 11. SANCTUARY PASS CTA ===== */}
       <section className="max-w-5xl mx-auto px-4 md:px-6 py-12 relative">
-        <div className="absolute inset-0 blur-[80px] rounded-full pointer-events-none" style={{ backgroundColor: "rgba(201,164,106,0.1)" }} />
+        <div className="absolute inset-0 blur-[80px] rounded-full pointer-events-none bg-brand-accent/5" />
         <div className="relative rounded-2xl md:rounded-[3rem] overflow-hidden p-[1px] animate-pulse-glow">
-          <div className="rounded-2xl md:rounded-[3rem] p-8 md:p-16 text-center relative z-10 flex flex-col items-center"
-            style={{ backgroundColor: "var(--color-bg, #0d0d0d)" }}>
-            <span className="mb-4 text-4xl" style={{ color: "var(--color-accent, #C9A46A)" }}>🌿</span>
-            <h2 className="text-3xl md:text-5xl font-serif mb-4" style={{ color: "var(--color-text, #EBE5DF)" }}>Become a Guardian.</h2>
-            <p className="text-sm md:text-lg max-w-xl mb-8 font-serif italic" style={{ color: "var(--color-soft, #A39E99)" }}>
+          <div className="rounded-2xl md:rounded-[3rem] p-8 md:p-16 text-center relative z-10 flex flex-col items-center bg-brand-bg border border-brand-border/40 shadow-xl">
+            <span className="mb-4 text-4xl text-brand-accent">🌿</span>
+            <h2 className="text-3xl md:text-5xl font-serif mb-4 text-brand-text">Become a Guardian.</h2>
+            <p className="text-sm md:text-lg max-w-xl mb-8 font-serif italic text-brand-soft">
               $4.99/month. Unlock the complete Soft Toolkit, ad-free reading, and support the quiet ecosystem.
             </p>
-            <Link href="/sanctuary-pass" className="text-white px-8 py-4 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform"
-              style={{ backgroundColor: "var(--color-accent, #C9A46A)", boxShadow: "0 0 30px rgba(201,164,106,0.3)" }}>
+            <Link href="/sanctuary-pass" className="text-white px-8 py-4 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform bg-brand-accent shadow-[0_0_30px_rgba(201,164,106,0.35)]">
               View Sanctuary Pass
             </Link>
           </div>
@@ -420,9 +387,9 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       </section>
       
       {/* ===== 12. PROMISE FOOTER ===== */}
-      <section className="py-16 text-center px-4" style={{ borderTop: "1px solid var(--color-border, #2E2A27)", backgroundColor: "var(--color-bg, #0d0d0d)" }}>
-        <p className="uppercase tracking-[0.3em] text-[10px] mb-6" style={{ color: "var(--color-soft, #A39E99)" }}>The Quietly Humans Promise</p>
-        <h2 className="text-2xl md:text-3xl font-serif max-w-2xl mx-auto leading-relaxed italic opacity-80" style={{ color: "var(--color-text, #EBE5DF)" }}>
+      <section className="py-16 text-center px-4 border-t border-brand-border bg-brand-bg">
+        <p className="uppercase tracking-[0.3em] text-[10px] mb-6 text-brand-soft">The Quietly Humans Promise</p>
+        <h2 className="text-2xl md:text-3xl font-serif max-w-2xl mx-auto leading-relaxed italic opacity-85 text-brand-text">
           &ldquo;Whenever the world is too loud, or the night is too long, there is a quiet room waiting for you here.&rdquo;
         </h2>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -434,8 +401,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
             { label: "Start Here", path: "/start" },
             { label: "Sanctuary Pass", path: "/sanctuary-pass" },
           ].map(l => (
-            <Link key={l.path} href={l.path} className="text-xs transition-colors pb-1"
-              style={{ color: "var(--color-soft, #A39E99)", borderBottom: "1px solid var(--color-border, #2E2A27)" }}>{l.label}</Link>
+            <Link key={l.path} href={l.path} className="text-xs transition-colors pb-1 text-brand-soft hover:text-brand-text border-b border-brand-border/40 hover:border-brand-accent">{l.label}</Link>
           ))}
         </div>
       </section>
