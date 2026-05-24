@@ -1,7 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { supabaseClient } from "@/lib/supabase";
 import Link from "next/link";
-import CheckoutButton from "./CheckoutButton";
 
 export const metadata = {
   title: "The Sanctuary Pass | Quietly Humans",
