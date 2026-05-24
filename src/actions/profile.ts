@@ -8,7 +8,7 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function createProfile(data: { id: string, username: string, display_name: string, bio: string, avatar_url: string | null }) {
+export async function createProfile(data: { id: string, username: string, display_name: string, bio: string, avatar_url: string | null, room_theme?: string }) {
   try {
     // Check if username is taken
     const { data: existing } = await supabaseAdmin

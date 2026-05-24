@@ -19,16 +19,23 @@ export async function GET(req: Request) {
 
     if (error) {
       console.error("Supabase Error logging click:", error);
-      // Even if logging fails, we should still redirect the user
     }
 
-    return NextResponse.redirect(url);
+    // Instead of direct redirect, route through the safety warning page
+    // We pass the raw url so the leaving page can handle it
+    const leavingUrl = new URL("/leaving", req.url);
+    leavingUrl.searchParams.set("url", url);
+    return NextResponse.redirect(leavingUrl.toString());
   } catch (error: any) {
     console.error("Analytics Click Error:", error);
-    // Fallback redirect if something completely breaks
+    
     const { searchParams } = new URL(req.url);
     const url = searchParams.get("url");
-    if (url) return NextResponse.redirect(url);
+    if (url) {
+      const leavingUrl = new URL("/leaving", req.url);
+      leavingUrl.searchParams.set("url", url);
+      return NextResponse.redirect(leavingUrl.toString());
+    }
     
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

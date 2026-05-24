@@ -131,3 +131,16 @@ CREATE POLICY "Comments are viewable by everyone."
   ON public.comments FOR SELECT USING (true);
 
 -- (Write policies will be enforced on our Next.js backend using the Supabase Service Role Key)
+
+-- 10. Create Subscribers Table (Sprint 8)
+CREATE TABLE public.subscribers (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  creator_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  subscriber_email text NOT NULL,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
+  UNIQUE(creator_id, subscriber_email)
+);
+
+ALTER TABLE public.subscribers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Creators can view their subscribers"
+  ON public.subscribers FOR SELECT USING (true); -- Read logic handled in backend

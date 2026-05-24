@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase";
 import Link from "next/link";
 import DashboardPostActionsClient from "./DashboardPostActionsClient";
+import SubscriberListClient from "./SubscribersListClient";
 
 export const metadata = {
   title: "Creator Dashboard | Quietly Humans",
@@ -26,6 +27,13 @@ export default async function DashboardPage() {
     .from("posts")
     .select("id, title, slug, candle_count, created_at")
     .eq("author_id", user.id)
+    .order("created_at", { ascending: false });
+
+  // Fetch subscribers
+  const { data: subscribers } = await supabaseClient
+    .from("subscribers")
+    .select("subscriber_email, created_at")
+    .eq("creator_id", user.id)
     .order("created_at", { ascending: false });
 
   // Fetch total followers
@@ -62,6 +70,11 @@ export default async function DashboardPage() {
           + Write New
         </Link>
       </header>
+
+      {/* Subscribers Section */}
+      <div className="mb-16">
+        <SubscriberListClient subscribers={subscribers || []} />
+      </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">

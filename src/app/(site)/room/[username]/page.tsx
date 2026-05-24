@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import FollowButton from "./FollowButton";
+import SubscribeFormClient from "@/components/global/SubscribeFormClient";
 
 type Props = { params: Promise<{ username: string }> };
 
@@ -106,14 +107,30 @@ export default async function CreatorRoomPage({ params }: Props) {
             </p>
           )}
 
-          <div className="flex gap-4">
-            {isOwnProfile ? (
-              <Link href="/settings" className="bg-white text-black px-8 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                Edit Room
-              </Link>
-            ) : (
-              <FollowButton targetUserId={profile.id} initialIsFollowing={isFollowing} />
+          <div className="flex flex-col items-center gap-6 w-full">
+            <div className="flex gap-4">
+              {isOwnProfile ? (
+                <Link href="/settings" className="bg-white text-black px-8 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                  Edit Room
+                </Link>
+              ) : (
+                <FollowButton targetUserId={profile.id} initialIsFollowing={isFollowing} />
+              )}
+            </div>
+
+            {profile.pins && profile.pins.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-3">
+                {profile.pins.map((pin: any, i: number) => (
+                  <a key={i} href={`/api/analytics/click?url=${encodeURIComponent(pin.url)}&profile_id=${profile.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white/5 border border-white/10 text-white px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold hover:bg-white/10 transition-colors">
+                    <span>{pin.title}</span>
+                  </a>
+                ))}
+              </div>
             )}
+
+            <div className="max-w-md w-full">
+              <SubscribeFormClient creatorId={profile.id} creatorName={profile.display_name || profile.username} />
+            </div>
           </div>
         </header>
 
