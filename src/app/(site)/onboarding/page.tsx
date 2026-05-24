@@ -26,10 +26,10 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 font-serif">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center p-6 font-serif bg-[#0d0d0d] text-white">
+      <div className="max-w-md w-full relative z-10">
         <div className="text-center mb-10">
-          <h1 className="text-4xl text-brand-text mb-4">Welcome to the Sanctuary.</h1>
+          <h1 className="text-4xl text-white mb-4">Welcome to the Sanctuary.</h1>
           <p className="text-brand-soft font-sans text-sm max-w-sm mx-auto leading-relaxed">
             Before you enter, choose a name for your Quiet Room. This is how others will know you if you choose to write.
           </p>

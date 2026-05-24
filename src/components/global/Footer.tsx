@@ -19,18 +19,18 @@ export default function Footer() {
 
         <div className="flex flex-col gap-4">
           <span className="text-xs tracking-widest uppercase opacity-40">Ecosystem</span>
-          <Link href="/guides" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Pillar Guides</Link>
+          <Link href="/reading-room" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Reading Room</Link>
+          <Link href="/pilgrim" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Pilgrim Notes</Link>
+          <Link href="/store" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Quiet Store</Link>
           <Link href="/books" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Books & Journals</Link>
-          <Link href="/products" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Digital Dashboard</Link>
-          <Link href="/blog" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Thoughts</Link>
-          <Link href="/letters" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Midnight Letters</Link>
+          <Link href="/guides" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Pillar Guides</Link>
         </div>
 
         <div className="flex flex-col gap-4">
           <span className="text-xs tracking-widest uppercase opacity-40">Connect</span>
+          <Link href="/dashboard" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Creator Dashboard</Link>
           <Link href="/breathe" className="text-sm opacity-80 hover:text-brand-accent transition-colors">The Breathe Room</Link>
-          <Link href="/reset" className="text-sm opacity-80 hover:text-brand-accent transition-colors">7-Day Reset</Link>
-          <Link href="/quotes" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Quiet Words</Link>
+          <Link href="/toolkit" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Soft Toolkit</Link>
           <Link href="/about" className="text-sm opacity-80 hover:text-brand-accent transition-colors">About Srijan</Link>
           <Link href="/contact" className="text-sm opacity-80 hover:text-brand-accent transition-colors">Contact</Link>
         </div>

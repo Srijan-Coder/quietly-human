@@ -22,26 +22,27 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full bg-[#0a0a0a] text-[#e0e0e0] font-sans selection:bg-brand-accent selection:text-white overflow-hidden">
+    <div className="relative min-h-screen w-full bg-[#0d0d0d] text-[#e0e0e0] font-sans selection:bg-brand-accent selection:text-white overflow-hidden">
       <AmbientBackground />
       
       {/* 1. Cinematic Hero */}
-      <section className="relative min-h-screen flex flex-col justify-center items-center px-6 text-center">
-        <div className="z-10 flex flex-col items-center max-w-4xl">
+      <section className="relative min-h-[90vh] flex flex-col justify-center items-center px-6 text-center">
+        <div className="z-10 flex flex-col items-center max-w-4xl mt-12">
           <motion.p
             initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="text-xs md:text-sm tracking-[0.3em] uppercase text-brand-soft mb-8"
+            className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-brand-soft mb-8 flex items-center gap-3"
           >
+            <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse-glow" />
             {greeting}
           </motion.p>
           
           <motion.h1
-            initial={{ opacity: 0, filter: "blur(20px)", scale: 0.9 }}
+            initial={{ opacity: 0, filter: "blur(20px)", scale: 0.95 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
             transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-serif tracking-tight text-white leading-tight mb-8"
+            className="text-6xl md:text-8xl lg:text-[7rem] font-serif tracking-tight text-white leading-[1.1] mb-8"
           >
             The quietest corner <br className="hidden md:block"/> of the internet.
           </motion.h1>
@@ -50,7 +51,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, delay: 0.8 }}
-            className="text-brand-soft text-lg md:text-xl max-w-2xl leading-relaxed mb-12"
+            className="text-brand-soft text-lg md:text-xl max-w-2xl leading-relaxed mb-12 font-serif italic"
           >
             A digital sanctuary for overthinkers. Write your midnight letters, use our clinical toolkits, and remember how to breathe.
           </motion.p>
@@ -59,12 +60,12 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-6 items-center"
+            className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto"
           >
-            <Link href="/onboarding" className="bg-white text-black px-8 py-4 rounded-full text-xs tracking-widest uppercase font-bold hover:scale-105 transition-transform">
+            <Link href="/onboarding" className="w-full sm:w-auto bg-white text-black px-8 py-4 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.1)]">
               Enter Sanctuary
             </Link>
-            <Link href="/pilgrim" className="px-8 py-4 rounded-full text-xs tracking-widest uppercase text-brand-soft hover:text-white border border-brand-border/50 hover:border-white/50 transition-all">
+            <Link href="/pilgrim" className="w-full sm:w-auto px-8 py-4 rounded-full text-[10px] tracking-widest uppercase text-brand-soft hover:text-white border border-white/10 hover:border-white/30 transition-all bg-white/5 backdrop-blur-md">
               Explore the Wall
             </Link>
           </motion.div>
@@ -72,116 +73,121 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
       </section>
 
       {/* 2. The Live Pulse */}
-      <section className="relative w-full border-y border-white/10 bg-white/5 backdrop-blur-md py-6 overflow-hidden">
-        <div className="flex whitespace-nowrap animate-[marquee_40s_linear_infinite] gap-12 text-sm text-brand-soft font-serif italic">
-          <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse"/> {stats.candles.toLocaleString()} candles lit</span>
-          <span>•</span>
-          <span>{stats.notes.toLocaleString()} pilgrim notes left</span>
-          <span>•</span>
-          <span>{stats.posts.toLocaleString()} midnight letters written</span>
-          <span>•</span>
-          <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse"/> {stats.candles.toLocaleString()} candles lit</span>
-          <span>•</span>
-          <span>{stats.notes.toLocaleString()} pilgrim notes left</span>
-          <span>•</span>
-          <span>{stats.posts.toLocaleString()} midnight letters written</span>
+      <section className="relative w-full border-y border-white/5 bg-white/5 backdrop-blur-md py-4 overflow-hidden z-20">
+        <div className="flex whitespace-nowrap animate-marquee gap-16 text-xs text-brand-soft font-sans tracking-widest uppercase">
+          <span className="flex items-center gap-3"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString()} candles lit</span>
+          <span className="flex items-center gap-3"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
+          <span className="flex items-center gap-3"><span className="text-brand-accent">✦</span> {stats.posts.toLocaleString()} midnight letters</span>
+          <span className="flex items-center gap-3"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString()} candles lit</span>
+          <span className="flex items-center gap-3"><span className="text-brand-accent">✦</span> {stats.notes.toLocaleString()} pilgrim notes</span>
+          <span className="flex items-center gap-3"><span className="text-brand-accent">✦</span> {stats.posts.toLocaleString()} midnight letters</span>
+          <span className="flex items-center gap-3"><span className="text-brand-accent">✦</span> {stats.candles.toLocaleString()} candles lit</span>
         </div>
       </section>
 
-      {/* 3. The Bento Box Ecosystem */}
-      <section className="max-w-6xl mx-auto px-6 py-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* 3. The Asymmetric Bento Grid */}
+      <section className="max-w-7xl mx-auto px-6 py-24 md:py-32 grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        {/* Box 1: The Toolkit */}
-        <div className="lg:col-span-2 bg-[#121212] border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col justify-between group overflow-hidden relative">
+        {/* Box 1: The Soft Toolkit (2 cols) */}
+        <Link href="/toolkit" className="md:col-span-2 bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col justify-between group overflow-hidden relative hover:border-brand-accent/50 transition-colors duration-500">
           <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"/>
-          <div className="z-10">
-            <h2 className="text-3xl font-serif text-white mb-4">The Soft Toolkit</h2>
-            <p className="text-brand-soft mb-12 max-w-md">15+ interactive psychological tools designed to dissolve worry, redirect panic, and help you find focus.</p>
+          <div className="z-10 mb-12">
+            <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 block font-bold">01. Interactive</span>
+            <h2 className="text-4xl font-serif text-white mb-4">The Soft Toolkit</h2>
+            <p className="text-brand-soft max-w-md">20 psychological tools designed to dissolve worry, redirect panic, and help you find focus. Used by thousands daily.</p>
           </div>
-          <div className="z-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link href="/toolkit/worry-dissolver" className="bg-black/50 border border-white/5 p-4 rounded-xl hover:bg-white/5 transition-colors">
-              <h3 className="text-white text-sm mb-1">Worry Dissolver</h3>
-              <p className="text-brand-soft text-[10px] uppercase tracking-widest">For racing thoughts</p>
-            </Link>
-            <Link href="/toolkit/panic-redirector" className="bg-black/50 border border-white/5 p-4 rounded-xl hover:bg-white/5 transition-colors">
-              <h3 className="text-white text-sm mb-1">Panic Redirector</h3>
-              <p className="text-brand-soft text-[10px] uppercase tracking-widest">Ground yourself</p>
-            </Link>
+          <div className="z-10 grid grid-cols-2 gap-4">
+            <div className="bg-black/40 border border-white/5 p-4 md:p-6 rounded-2xl group-hover:bg-white/5 transition-colors">
+              <span className="text-2xl mb-2 block">🌫️</span>
+              <h3 className="text-white text-sm md:text-base mb-1 font-serif">Worry Dissolver</h3>
+            </div>
+            <div className="bg-black/40 border border-white/5 p-4 md:p-6 rounded-2xl group-hover:bg-white/5 transition-colors">
+              <span className="text-2xl mb-2 block">🕰️</span>
+              <h3 className="text-white text-sm md:text-base mb-1 font-serif">Panic Redirector</h3>
+            </div>
           </div>
-        </div>
+        </Link>
 
-        {/* Box 2: Pilgrim Notes */}
-        <div className="bg-[#121212] border border-white/10 p-8 rounded-[2rem] flex flex-col group relative overflow-hidden">
+        {/* Box 2: Pilgrim Notes (1 col) */}
+        <Link href="/pilgrim" className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col group relative overflow-hidden hover:border-brand-accent/50 transition-colors duration-500">
            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"/>
-           <h2 className="text-2xl font-serif text-white mb-2 z-20">The Community Wall</h2>
-           <p className="text-brand-soft text-sm mb-8 z-20">Recent thoughts left behind.</p>
+           <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 block font-bold z-20">02. Community</span>
+           <h2 className="text-3xl font-serif text-white mb-2 z-20">Pilgrim Notes</h2>
+           <p className="text-brand-soft text-sm mb-8 z-20">Anonymous thoughts left behind by others.</p>
            
-           <div className="flex flex-col gap-4 z-0 opacity-60 group-hover:opacity-100 transition-opacity">
+           <div className="flex flex-col gap-4 z-0 opacity-40 group-hover:opacity-100 transition-opacity duration-500">
               {latestNotes.map((note) => (
-                <div key={note.id} className="bg-white/5 p-4 rounded-xl text-sm italic border border-white/5">
-                  "{note.content.substring(0, 80)}..."
+                <div key={note.id} className="bg-black/40 p-4 rounded-xl text-sm italic border border-white/5 font-serif text-brand-soft">
+                  "{note.content.substring(0, 70)}..."
                 </div>
               ))}
            </div>
-        </div>
+        </Link>
 
-        {/* Box 3: Creator Pitch */}
-        <div className="bg-[#121212] border border-white/10 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center group">
-          <h2 className="text-2xl font-serif text-white mb-4">Don't scream into the void.</h2>
-          <p className="text-brand-soft text-sm mb-8">Build your own quiet room. Publish essays, curate your audience, and monetize your digital products using Creator Pins.</p>
-          <Link href="/onboarding" className="text-xs uppercase tracking-widest border-b border-white/30 pb-1 hover:border-white transition-colors">
-            Start Writing
-          </Link>
-        </div>
-
-        {/* Box 4: Latest Posts */}
-        <div className="lg:col-span-2 bg-[#121212] border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col justify-between">
-           <div className="flex justify-between items-end mb-12">
+        {/* Box 3: The Reading Room (2 cols) */}
+        <Link href="/reading-room" className="md:col-span-2 bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col justify-between group overflow-hidden relative hover:border-brand-accent/50 transition-colors duration-500">
+           <div className="flex justify-between items-start mb-12 relative z-10">
              <div>
-                <h2 className="text-3xl font-serif text-white mb-2">The Reading Room</h2>
-                <p className="text-brand-soft">A feed without the noise. Curated essays.</p>
+                <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 block font-bold">03. Consumption</span>
+                <h2 className="text-4xl font-serif text-white mb-2">The Reading Room</h2>
+                <p className="text-brand-soft">A feed without the noise. Read curated midnight letters and journals.</p>
              </div>
-             <Link href="/reading-room" className="hidden md:block text-xs uppercase tracking-widest border border-white/20 px-4 py-2 rounded-full hover:bg-white hover:text-black transition-colors">
-               Read All
-             </Link>
            </div>
            
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
               {latestPosts.map((post) => (
-                <Link key={post.id} href={`/room/${post.profiles?.username}/${post.slug}`} className="block group">
-                  <h3 className="text-xl font-serif text-white group-hover:text-brand-accent transition-colors mb-2">{post.title}</h3>
-                  <p className="text-sm text-brand-soft line-clamp-2">{post.excerpt}</p>
-                  <p className="text-xs text-brand-soft/50 mt-4 uppercase tracking-widest">By @{post.profiles?.username}</p>
-                </Link>
+                <div key={post.id} className="block group/post p-6 bg-black/40 rounded-2xl border border-white/5">
+                  <h3 className="text-xl font-serif text-white group-hover/post:text-brand-accent transition-colors mb-2 line-clamp-1">{post.title}</h3>
+                  <p className="text-sm text-brand-soft line-clamp-2 mb-4 font-serif italic">{post.excerpt}</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-brand-accent/20 flex items-center justify-center text-[10px]">✨</div>
+                    <p className="text-[10px] text-white/50 uppercase tracking-widest">@{post.profiles?.username}</p>
+                  </div>
+                </div>
               ))}
            </div>
-        </div>
+        </Link>
+
+        {/* Box 4: Creator Pitch (1 col) */}
+        <Link href="/onboarding" className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col justify-center items-center text-center group hover:border-white/30 transition-colors duration-500">
+          <span className="text-4xl mb-6">🖋️</span>
+          <h2 className="text-2xl font-serif text-white mb-4">Don't scream into the void.</h2>
+          <p className="text-brand-soft text-sm mb-8">Build your own quiet room. Publish essays, curate your audience, and monetize digital products.</p>
+          <span className="text-[10px] uppercase tracking-widest border-b border-brand-accent/50 text-brand-accent pb-1 group-hover:border-brand-accent transition-colors font-bold">
+            Start Writing
+          </span>
+        </Link>
 
       </section>
 
       {/* 4. Sanctuary Pass CTA */}
-      <section className="max-w-4xl mx-auto px-6 py-32 mb-32">
-        <div className="relative rounded-[3rem] overflow-hidden p-[1px]">
-          {/* Glowing Border */}
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-accent/0 via-brand-accent to-brand-accent/0 opacity-50"/>
-          
-          <div className="bg-[#0a0a0a] rounded-[3rem] p-12 md:p-24 text-center relative z-10 flex flex-col items-center">
-             <span className="text-brand-accent mb-6 text-4xl">🕊️</span>
-             <h2 className="text-4xl md:text-5xl font-serif text-white mb-6">Become a Guardian.</h2>
-             <p className="text-brand-soft text-lg max-w-lg mb-12">Upgrade to the Sanctuary Pass for $4.99/month. Unlock the complete Soft Toolkit, ad-free reading, and support the ecosystem.</p>
-             <Link href="/sanctuary-pass" className="bg-white text-black px-8 py-4 rounded-full text-xs tracking-widest uppercase font-bold hover:scale-105 transition-transform">
+      <section className="max-w-5xl mx-auto px-6 py-12 mb-32 relative">
+        <div className="absolute inset-0 bg-brand-accent/20 blur-[100px] rounded-full pointer-events-none" />
+        <div className="relative rounded-[3rem] overflow-hidden p-[1px] animate-pulse-glow">
+          <div className="bg-[#0d0d0d]/90 backdrop-blur-3xl rounded-[3rem] p-12 md:p-24 text-center relative z-10 flex flex-col items-center">
+             <span className="text-brand-accent mb-6 text-5xl">🌿</span>
+             <h2 className="text-5xl md:text-6xl font-serif text-white mb-6">Become a Guardian.</h2>
+             <p className="text-brand-soft text-lg max-w-xl mb-12 font-serif italic">
+               Upgrade to the Sanctuary Pass for $4.99/month. Unlock the complete Soft Toolkit, ad-free reading, and support the quiet ecosystem.
+             </p>
+             <Link href="/sanctuary-pass" className="bg-brand-accent text-white px-10 py-5 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform shadow-[0_0_30px_rgba(201,164,106,0.3)]">
                 View Sanctuary Pass
              </Link>
           </div>
         </div>
       </section>
+      
+      {/* 5. The 3AM Promise */}
+      <section className="border-t border-white/5 bg-black py-24 text-center px-6">
+        <p className="text-brand-soft uppercase tracking-[0.3em] text-[10px] mb-8">The Quietly Humans Promise</p>
+        <h2 className="text-3xl md:text-4xl font-serif text-white max-w-2xl mx-auto leading-relaxed italic opacity-80 hover:opacity-100 transition-opacity duration-1000">
+          "Whenever the world is too loud, or the night is too long, there is a quiet room waiting for you here."
+        </h2>
+        <div className="mt-12 flex justify-center gap-6">
+          <Link href="/3am" className="text-xs text-brand-soft hover:text-white transition-colors border-b border-white/10 pb-1">Enter the 3AM Room</Link>
+        </div>
+      </section>
 
-      <style jsx global>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
     </div>
   );
 }
