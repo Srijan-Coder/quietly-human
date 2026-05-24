@@ -6,7 +6,7 @@ import RoomThemeSelectorClient from "./RoomThemeSelectorClient";
 import ProfileSettingsClient from "./ProfileSettingsClient";
 
 export const metadata = {
-  title: "Settings | Quietly Humans",
+  title: "Settings",
 };
 
 export default async function SettingsPage() {

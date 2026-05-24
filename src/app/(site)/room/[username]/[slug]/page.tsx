@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) return { title: "Quietly Humans" };
 
-  const title = `${post.title} | Quietly Humans`;
+  const title = `${post.title}`;
   const description = post.excerpt || `A quiet writing by ${profile?.display_name || username}`;
   const imageUrl = post.cover_image_url || `${BASE_URL}/og-default.png`;
 

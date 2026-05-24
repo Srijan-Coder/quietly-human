@@ -8,7 +8,7 @@ import SubscriberListClient from "./SubscribersListClient";
 import DashboardFeedClient from "./DashboardFeedClient";
 
 export const metadata = {
-  title: "Creator Dashboard | Quietly Humans",
+  title: "Creator Dashboard",
 };
 
 export default async function DashboardPage() {

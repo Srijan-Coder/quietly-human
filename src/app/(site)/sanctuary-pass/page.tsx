@@ -3,7 +3,7 @@ import { supabaseClient } from "@/lib/supabase";
 import SanctuaryPassClient from "./SanctuaryPassClient";
 
 export const metadata = {
-  title: "The Sanctuary Pass | Quietly Humans",
+  title: "The Sanctuary Pass",
 };
 
 export default async function SanctuaryPassPage() {

@@ -4,7 +4,7 @@ import { supabaseClient } from "@/lib/supabase";
 import WriteEditorClient from "@/app/(site)/write/WriteEditorClient";
 
 export const metadata = {
-  title: "Edit Words | Quietly Humans",
+  title: "Edit Words",
 };
 
 export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {

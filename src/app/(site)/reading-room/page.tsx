@@ -4,7 +4,7 @@ import ReadingRoomClient from "./ReadingRoomClient";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const metadata = {
-  title: "The Reading Room — Curated Essays & Midnight Letters | Quietly Humans",
+  title: "The Reading Room — Curated Essays & Midnight Letters",
   description: "A feed without the noise. Read curated essays, midnight letters, and journals from quiet minds.",
 };
 

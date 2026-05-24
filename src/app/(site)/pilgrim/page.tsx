@@ -2,7 +2,7 @@ import { supabaseClient } from "@/lib/supabase";
 import PilgrimClient from "./PilgrimClient";
 
 export const metadata = {
-  title: "Pilgrim Notes | Quietly Humans",
+  title: "Pilgrim Notes",
   description: "A community wall of anonymous and pseudonymous thoughts.",
 };
 

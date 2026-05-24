@@ -6,7 +6,7 @@ import NotificationClearClient from "./NotificationClearClient";
 import NotificationsListClient from "./NotificationsListClient";
 
 export const metadata = {
-  title: "Notifications | Quietly Humans",
+  title: "Notifications",
 };
 
 export default async function NotificationsPage() {

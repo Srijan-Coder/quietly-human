@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import LeavingWarningClient from "./LeavingWarningClient";
 
 export const metadata = {
-  title: "Leaving Sanctuary | Quietly Humans",
+  title: "Leaving Sanctuary",
 };
 
 export default function LeavingPage() {

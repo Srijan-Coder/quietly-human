@@ -4,7 +4,7 @@ import WriteEditorClient from "./WriteEditorClient";
 import { supabaseClient } from "@/lib/supabase";
 
 export const metadata = {
-  title: "Write | Quietly Humans",
+  title: "Write",
 };
 
 export default async function WritePage() {

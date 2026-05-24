@@ -4,7 +4,7 @@ import { supabaseClient } from "@/lib/supabase";
 import AdminBanClient from "./AdminBanClient";
 
 export const metadata = {
-  title: "Admin Dashboard | Quietly Humans",
+  title: "Admin Dashboard",
 };
 
 export default async function AdminPage() {

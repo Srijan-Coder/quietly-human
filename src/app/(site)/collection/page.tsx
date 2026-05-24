@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import CollectionLibraryClient from "./CollectionLibraryClient";
 
 export const metadata: Metadata = {
-  title: "My Collection | Quietly Humans",
+  title: "My Collection",
   description: "Your private sanctuary of saved tools, essays, and letters.",
 };
 

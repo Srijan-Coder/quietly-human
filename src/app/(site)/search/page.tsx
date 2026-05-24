@@ -2,7 +2,7 @@ import { StandaloneSearchClient } from "@/components/global/StandaloneSearchClie
 import { Suspense } from "react";
 
 export const metadata = {
-  title: "Sanctuary Search - Quietly Humans",
+  title: "Sanctuary Search",
   description: "Search for a feeling, word, or topic.",
 };
 

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!profile) return { title: "Quietly Humans" };
 
   const name = profile.display_name || username;
-  const title = `${name}'s Room | Quietly Humans`;
+  const title = `${name}'s Room`;
   const description = profile.bio || `Read writings and letters from ${name} on Quietly Humans.`;
   const imageUrl = profile.avatar_url || `${BASE_URL}/og-default.png`;
 
