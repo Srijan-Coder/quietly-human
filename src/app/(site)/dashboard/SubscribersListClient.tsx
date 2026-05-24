@@ -16,9 +16,9 @@ export default function SubscribersListClient({ subscribers }: { subscribers: an
     <div className="bg-[#121212] border border-white/5 rounded-[2rem] p-8 md:p-12 mb-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-brand-border/50 pb-8 mb-8">
         <div>
-          <h2 className="text-3xl font-serif text-white mb-2">Subscribers</h2>
+          <h2 className="text-3xl font-serif text-white mb-2">Email Subscribers</h2>
           <p className="text-brand-soft font-sans text-sm">
-            You have {subscribers.length} reader(s) waiting for your letters.
+            You have {subscribers.length} reader(s) who subscribed to your email newsletter. (Note: Followers are separate and shown above).
           </p>
         </div>
         
