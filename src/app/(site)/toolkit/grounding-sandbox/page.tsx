@@ -1,3 +1,4 @@
+import PremiumGate from "@/components/global/PremiumGate";
 import GroundingSandboxClient from "@/components/global/GroundingSandboxClient";
 import { Metadata } from "next";
 
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function GroundingSandboxPage() {
   return (
-    <div className="pt-0 pb-0 w-full h-screen">
+    <PremiumGate>
+      <div className="pt-0 pb-0 w-full h-screen">
       <GroundingSandboxClient />
     </div>
+    </PremiumGate>
   );
 }

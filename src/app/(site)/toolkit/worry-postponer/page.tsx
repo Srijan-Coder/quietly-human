@@ -1,3 +1,4 @@
+import PremiumGate from "@/components/global/PremiumGate";
 import WorryPostponerClient from "@/components/global/WorryPostponerClient";
 import { Metadata } from "next";
 
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function WorryPostponerPage() {
   return (
-    <div className="pt-20 pb-0">
+    <PremiumGate>
+      <div className="pt-20 pb-0">
       <WorryPostponerClient />
     </div>
+    </PremiumGate>
   );
 }

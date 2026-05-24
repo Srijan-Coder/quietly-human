@@ -1,3 +1,4 @@
+import PremiumGate from "@/components/global/PremiumGate";
 import CognitiveCourtroomClient from "@/components/global/CognitiveCourtroomClient";
 import { Metadata } from "next";
 
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function CognitiveCourtroomPage() {
   return (
-    <div className="pt-20 pb-0">
+    <PremiumGate>
+      <div className="pt-20 pb-0">
       <CognitiveCourtroomClient />
     </div>
+    </PremiumGate>
   );
 }

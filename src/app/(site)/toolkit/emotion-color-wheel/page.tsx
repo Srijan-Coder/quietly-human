@@ -1,3 +1,4 @@
+import PremiumGate from "@/components/global/PremiumGate";
 import EmotionColorWheelClient from "@/components/global/EmotionColorWheelClient";
 import { Metadata } from "next";
 
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function EmotionColorWheelPage() {
   return (
-    <div className="pt-20 pb-0">
+    <PremiumGate>
+      <div className="pt-20 pb-0">
       <EmotionColorWheelClient />
     </div>
+    </PremiumGate>
   );
 }

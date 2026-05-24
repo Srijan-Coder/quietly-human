@@ -1,3 +1,4 @@
+import PremiumGate from "@/components/global/PremiumGate";
 import YesButFlipperClient from "@/components/global/YesButFlipperClient";
 import { Metadata } from "next";
 
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function YesButFlipperPage() {
   return (
-    <div className="pt-20 pb-0">
+    <PremiumGate>
+      <div className="pt-20 pb-0">
       <YesButFlipperClient />
     </div>
+    </PremiumGate>
   );
 }

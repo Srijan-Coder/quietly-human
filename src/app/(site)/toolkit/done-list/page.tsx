@@ -1,3 +1,4 @@
+import PremiumGate from "@/components/global/PremiumGate";
 import DoneListClient from "@/components/global/DoneListClient";
 import { Metadata } from "next";
 
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function DoneListPage() {
   return (
-    <div className="pt-20 pb-0">
+    <PremiumGate>
+      <div className="pt-20 pb-0">
       <DoneListClient />
     </div>
+    </PremiumGate>
   );
 }
