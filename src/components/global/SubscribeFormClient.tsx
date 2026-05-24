@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export default function SubscribeFormClient({ creatorId, creatorName }: { creatorId: string, creatorName: string }) {
   const [email, setEmail] = useState("");
@@ -34,14 +33,13 @@ export default function SubscribeFormClient({ creatorId, creatorName }: { creato
 
   if (status === "success") {
     return (
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-        className="w-full bg-brand-accent/10 border border-brand-accent/30 p-6 rounded-2xl text-center flex flex-col items-center justify-center min-h-[160px]"
+      <div 
+        className="w-full bg-brand-accent/10 border border-brand-accent/30 p-6 rounded-2xl text-center flex flex-col items-center justify-center min-h-[160px] animate-fade-in-up"
       >
         <span className="text-3xl mb-2">💌</span>
         <h3 className="font-serif text-brand-text text-xl mb-1">You are on the list.</h3>
         <p className="text-brand-soft text-sm">You will receive letters from {creatorName} directly in your inbox.</p>
-      </motion.div>
+      </div>
     );
   }
 

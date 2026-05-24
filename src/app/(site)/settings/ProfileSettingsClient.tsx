@@ -21,6 +21,50 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: "error" | "success" } | null>(null);
 
+  // Compress image client-side before upload to stay under Vercel's 4.5MB limit
+  const compressImage = (file: File, maxSize: number = 512): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = document.createElement("img");
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let { width, height } = img;
+          
+          // Scale down to maxSize x maxSize while keeping aspect ratio
+          if (width > maxSize || height > maxSize) {
+            if (width > height) {
+              height = Math.round((height * maxSize) / width);
+              width = maxSize;
+            } else {
+              width = Math.round((width * maxSize) / height);
+              height = maxSize;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) { reject(new Error("Canvas not supported")); return; }
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          canvas.toBlob(
+            (blob) => {
+              if (blob) resolve(blob);
+              else reject(new Error("Compression failed"));
+            },
+            "image/jpeg",
+            0.8 // 80% quality
+          );
+        };
+        img.onerror = () => reject(new Error("Failed to load image"));
+        img.src = event.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error("Failed to read file"));
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -30,23 +74,33 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
       return;
     }
 
-    if (file.size > 4 * 1024 * 1024) {
-      setMessage({ text: "File is too large. Please upload an image smaller than 4MB.", type: "error" });
+    if (file.size > 10 * 1024 * 1024) {
+      setMessage({ text: "File is too large. Please upload an image smaller than 10MB.", type: "error" });
       return;
     }
 
     setIsUploading(true);
     setMessage(null);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("bucket", "avatars");
-
     try {
+      // Compress on the client — output is always < 500KB
+      const compressedBlob = await compressImage(file);
+      const compressedFile = new File([compressedBlob], `avatar.jpg`, { type: "image/jpeg" });
+
+      const formData = new FormData();
+      formData.append("file", compressedFile);
+      formData.append("bucket", "avatars");
+
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
+
+      // Guard against Vercel returning HTML error pages
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        throw new Error("Upload failed — server returned an unexpected response. The image may be too large.");
+      }
 
       const data = await res.json();
       
@@ -134,7 +188,7 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
             {isUploading ? "Uploading..." : "Upload New Picture"}
             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} disabled={isUploading} />
           </label>
-          <p className="text-[10px] text-brand-soft mt-3 font-sans">Square image, max 4MB.</p>
+          <p className="text-[10px] text-brand-soft mt-3 font-sans">Any image up to 10MB. It will be auto-compressed.</p>
         </div>
       </div>
 

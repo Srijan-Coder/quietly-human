@@ -183,7 +183,7 @@ export default async function CreatorRoomPage({ params }: Props) {
                   </div>
                   
                   <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center relative z-10">
-                    <span className="text-[10px] uppercase tracking-widest text-white/40">{new Date(post.published_at).toLocaleDateString()}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-white/40">{new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
                     <span className="text-xs text-white/50 font-sans flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-white/5">
                       <span className="text-sm">🕯️</span> {post.candle_count || 0}
                     </span>
