@@ -31,12 +31,14 @@ export async function POST(req: Request) {
 
     const fileExt = file.name.split('.').pop();
     const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+    const fileBuffer = await file.arrayBuffer();
 
     const { data, error } = await supabaseAdmin.storage
       .from(bucket)
-      .upload(fileName, file, {
+      .upload(fileName, fileBuffer, {
         cacheControl: "3600",
-        upsert: false
+        upsert: false,
+        contentType: file.type
       });
 
     if (error) {

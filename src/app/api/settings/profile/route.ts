@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       .from("profiles")
       .select("display_name, username, last_name_change_at")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
 
     if (!currentProfile) {
       return NextResponse.json({ error: "Profile not found." }, { status: 404 });
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         .select("id")
         .eq("username", username)
         .neq("id", user.id)
-        .single();
+        .maybeSingle();
         
       if (existingUser) {
         return NextResponse.json({ error: "Username is already taken." }, { status: 400 });
