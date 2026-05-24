@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 });
     }
 
-    const { title, content, type, category, postTheme, attachedPins } = await req.json();
+    const { title, content, type, category, postTheme, attachedPins, coverImageUrl, pdfFileUrl } = await req.json();
 
     if (!title || !content || !type) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
@@ -83,6 +83,8 @@ export async function POST(req: Request) {
         slug,
         category: category || "Uncategorized",
         post_theme: postTheme || "default",
+        cover_image_url: coverImageUrl || null,
+        pdf_file_url: (type === 'ebook' && pdfFileUrl) ? pdfFileUrl : null,
         is_draft: false,
         attached_pins: finalAttachedPins,
         published_at: new Date().toISOString()

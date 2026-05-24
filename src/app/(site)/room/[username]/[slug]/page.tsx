@@ -70,6 +70,32 @@ export default async function PostPage({ params }: Props) {
             </h1>
           )}
 
+          {post.cover_image_url && (
+            <div className="w-full h-[40vh] min-h-[300px] mb-8 relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+              <Image 
+                src={post.cover_image_url} 
+                alt="Cover Image" 
+                fill 
+                className="object-cover hover:scale-105 transition-transform duration-1000" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60"></div>
+            </div>
+          )}
+
+          {post.type === 'ebook' && post.pdf_file_url && (
+            <div className="mb-12 text-center">
+              <a 
+                href={post.pdf_file_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-brand-accent text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest font-bold hover:scale-105 transition-transform shadow-[0_0_30px_rgba(252,163,17,0.3)]"
+              >
+                <span className="text-xl">📖</span>
+                Download / Read Ebook
+              </a>
+            </div>
+          )}
+
           <div className="flex items-center justify-center gap-3">
             <Link href={`/room/${username}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               {profile.avatar_url ? (

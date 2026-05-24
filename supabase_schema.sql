@@ -31,6 +31,8 @@ CREATE TABLE public.posts (
   content text NOT NULL,
   category text, -- Sprint 6
   post_theme text DEFAULT 'default', -- Sprint 6
+  cover_image_url text, -- Sprint 7
+  pdf_file_url text, -- Sprint 7
   candle_count integer DEFAULT 0,
   is_draft boolean DEFAULT false,
   attached_pins jsonb DEFAULT '[]'::jsonb, -- Sprint 6 (Up to 3 pins)

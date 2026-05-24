@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import TiptapEditor from "@/components/global/TiptapEditor";
+import { supabaseClient } from "@/lib/supabase";
 
 const CATEGORIES = [
   "Uncategorized", "Stoicism", "Minimalism", "Healing", "Midnight Thoughts", 
@@ -41,6 +42,10 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
   }
   
   const [selectedPinIndexes, setSelectedPinIndexes] = useState<number[]>(initialPinIndexes);
+  const [coverImageUrl, setCoverImageUrl] = useState(initialPost?.cover_image_url || "");
+  const [pdfFileUrl, setPdfFileUrl] = useState(initialPost?.pdf_file_url || "");
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
+  const [isUploadingPdf, setIsUploadingPdf] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [error, setError] = useState("");
   const [saveStatus, setSaveStatus] = useState("Draft saved locally");
@@ -78,6 +83,55 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
     return () => clearTimeout(timer);
   }, [title, content, type, category, postTheme, selectedPinIndexes, initialPost]);
 
+  const uploadFile = async (e: React.ChangeEvent<HTMLInputElement>, isPdf: boolean) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Size Validation (User requested in KB not MB - we use max limits)
+    // Image max: 2MB (2048 KB)
+    // PDF max: 5MB (5120 KB)
+    const sizeInKb = file.size / 1024;
+    
+    if (isPdf) {
+      if (file.type !== "application/pdf") return alert("Only PDF files are allowed.");
+      if (sizeInKb > 5120) return alert(`PDF is too large (${Math.round(sizeInKb)}KB). Maximum size is 5120KB (5MB).`);
+      setIsUploadingPdf(true);
+    } else {
+      if (!file.type.startsWith("image/")) return alert("Only images are allowed.");
+      if (sizeInKb > 2048) return alert(`Image is too large (${Math.round(sizeInKb)}KB). Maximum size is 2048KB (2MB).`);
+      setIsUploadingCover(true);
+    }
+
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `${isPdf ? 'pdfs' : 'covers'}/${fileName}`;
+
+      const { data, error: uploadError } = await supabaseClient
+        .storage
+        .from("creator_media")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabaseClient
+        .storage
+        .from("creator_media")
+        .getPublicUrl(filePath);
+
+      if (isPdf) {
+        setPdfFileUrl(publicUrlData.publicUrl);
+      } else {
+        setCoverImageUrl(publicUrlData.publicUrl);
+      }
+    } catch (err: any) {
+      alert("Error uploading file: " + err.message);
+    } finally {
+      if (isPdf) setIsUploadingPdf(false);
+      else setIsUploadingCover(false);
+    }
+  };
+
   const togglePin = (index: number) => {
     if (selectedPinIndexes.includes(index)) {
       setSelectedPinIndexes(selectedPinIndexes.filter(i => i !== index));
@@ -100,7 +154,10 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
     setError("");
 
     try {
-      const payload: any = { title, content, type, category, postTheme };
+      const payload: any = { 
+        title, content, type, category, postTheme, 
+        coverImageUrl, pdfFileUrl: type === 'ebook' ? pdfFileUrl : null 
+      };
       
       // Attach selected pins if premium
       if (selectedPinIndexes.length > 0 && isPremium) {
@@ -228,6 +285,34 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
               </div>
             )}
           </div>
+        </div>
+
+        {/* File Uploads */}
+        <div className="relative z-10 mb-8 flex flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <label className="cursor-pointer bg-black/50 border border-white/10 hover:bg-white/5 transition-colors px-4 py-2 rounded-full text-xs font-sans text-brand-soft uppercase tracking-widest flex items-center gap-2">
+              <span>{isUploadingCover ? "Uploading..." : "📷 Add Cover Image"}</span>
+              <input type="file" accept="image/*" onChange={(e) => uploadFile(e, false)} className="hidden" disabled={isUploadingCover} />
+            </label>
+            {coverImageUrl && (
+              <span className="text-[10px] text-green-400 font-sans uppercase tracking-widest">Cover Added ✓</span>
+            )}
+          </div>
+          {coverImageUrl && (
+            <div className="h-32 w-full max-w-sm rounded-2xl bg-cover bg-center border border-white/10" style={{ backgroundImage: `url(${coverImageUrl})` }} />
+          )}
+
+          {type === 'ebook' && (
+            <div className="flex items-center gap-4 mt-2">
+              <label className="cursor-pointer bg-brand-accent/10 border border-brand-accent/20 hover:bg-brand-accent/20 transition-colors px-4 py-2 rounded-full text-xs font-sans text-brand-accent uppercase tracking-widest flex items-center gap-2">
+                <span>{isUploadingPdf ? "Uploading PDF..." : "📄 Upload Ebook PDF (Free Book)"}</span>
+                <input type="file" accept="application/pdf" onChange={(e) => uploadFile(e, true)} className="hidden" disabled={isUploadingPdf} />
+              </label>
+              {pdfFileUrl && (
+                <span className="text-[10px] text-green-400 font-sans uppercase tracking-widest">PDF Added ✓</span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Title Input */}

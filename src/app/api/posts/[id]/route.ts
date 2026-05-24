@@ -33,7 +33,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { id } = await params;
-    const { title, content, type, category, postTheme, attachedPins } = await req.json();
+    const { title, content, type, category, postTheme, attachedPins, coverImageUrl, pdfFileUrl } = await req.json();
 
     // Verify ownership
     const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", id).single();
@@ -58,6 +58,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         type,
         category: category || "Uncategorized",
         post_theme: postTheme || "default",
+        cover_image_url: coverImageUrl || null,
+        pdf_file_url: (type === 'ebook' && pdfFileUrl) ? pdfFileUrl : null,
         attached_pins: finalAttachedPins
       })
       .eq("id", id);
