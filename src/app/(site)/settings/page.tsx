@@ -28,13 +28,17 @@ export default async function SettingsPage() {
         </p>
       </header>
 
-      <div className="bg-brand-card border border-brand-border p-8 rounded-2xl">
-        <h2 className="text-xl text-brand-text mb-6">Manage Your Pins</h2>
-        <p className="text-brand-soft text-sm mb-8 font-sans">
-          Pins appear at the top of your Creator Room. Use them to link to your own products, a newsletter, or external projects.
-        </p>
-        
-        <PinManagerClient initialPins={profile.pins || []} userId={user.id} />
+      {/* Settings Sections */}
+      <div className="space-y-16">
+        {/* Store & Pins */}
+        <section className="bg-brand-card border border-brand-border p-8 rounded-2xl">
+          <h2 className="text-xl text-brand-text mb-2 font-serif">Store & Pins</h2>
+          <p className="text-brand-soft text-sm mb-8 font-sans">
+            Manage your shop links and pinned content to showcase your work.
+          </p>
+          
+          <PinManagerClient initialPins={profile.pins || []} userId={user.id} />
+        </section>
       </div>
     </div>
   );

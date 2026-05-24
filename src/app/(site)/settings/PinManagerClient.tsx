@@ -51,62 +51,80 @@ export default function PinManagerClient({ initialPins, userId }: { initialPins:
 
   return (
     <div>
-      {error && <div className="text-red-400 mb-4 text-sm font-sans">{error}</div>}
+      {error && <div className="text-red-400 mb-4 text-sm font-sans bg-red-500/10 p-3 rounded-lg border border-red-500/20">{error}</div>}
       
+      <p className="text-brand-soft text-sm font-sans mb-8">
+        Add up to 4 pins to your Creator Room. You can link your Gumroad products, your social media, or any other link. Use a price tag emoji (🏷️) or link emoji (🔗).
+      </p>
+
       <div className="space-y-4 mb-8">
         {pins.map((pin, i) => (
-          <div key={i} className="flex flex-col sm:flex-row gap-4 p-4 border border-brand-border/50 rounded-xl bg-brand-bg relative">
+          <div key={i} className="flex flex-col sm:flex-row gap-6 p-6 border border-white/10 rounded-2xl bg-black/50 relative group hover:border-brand-accent/50 transition-colors">
             <button 
               onClick={() => removePin(i)} 
-              className="absolute -top-2 -right-2 bg-red-500/20 text-red-500 rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-500 hover:text-white transition-colors"
+              className="absolute -top-3 -right-3 bg-[#121212] border border-white/10 text-white/50 rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-red-500 hover:text-white hover:border-red-500 transition-colors z-10 shadow-lg"
             >
-              ×
+              ✕
             </button>
-            <input 
-              value={pin.emoji} 
-              onChange={e => updatePin(i, "emoji", e.target.value)} 
-              className="bg-transparent border-b border-brand-border text-center w-12 text-2xl outline-none" 
-              maxLength={2}
-            />
-            <div className="flex-1 space-y-2">
+            <div className="flex flex-col items-center justify-center bg-[#121212] border border-white/5 rounded-xl w-24 h-24 shrink-0">
               <input 
-                value={pin.title} 
-                onChange={e => updatePin(i, "title", e.target.value)} 
-                placeholder="Title" 
-                className="w-full bg-transparent border-b border-brand-border outline-none font-sans text-brand-text" 
+                value={pin.emoji} 
+                onChange={e => updatePin(i, "emoji", e.target.value)} 
+                className="bg-transparent text-center w-full text-4xl outline-none" 
+                maxLength={2}
+                placeholder="🔗"
               />
-              <input 
-                value={pin.subtitle} 
-                onChange={e => updatePin(i, "subtitle", e.target.value)} 
-                placeholder="Subtitle" 
-                className="w-full bg-transparent border-b border-brand-border outline-none font-sans text-xs text-brand-soft" 
-              />
-              <input 
-                value={pin.url} 
-                onChange={e => updatePin(i, "url", e.target.value)} 
-                placeholder="https://" 
-                className="w-full bg-transparent border-b border-brand-border outline-none font-sans text-xs text-brand-accent" 
-              />
+              <span className="text-[9px] uppercase tracking-widest text-white/30 mt-2">Emoji</span>
+            </div>
+            
+            <div className="flex-1 space-y-4">
+              <div>
+                <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-1 block">Title / Product Name</label>
+                <input 
+                  value={pin.title} 
+                  onChange={e => updatePin(i, "title", e.target.value)} 
+                  placeholder="e.g. Minimalist Notion Journal" 
+                  className="w-full bg-transparent border-b border-white/10 focus:border-brand-accent pb-2 outline-none font-sans text-white text-lg transition-colors" 
+                />
+              </div>
+              <div>
+                <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-1 block">Subtitle / Price</label>
+                <input 
+                  value={pin.subtitle} 
+                  onChange={e => updatePin(i, "subtitle", e.target.value)} 
+                  placeholder="e.g. $9.99 • Digital Download" 
+                  className="w-full bg-transparent border-b border-white/10 focus:border-brand-accent pb-2 outline-none font-sans text-brand-soft transition-colors text-sm" 
+                />
+              </div>
+              <div>
+                <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-1 block">Gumroad / External Link</label>
+                <input 
+                  value={pin.url} 
+                  onChange={e => updatePin(i, "url", e.target.value)} 
+                  placeholder="https://gumroad.com/l/..." 
+                  className="w-full bg-transparent border-b border-white/10 focus:border-brand-accent pb-2 outline-none font-sans text-brand-accent transition-colors text-sm" 
+                />
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center bg-[#121212] border border-white/5 p-6 rounded-2xl">
         <button 
           onClick={addPin} 
           disabled={pins.length >= 4}
-          className="text-xs uppercase tracking-widest text-brand-soft hover:text-brand-text transition-colors font-sans disabled:opacity-50"
+          className="text-xs uppercase tracking-widest text-white hover:text-brand-accent transition-colors font-sans disabled:opacity-50 flex items-center gap-2 font-bold"
         >
-          + Add Pin
+          <span className="text-xl">+</span> Add Pin ({pins.length}/4)
         </button>
         
         <button 
           onClick={handleSave} 
           disabled={loading}
-          className="bg-brand-text text-brand-bg px-6 py-2 rounded-full uppercase tracking-widest text-xs font-bold hover:bg-brand-accent hover:text-white transition-all disabled:opacity-50"
+          className="bg-white text-black px-8 py-3 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 transition-transform disabled:opacity-50 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
         >
-          {loading ? "Saving..." : "Save Pins"}
+          {loading ? "Saving..." : "Save Store & Pins"}
         </button>
       </div>
     </div>

@@ -105,6 +105,42 @@ export default async function DashboardPage() {
           </div>
         )}
       </div>
+
+      {/* Revenue & Store Section */}
+      <h2 className="text-2xl font-serif text-white mt-16 mb-6">Creator Store & Revenue</h2>
+      <div className="bg-[#121212] border border-white/5 rounded-[2rem] p-8 md:p-12">
+        <div className="flex flex-col md:flex-row gap-12 items-start">
+          <div className="flex-1">
+            <h3 className="text-3xl text-brand-text mb-4 font-serif">Monetize your Room</h3>
+            <p className="text-brand-soft font-sans leading-relaxed mb-6">
+              Quietly Humans allows you to sell digital products (Notion templates, ebooks, journaling guides) directly from your Creator Room. We use <strong>Gumroad</strong> to process all payments globally.
+            </p>
+            <ol className="list-decimal pl-5 text-brand-soft font-sans space-y-3 mb-8">
+              <li>Upload your digital product to your own Gumroad account.</li>
+              <li>Copy the checkout link provided by Gumroad.</li>
+              <li>Go to <strong>Settings {`>`} Pins</strong> and add your product link.</li>
+            </ol>
+            <Link href="/settings" className="bg-brand-accent text-white px-6 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform inline-block">
+              Set up your Store Pins
+            </Link>
+          </div>
+          <div className="flex-1 bg-black/50 border border-white/5 p-8 rounded-2xl w-full">
+            <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-4 block">Pending Balance</span>
+            <div className="text-5xl font-serif text-white mb-2">$0.00</div>
+            <p className="text-xs text-brand-soft/70 font-sans mb-6">
+              Tracked directly via your Gumroad Affiliate dashboard. Payouts happen every Friday via Gumroad.
+            </p>
+            <div className="border-t border-white/5 pt-6 mt-6 flex justify-between text-sm">
+              <span className="text-brand-soft">Platform Fee:</span>
+              <span className="text-white">0% (Beta)</span>
+            </div>
+            <div className="flex justify-between text-sm mt-2">
+              <span className="text-brand-soft">Gumroad Fee:</span>
+              <span className="text-white">10% + 30¢</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
