@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const postId = params.id;
+    const { id: postId } = await params;
     if (!postId) {
       return NextResponse.json({ error: "Missing post id" }, { status: 400 });
     }
