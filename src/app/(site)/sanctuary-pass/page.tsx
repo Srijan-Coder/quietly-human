@@ -91,7 +91,7 @@ export default async function SanctuaryPassPage() {
             </div>
 
             <a 
-              href="https://gumroad.com" 
+              href="https://quietlyhumansspace.gumroad.com/l/soacp" 
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-brand-accent text-black px-12 py-4 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 transition-transform shadow-[0_0_30px_rgba(252,163,17,0.3)] inline-block relative z-10"
