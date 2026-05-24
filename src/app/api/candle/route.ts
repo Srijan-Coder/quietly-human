@@ -23,9 +23,33 @@ export async function POST(req: Request) {
     // 1. Insert into candles table
     const { error: insertError } = await supabaseAdmin
       .from("candles")
-      .insert([{ user_id: user.id, target_id: targetId, target_type: targetType }]);
-    
-    if (insertError) {
+      .insert([{
+        user_id: user.id,
+        target_type: targetType,
+        target_id: targetId
+      }]);
+
+    if (!insertError) {
+      // Find the author of the post or note to send them a notification
+      let authorId = null;
+      if (targetType === "post") {
+        const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", targetId).single();
+        authorId = post?.author_id;
+      } else if (targetType === "note") {
+        const { data: note } = await supabaseAdmin.from("pilgrim_notes").select("author_id").eq("id", targetId).single();
+        authorId = note?.author_id;
+      }
+
+      // If it's not our own post, send a notification
+      if (authorId && authorId !== user.id) {
+        await supabaseAdmin.from("notifications").insert([{
+          user_id: authorId,
+          actor_id: user.id,
+          type: targetType === "post" ? "candle_post" : "candle_note",
+          target_id: targetId
+        }]);
+      }
+    } else {
       if (insertError.code === "23505") { // Unique constraint violation
         return NextResponse.json({ error: "Already lit a candle" }, { status: 400 });
       }

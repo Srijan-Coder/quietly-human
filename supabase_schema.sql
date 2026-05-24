@@ -52,12 +52,24 @@ CREATE TABLE public.candles (
   PRIMARY KEY (user_id, target_type, target_id)
 );
 
+-- 6. Create Notifications Table
+CREATE TABLE public.notifications (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  actor_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  type text NOT NULL CHECK (type IN ('follow', 'candle_post', 'candle_note')),
+  target_id uuid, -- Optional reference to post or note
+  is_read boolean DEFAULT false,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- Turn on Row Level Security (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.follows ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.pilgrim_notes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.candles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 
 -- Simple Policies (Open reads, restricted writes)
 -- Note: We will use a Server Key for writes in API routes to bypass RLS initially, 

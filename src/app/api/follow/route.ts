@@ -21,12 +21,20 @@ export async function POST(req: Request) {
     }
 
     if (action === "follow") {
-      const { error } = await supabaseAdmin
+      const { error: insertError } = await supabaseAdmin
         .from("follows")
         .insert([{ follower_id: user.id, following_id: targetUserId }]);
       
-      if (error && error.code !== "23505") { // Ignore unique violation if already following
-        console.error(error);
+      if (!insertError) {
+        await supabaseAdmin.from("notifications").insert([{
+          user_id: targetUserId,
+          actor_id: user.id,
+          type: "follow"
+        }]);
+      }
+
+      if (insertError && insertError.code !== "23505") { // Ignore unique violation if already following
+        console.error(insertError);
         return NextResponse.json({ error: "Failed to follow" }, { status: 500 });
       }
     } else {

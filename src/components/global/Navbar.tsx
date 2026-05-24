@@ -131,13 +131,18 @@ export default function Navbar() {
               </SignInButton>
             )}
             {isLoaded && isSignedIn && (
-              <UserButton 
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "w-7 h-7 md:w-8 md:h-8",
-                  }
-                }}
-              />
+              <div className="flex items-center gap-4 mr-4">
+                <Link href="/notifications" className="opacity-60 hover:opacity-100 transition-opacity">
+                  <span className="text-lg">🔔</span>
+                </Link>
+                <UserButton 
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: "w-7 h-7 md:w-8 md:h-8",
+                    }
+                  }}
+                />
+              </div>
             )}
           </div>
 
