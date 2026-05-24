@@ -33,6 +33,18 @@ export default async function DashboardPage() {
     .select("follower_id", { count: "exact" })
     .eq("following_id", user.id);
 
+  // Fetch page views
+  const { count: pageViewsCount } = await supabaseClient
+    .from("page_views")
+    .select("*", { count: "exact", head: true })
+    .eq("profile_id", user.id);
+
+  // Fetch link clicks
+  const { count: linkClicksCount } = await supabaseClient
+    .from("link_clicks")
+    .select("*", { count: "exact", head: true })
+    .eq("profile_id", user.id);
+
   const totalCandles = posts?.reduce((acc, post) => acc + (post.candle_count || 0), 0) || 0;
 
   return (
@@ -51,17 +63,24 @@ export default async function DashboardPage() {
       </header>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
         <div className="bg-[#121212] border border-white/5 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-3 z-10">Total Posts</span>
-          <span className="text-5xl font-serif text-white z-10">{posts?.length || 0}</span>
+          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-3 z-10">Room Views</span>
+          <span className="text-5xl font-serif text-white z-10">{pageViewsCount || 0}</span>
         </div>
         <div className="bg-[#121212] border border-brand-accent/20 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group shadow-[0_0_30px_rgba(252,163,17,0.05)]">
           <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-3 z-10">Total Candles Lit</span>
           <span className="text-5xl font-serif text-brand-accent flex items-center gap-3 z-10">
             <span className="text-3xl">🕯️</span> {totalCandles}
+          </span>
+        </div>
+        <div className="bg-[#121212] border border-brand-accent/20 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group shadow-[0_0_30px_rgba(252,163,17,0.05)]">
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-3 z-10">Store Link Clicks</span>
+          <span className="text-5xl font-serif text-brand-accent flex items-center gap-3 z-10">
+            <span className="text-3xl">🏷️</span> {linkClicksCount || 0}
           </span>
         </div>
         <div className="bg-[#121212] border border-white/5 p-8 rounded-[2rem] flex flex-col justify-center items-center text-center relative overflow-hidden group">

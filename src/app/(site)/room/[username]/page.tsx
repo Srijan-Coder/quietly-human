@@ -50,6 +50,14 @@ export default async function CreatorRoomPage({ params }: Props) {
 
   const isOwnProfile = user?.id === profile.id;
 
+  // Log the page view asynchronously (fire and forget)
+  import("@/lib/supabase").then(({ supabaseAdmin }) => {
+    supabaseAdmin.from("page_views").insert({ 
+      profile_id: profile.id, 
+      path: `/room/${username}` 
+    }).then();
+  });
+
   // Map ambiance to Tailwind colors
   const getAmbianceClasses = (ambiance: string) => {
     switch(ambiance) {
@@ -118,7 +126,7 @@ export default async function CreatorRoomPage({ params }: Props) {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {profile.pins.map((pin: any, idx: number) => (
-                <a key={idx} href={pin.url} target="_blank" rel="noopener noreferrer" className="group block bg-[#121212] border border-white/5 rounded-[1.5rem] overflow-hidden hover:border-brand-accent/50 transition-all duration-500 shadow-sm relative">
+                <a key={idx} href={`/api/analytics/click?url=${encodeURIComponent(pin.url)}&profile_id=${profile.id}`} target="_blank" rel="noopener noreferrer" className="group block bg-[#121212] border border-white/5 rounded-[1.5rem] overflow-hidden hover:border-brand-accent/50 transition-all duration-500 shadow-sm relative">
                   <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                   <div className="h-32 bg-black/40 relative flex items-center justify-center p-4 text-center border-b border-white/5 group-hover:bg-white/5 transition-colors">
                     <span className="text-5xl filter grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110">

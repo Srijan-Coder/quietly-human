@@ -63,6 +63,22 @@ CREATE TABLE public.notifications (
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- 7. Create Page Views Table
+CREATE TABLE public.page_views (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  profile_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  path text NOT NULL,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 8. Create Link Clicks Table
+CREATE TABLE public.link_clicks (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  profile_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  url text NOT NULL,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- Turn on Row Level Security (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.follows ENABLE ROW LEVEL SECURITY;
@@ -70,6 +86,8 @@ ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.pilgrim_notes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.candles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.page_views ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.link_clicks ENABLE ROW LEVEL SECURITY;
 
 -- Simple Policies (Open reads, restricted writes)
 -- Note: We will use a Server Key for writes in API routes to bypass RLS initially, 
