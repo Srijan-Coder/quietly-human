@@ -18,25 +18,25 @@
 }
 
 /* ============================================
-   LIGHT MODE — warm parchment (not harsh white)
+   LIGHT MODE — warm ivory, not harsh white
    ============================================ */
 :root {
-  --color-bg: #EFE7DA;
-  --color-card: #F7F0E6;
-  --color-text: #2A2118;
-  --color-soft: #6B5E52;
-  --color-accent: #9E6E47;
-  --color-muted: #D8C9B5;
-  --color-blue: #8EA8A6;
-  --color-border: #CBBFB0;
+  --color-bg: #FAF7F2;
+  --color-card: #FFFFFF;
+  --color-text: #1A1613;
+  --color-soft: #7A6E63;
+  --color-accent: #A0724A;
+  --color-muted: #E8DFD4;
+  --color-blue: #6E8E8A;
+  --color-border: #E0D6CA;
 }
 
 /* ============================================
-   DARK MODE — original balanced dark theme
+   DARK MODE — deep cinematic blacks
    ============================================ */
 .dark {
-  --color-bg: #161514;
-  --color-card: #1F1D1C;
+  --color-bg: #0d0d0d;
+  --color-card: #171717;
   --color-text: #EBE5DF;
   --color-soft: #A39E99;
   --color-accent: #C9A46A;
@@ -245,4 +245,19 @@ html.lenis, html.lenis body {
 
 .animate-pulse-glow {
   animation: pulse-glow 3s infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out both;
 }

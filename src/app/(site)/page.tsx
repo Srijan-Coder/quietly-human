@@ -30,11 +30,39 @@ export default async function Home() {
     .order("created_at", { ascending: false })
     .limit(2);
 
+  // Fetch featured products (pins from profiles) for the Store promo section
+  let featuredProducts: any[] = [];
+  try {
+    const { data: profiles } = await supabaseClient
+      .from("profiles")
+      .select("username, display_name, avatar_url, pins")
+      .not("pins", "is", null)
+      .limit(10);
+
+    if (profiles) {
+      profiles.forEach(profile => {
+        const pins = profile.pins || [];
+        pins.forEach((pin: any) => {
+          featuredProducts.push({
+            ...pin,
+            creatorUsername: profile.username,
+            creatorName: profile.display_name || profile.username,
+          });
+        });
+      });
+      // Shuffle and take top 4
+      featuredProducts = featuredProducts.sort(() => 0.5 - Math.random()).slice(0, 4);
+    }
+  } catch (e) {
+    console.error("Failed to fetch products for homepage:", e);
+  }
+
   return (
     <HomeContentClient 
       stats={stats} 
       latestNotes={latestNotes || []} 
       latestPosts={latestPosts || []} 
+      featuredProducts={featuredProducts}
     />
   );
 }
