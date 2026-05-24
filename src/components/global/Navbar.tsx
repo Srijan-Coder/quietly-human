@@ -8,56 +8,11 @@ import { ThemeToggle } from "./ThemeToggle";
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 import { GlobalSearchModal } from "./GlobalSearchModal";
 
-const oldMegaMenuCategories = [
-  {
-    title: "Sanctuary 🌿",
-    links: [
-      { name: "The Breathe Room", path: "/breathe" },
-      { name: "The 3AM Room", path: "/3am" },
-      { name: "Quiet Focus", path: "/focus" },
-      { name: "7-Day Reset", path: "/reset" },
-      { name: "Quiet Words", path: "/quotes" },
-      { name: "Soft Toolkit", path: "/toolkit" },
-      { name: "When it feels heavy...", path: "/heavy" },
-    ]
-  },
-  {
-    title: "Explore ☁️",
-    links: [
-      { name: "Emotional Search", path: "/search" },
-      { name: "The Quiet Archive", path: "/archive" },
-      { name: "Quiet Thoughts (Blog)", path: "/blog" },
-      { name: "My Collection", path: "/collection" },
-      { name: "Journey Paths", path: "/paths/behind" },
-      { name: "Free Resources", path: "/resources" },
-      { name: "Free Ebooks", path: "/books" },
-    ]
-  },
-  {
-    title: "Library 📖",
-    links: [
-      { name: "Pillar Guides", path: "/guides" },
-      { name: "Midnight Letters", path: "/letters" },
-      { name: "Books & Journals", path: "/library" },
-      { name: "The Ecosystem", path: "/ecosystem" },
-    ]
-  },
-  {
-    title: "Connect 💌",
-    links: [
-      { name: "Reader Notes", path: "/testimonials" },
-      { name: "Link-in-Bio", path: "/links" },
-      { name: "About Srijan", path: "/about" },
-    ]
-  }
-];
-
 export default function Navbar() {
   const { isLoaded, isSignedIn } = useAuth();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -68,26 +23,21 @@ export default function Navbar() {
 
   const navItems = [
     {
-      name: "Explore",
+      name: "Read",
       items: [
-        { title: "The Reading Room", path: "/reading-room", desc: "Curated essays and letters." },
-        { title: "Pilgrim Notes", path: "/pilgrim", desc: "The community wall." },
-        { title: "The Quiet Store", path: "/store", desc: "Digital products & books." },
+        { title: "The Reading Room", path: "/reading-room", desc: "Network feed & Creator discovery." },
       ]
     },
     {
       name: "Heal",
       items: [
-        { title: "Soft Toolkit", path: "/toolkit", desc: "15+ interactive tools." },
-        { title: "Breathe Room", path: "/breathe", desc: "Guided breathing." },
-        { title: "Focus Timer", path: "/focus", desc: "Deep work pomodoro." },
+        { title: "Soft Toolkit", path: "/toolkit", desc: "20 interactive clinical tools." },
       ]
     },
     {
-      name: "Creator",
+      name: "Upgrade",
       items: [
-        { title: "Dashboard", path: "/dashboard", desc: "Analytics & metrics." },
-        { title: "Room Settings", path: "/settings", desc: "Manage your pins." },
+        { title: "Sanctuary Pass", path: "/sanctuary-pass", desc: "Unlock premium tools & quiet mode." },
       ]
     }
   ];
@@ -99,13 +49,13 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          scrolled || isMegaMenuOpen
+          scrolled
             ? "bg-brand-bg/90 backdrop-blur-2xl border-b border-brand-border/50 py-4" 
             : "bg-transparent py-6"
         } px-6 md:px-12 flex justify-between items-center text-brand-text`}
       >
         <div className="flex items-center gap-6">
-          <Link href="/" onClick={() => setIsMegaMenuOpen(false)} className="font-serif text-xl md:text-2xl tracking-wide font-bold hover:text-brand-accent transition-colors z-50">
+          <Link href="/" className="font-serif text-xl md:text-2xl tracking-wide font-bold hover:text-brand-accent transition-colors z-50">
             Quietly Humans.
           </Link>
           
@@ -167,7 +117,7 @@ export default function Navbar() {
 
           {isLoaded && !isSignedIn && (
             <SignInButton mode="modal">
-              <button className="hidden md:block text-xs uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity font-sans">
+              <button className="hidden md:block text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all font-bold font-sans px-6 py-2 rounded-full">
                 Log In
               </button>
             </SignInButton>
@@ -175,78 +125,24 @@ export default function Navbar() {
 
           {isLoaded && isSignedIn && (
             <div className="flex items-center gap-4">
-              <Link href="/write" className="hidden md:block text-xs uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity font-sans border border-brand-border px-4 py-2 rounded-full hover:border-brand-accent">
+              <Link href="/dashboard" className="hidden md:block text-[10px] uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity font-sans font-bold">
+                Dashboard
+              </Link>
+              <Link href="/write" className="hidden md:block text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all font-bold font-sans border border-brand-border px-6 py-2 rounded-full">
                 Write
               </Link>
-              
-              <Link href="/sanctuary-pass" className="hidden md:block text-[10px] uppercase tracking-widest text-brand-accent font-bold px-4 py-2 rounded-full border border-brand-accent/30 bg-brand-accent/5 hover:bg-brand-accent hover:text-white transition-colors">
-                Pass
-              </Link>
 
-              <Link href="/notifications" className="opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-lg">🔔</span>
-              </Link>
-              
               <UserButton 
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "w-8 h-8 shadow-sm",
+                    userButtonAvatarBox: "w-8 h-8 shadow-sm border border-white/20",
                   }
                 }}
               />
             </div>
           )}
-
-          {/* The "Menu" Button to open the Old Mega-Menu */}
-          <button 
-            onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
-            className="text-xs uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity flex items-center gap-2 border border-brand-border/50 px-4 py-2 rounded-full"
-          >
-            {isMegaMenuOpen ? "Close" : "Menu"}
-          </button>
         </div>
       </motion.header>
-
-      {/* The "Mixed" Mega-Menu Overlay (Old features preserved!) */}
-      <AnimatePresence>
-        {isMegaMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: "-100%" }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: "-100%" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 bg-brand-bg px-6 pt-32 pb-32 md:pt-40 md:pb-24 overflow-y-auto flex flex-col"
-          >
-            <div className="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
-              {oldMegaMenuCategories.map((category, i) => (
-                <motion.div
-                  key={category.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 + i * 0.1 }}
-                  className="flex flex-col gap-6"
-                >
-                  <span className="text-xs tracking-widest uppercase opacity-40 border-b border-brand-border pb-4">{category.title}</span>
-                  <nav className="flex flex-col gap-4">
-                    {category.links.map((link) => (
-                      <Link
-                        key={link.path}
-                        href={link.path}
-                        onClick={() => setIsMegaMenuOpen(false)}
-                        className={`font-serif text-2xl md:text-xl lg:text-2xl transition-colors duration-500 hover:text-brand-accent ${
-                          pathname === link.path ? "text-brand-accent italic" : "text-brand-text"
-                        }`}
-                      >
-                        {link.name}
-                      </Link>
-                    ))}
-                  </nav>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <GlobalSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>

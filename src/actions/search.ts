@@ -29,34 +29,27 @@ export async function searchSanctuary(query: string): Promise<GlobalSearchResult
   let results: GlobalSearchResult[] = [];
 
   try {
-    // 1. Search Sanity CMS
-    const searchQuery = groq`
-      *[
-        _type in ["post", "letter", "guide", "ebook"] 
-        && (
-          title match "*${safeQuery}*" ||
-          subtitle match "*${safeQuery}*" ||
-          excerpt match "*${safeQuery}*" ||
-          "${safeQuery}" in emotionTags ||
-          pt::text(body) match "*${safeQuery}*" ||
-          pt::text(content) match "*${safeQuery}*" ||
-          pt::text(chapters[].content) match "*${safeQuery}*"
-        )
-      ] | order(_createdAt desc)[0...10] {
-        _id,
-        _type,
-        title,
-        subtitle,
-        excerpt,
-        slug,
-        emotionTags,
-        publishedAt
-      }
-    `;
-    const sanityResults = await client.fetch(searchQuery);
-    results = [...sanityResults];
+    // 1. Search Supabase Posts (Writings)
+    const { data: posts } = await supabaseClient
+      .from('posts')
+      .select('id, title, excerpt, type, slug, profiles!inner(username)')
+      .eq('is_draft', false)
+      .or(`title.ilike.%${safeQuery}%,content.ilike.%${safeQuery}%`)
+      .limit(10);
+
+    if (posts && posts.length > 0) {
+      const postResults: GlobalSearchResult[] = posts.map(p => ({
+        _id: p.id,
+        _type: 'post',
+        title: p.title,
+        subtitle: p.excerpt,
+        slug: { current: p.slug || p.id },
+        username: p.profiles?.username
+      }));
+      results = [...postResults];
+    }
   } catch (error) {
-    console.error("Sanctuary Search (Sanity) failed:", error);
+    console.error("Sanctuary Search (Posts) failed:", error);
   }
 
   try {

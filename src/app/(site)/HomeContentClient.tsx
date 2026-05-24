@@ -65,8 +65,8 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
             <Link href="/onboarding" className="w-full sm:w-auto bg-white text-black px-8 py-4 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.1)]">
               Enter Sanctuary
             </Link>
-            <Link href="/pilgrim" className="w-full sm:w-auto px-8 py-4 rounded-full text-[10px] tracking-widest uppercase text-brand-soft hover:text-white border border-white/10 hover:border-white/30 transition-all bg-white/5 backdrop-blur-md">
-              Explore the Wall
+            <Link href="/reading-room" className="w-full sm:w-auto px-8 py-4 rounded-full text-[10px] tracking-widest uppercase text-brand-soft hover:text-white border border-white/10 hover:border-white/30 transition-all bg-white/5 backdrop-blur-md">
+              Enter Reading Room
             </Link>
           </motion.div>
         </div>
@@ -109,7 +109,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
         </Link>
 
         {/* Box 2: Pilgrim Notes (1 col) */}
-        <Link href="/pilgrim" className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col group relative overflow-hidden hover:border-brand-accent/50 transition-colors duration-500">
+        <Link href="/reading-room" className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col group relative overflow-hidden hover:border-brand-accent/50 transition-colors duration-500">
            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"/>
            <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 block font-bold z-20">02. Community</span>
            <h2 className="text-3xl font-serif text-white mb-2 z-20">Pilgrim Notes</h2>
@@ -149,12 +149,12 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
         </Link>
 
         {/* Box 4: Creator Pitch (1 col) */}
-        <Link href="/onboarding" className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col justify-center items-center text-center group hover:border-white/30 transition-colors duration-500">
+        <Link href="/dashboard" className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] flex flex-col justify-center items-center text-center group hover:border-white/30 transition-colors duration-500">
           <span className="text-4xl mb-6">🖋️</span>
           <h2 className="text-2xl font-serif text-white mb-4">Don't scream into the void.</h2>
           <p className="text-brand-soft text-sm mb-8">Build your own quiet room. Publish essays, curate your audience, and monetize digital products.</p>
           <span className="text-[10px] uppercase tracking-widest border-b border-brand-accent/50 text-brand-accent pb-1 group-hover:border-brand-accent transition-colors font-bold">
-            Start Writing
+            Creator Dashboard
           </span>
         </Link>
 
@@ -177,14 +177,14 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts }: {
         </div>
       </section>
       
-      {/* 5. The 3AM Promise */}
+      {/* 5. The Promise */}
       <section className="border-t border-white/5 bg-black py-24 text-center px-6">
         <p className="text-brand-soft uppercase tracking-[0.3em] text-[10px] mb-8">The Quietly Humans Promise</p>
         <h2 className="text-3xl md:text-4xl font-serif text-white max-w-2xl mx-auto leading-relaxed italic opacity-80 hover:opacity-100 transition-opacity duration-1000">
           "Whenever the world is too loud, or the night is too long, there is a quiet room waiting for you here."
         </h2>
         <div className="mt-12 flex justify-center gap-6">
-          <Link href="/3am" className="text-xs text-brand-soft hover:text-white transition-colors border-b border-white/10 pb-1">Enter the 3AM Room</Link>
+          <Link href="/toolkit" className="text-xs text-brand-soft hover:text-white transition-colors border-b border-white/10 pb-1">Enter the Soft Toolkit</Link>
         </div>
       </section>
 

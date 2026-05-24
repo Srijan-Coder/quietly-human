@@ -44,7 +44,9 @@ export function GlobalSearchModal({ isOpen, onClose }: { isOpen: boolean, onClos
     const slug = item.slug?.current;
     if (!slug) return "#";
     switch (item._type) {
-      case "post": return `/blog/${slug}`;
+      case "post": 
+        if (item.username) return `/room/${item.username}/${slug}`;
+        return `/room/unknown/${slug}`;
       case "letter": return `/letters/${slug}`;
       case "guide": return `/guides/${slug}`;
       case "ebook": return `/read/${slug}`;
