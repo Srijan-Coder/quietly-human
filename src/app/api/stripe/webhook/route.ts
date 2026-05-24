@@ -31,10 +31,25 @@ export async function POST(req: Request) {
       
       // If it's a subscription, upgrade them to premium
       if (session.mode === "subscription" && session.customer) {
-        await supabaseAdmin
+        const { data: updatedData } = await supabaseAdmin
           .from("profiles")
           .update({ is_premium: true })
-          .eq("stripe_customer_id", session.customer);
+          .eq("stripe_customer_id", session.customer)
+          .select("id");
+
+        // Webhook resilience fallback: If DB record didn't match the customer id, fetch metadata from Stripe
+        if (!updatedData || updatedData.length === 0) {
+          const customer = await stripe.customers.retrieve(session.customer as string);
+          if (customer && !customer.deleted && customer.metadata?.clerkUserId) {
+            await supabaseAdmin
+              .from("profiles")
+              .update({ 
+                is_premium: true,
+                stripe_customer_id: session.customer as string 
+              })
+              .eq("id", customer.metadata.clerkUserId);
+          }
+        }
       }
       
       // If we implement one-off purchases later (The Store), we handle it here

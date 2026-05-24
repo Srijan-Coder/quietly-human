@@ -296,7 +296,7 @@ export default async function CreatorRoomPage({ params }: Props) {
               <span className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-sans">Pinned</span>
               <div className="h-px flex-1 bg-white/6" />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {profile.pins.map((pin: any, idx: number) => (
                 <a
                   key={idx}

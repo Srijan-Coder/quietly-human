@@ -186,14 +186,15 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
     if (!file) return;
 
     const sizeInKb = file.size / 1024;
+    setError(""); // Clear previous errors
     
     if (isPdf) {
-      if (file.type !== "application/pdf") return alert("Only PDF files are allowed.");
-      if (sizeInKb > 5120) return alert(`PDF is too large (${Math.round(sizeInKb)}KB). Maximum size is 5120KB (5MB).`);
+      if (file.type !== "application/pdf") return setError("Only PDF files are allowed.");
+      if (sizeInKb > 5120) return setError(`PDF is too large (${Math.round(sizeInKb)}KB). Maximum size is 5120KB (5MB).`);
       setIsUploadingPdf(true);
     } else {
-      if (!file.type.startsWith("image/")) return alert("Only images are allowed.");
-      if (sizeInKb > 2048) return alert(`Image is too large (${Math.round(sizeInKb)}KB). Maximum size is 2048KB (2MB).`);
+      if (!file.type.startsWith("image/")) return setError("Only images are allowed.");
+      if (sizeInKb > 2048) return setError(`Image is too large (${Math.round(sizeInKb)}KB). Maximum size is 2048KB (2MB).`);
       setIsUploadingCover(true);
     }
 
@@ -220,7 +221,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
         setCoverImageUrl(publicUrlData.publicUrl);
       }
     } catch (err: any) {
-      alert("Error uploading file: " + err.message);
+      setError("Error uploading file: " + err.message);
     } finally {
       if (isPdf) setIsUploadingPdf(false);
       else setIsUploadingCover(false);
@@ -228,11 +229,12 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
   };
 
   const togglePin = (index: number) => {
+    setError(""); // Clear previous errors
     if (selectedPinIndexes.includes(index)) {
       setSelectedPinIndexes(selectedPinIndexes.filter(i => i !== index));
     } else {
       if (selectedPinIndexes.length >= 3) {
-        alert("You can only attach up to 3 links per post.");
+        setError("You can only attach up to 3 links per post.");
         return;
       }
       setSelectedPinIndexes([...selectedPinIndexes, index]);

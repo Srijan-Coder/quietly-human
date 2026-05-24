@@ -6,6 +6,7 @@ import CandleButton from "./CandleButton";
 import GentleAd from "@/components/global/GentleAd";
 import CommentSectionClient from "@/components/global/CommentSectionClient";
 import ViewTracker from "./ViewTracker";
+import ShareButtons from "./ShareButtons";
 import type { Metadata } from "next";
 
 const BASE_URL = "https://www.quietlyhumans.space";
@@ -242,22 +243,7 @@ export default async function PostPage({ params }: Props) {
           <CandleButton targetId={post.id} targetType="post" initialCount={post.candle_count || 0} />
           
           {/* Share buttons */}
-          <div className="flex items-center gap-3">
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${post.title}" — @quietlyhuman\n\n`)}&url=${encodeURIComponent(`${BASE_URL}/room/${username}/${post.slug || post.id}`)}`}
-              target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-sans font-bold transition-all hover:scale-105 bg-brand-card border border-brand-border hover:border-brand-accent/50 text-brand-soft"
-            >
-              𝕏 Share
-            </a>
-            <a
-              href={`https://wa.me/?text=${encodeURIComponent(`${post.title} — ${BASE_URL}/room/${username}/${post.slug || post.id}`)}`}
-              target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-sans font-bold transition-all hover:scale-105 bg-brand-card border border-brand-border hover:border-brand-accent/50 text-brand-soft"
-            >
-              💬 WhatsApp
-            </a>
-          </div>
+          <ShareButtons title={post.title} url={`${BASE_URL}/room/${username}/${post.slug || post.id}`} />
         </div>
 
         {/* Author Bio Card */}

@@ -9,6 +9,7 @@ type ProfileSettingsClientProps = {
     username: string;
     avatar_url: string | null;
     last_name_change_at: string | null;
+    bio: string | null;
   };
 };
 
@@ -16,6 +17,7 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
   const [displayName, setDisplayName] = useState(initialProfile.display_name || "");
   const [username, setUsername] = useState(initialProfile.username || "");
   const [avatarUrl, setAvatarUrl] = useState(initialProfile.avatar_url || "");
+  const [bio, setBio] = useState(initialProfile.bio || "");
   
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -128,7 +130,8 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
         body: JSON.stringify({
           displayName,
           username,
-          avatarUrl
+          avatarUrl,
+          bio
         })
       });
 
@@ -184,7 +187,7 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
         </div>
         
         <div>
-          <label className="cursor-pointer bg-white/5 hover:bg-white/10 transition-colors px-4 py-2 rounded-full text-xs font-sans text-white border border-white/10">
+          <label className="cursor-pointer bg-brand-bg hover:bg-brand-card transition-colors px-4 py-2 rounded-full text-xs font-sans text-brand-text border border-brand-border">
             {isUploading ? "Uploading..." : "Upload New Picture"}
             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} disabled={isUploading} />
           </label>
@@ -203,7 +206,7 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
             value={displayName} 
             onChange={e => setDisplayName(e.target.value)}
             disabled={!canChangeName}
-            className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white font-serif focus:outline-none focus:border-brand-accent disabled:opacity-50" 
+            className="bg-brand-bg/50 border border-brand-border rounded-xl px-4 py-3 text-brand-text font-serif focus:outline-none focus:border-brand-accent disabled:opacity-50" 
           />
         </div>
 
@@ -216,9 +219,24 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
               value={username} 
               onChange={e => setUsername(e.target.value)}
               disabled={!canChangeName}
-              className="w-full bg-black/50 border border-white/10 rounded-xl pl-9 pr-4 py-3 text-white font-serif focus:outline-none focus:border-brand-accent disabled:opacity-50" 
+              className="w-full bg-brand-bg/50 border border-brand-border rounded-xl pl-9 pr-4 py-3 text-brand-text font-serif focus:outline-none focus:border-brand-accent disabled:opacity-50" 
             />
           </div>
+        </div>
+      </div>
+
+      {/* Bio Section */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs text-brand-soft uppercase tracking-widest font-sans">Biography / About Me</label>
+        <textarea 
+          value={bio} 
+          onChange={e => setBio(e.target.value.substring(0, 200))}
+          placeholder="Write a short description to show visitors in your room..."
+          className="w-full bg-brand-bg/50 border border-brand-border rounded-xl px-4 py-3 text-brand-text font-serif focus:outline-none focus:border-brand-accent min-h-[100px] resize-y" 
+          maxLength={200}
+        />
+        <div className="text-right text-[10px] font-sans text-brand-soft">
+          {bio.length} / 200 Characters
         </div>
       </div>
 
@@ -236,7 +254,7 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
       <button 
         onClick={handleSave}
         disabled={isSaving}
-        className="mt-4 px-8 py-3 bg-white text-black rounded-full text-xs uppercase tracking-widest font-bold self-start hover:scale-105 transition-transform disabled:opacity-50"
+        className="mt-4 px-8 py-3 bg-brand-text text-brand-bg rounded-full text-xs uppercase tracking-widest font-bold self-start hover:scale-105 transition-transform disabled:opacity-50 cursor-pointer"
       >
         {isSaving ? "Saving..." : "Save Profile Changes"}
       </button>

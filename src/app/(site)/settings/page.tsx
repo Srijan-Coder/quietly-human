@@ -15,7 +15,7 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabaseClient
     .from("profiles")
-    .select("username, display_name, avatar_url, last_name_change_at, pins, is_premium, room_theme")
+    .select("username, display_name, avatar_url, last_name_change_at, pins, is_premium, room_theme, bio")
     .eq("id", user.id)
     .single();
 
@@ -34,16 +34,16 @@ export default async function SettingsPage() {
       <div className="space-y-16">
         {/* Public Profile */}
         <section className="bg-brand-card border border-brand-border p-8 rounded-[2rem]">
-          <h2 className="text-xl text-white mb-2 font-serif">Public Profile</h2>
+          <h2 className="text-xl text-brand-text mb-2 font-serif">Public Profile</h2>
           <p className="text-brand-soft text-sm mb-8 font-sans">
-            Update your avatar, display name, and username. (Names can only be changed once every 14 days).
+            Update your avatar, display name, biography, and username.
           </p>
           <ProfileSettingsClient initialProfile={profile} />
         </section>
 
         {/* Appearance */}
         <section className="bg-brand-card border border-brand-border p-8 rounded-[2rem]">
-          <h2 className="text-xl text-white mb-2 font-serif">Room Theme</h2>
+          <h2 className="text-xl text-brand-text mb-2 font-serif">Room Theme</h2>
           <p className="text-brand-soft text-sm mb-8 font-sans">
             Choose the aesthetic for your public Creator Room.
           </p>
@@ -52,7 +52,7 @@ export default async function SettingsPage() {
 
         {/* Store & Pins */}
         <section className="bg-brand-card border border-brand-border p-8 rounded-[2rem]">
-          <h2 className="text-xl text-white mb-2 font-serif">Store & Pins</h2>
+          <h2 className="text-xl text-brand-text mb-2 font-serif">Store & Pins</h2>
           <p className="text-brand-soft text-sm mb-8 font-sans">
             Manage your shop links and pinned content to showcase your work.
           </p>

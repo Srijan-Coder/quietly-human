@@ -73,6 +73,10 @@ export default function ReadingRoomClient({
     return profiles;
   }, [initialProfiles, feedSource, currentUserId, followingIds]);
 
+  const isEmpty = categoryFilter === "creators"
+    ? !displayedProfiles || displayedProfiles.length === 0
+    : !displayedPosts || displayedPosts.length === 0;
+
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-32 font-sans bg-brand-bg text-brand-text">
       <header className="mb-12 text-center flex flex-col items-center">
@@ -138,11 +142,35 @@ export default function ReadingRoomClient({
         </div>
       </header>
 
-      {/* Posts & Profiles Masonry Grid */}
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-        {categoryFilter === "creators" ? (
-          displayedProfiles && displayedProfiles.length > 0 ? (
-            displayedProfiles.map((profile) => (
+      {/* Posts & Profiles Masonry Grid or Empty State */}
+      {isEmpty ? (
+        <div className="w-full max-w-md mx-auto mt-16 p-12 rounded-[2.5rem] bg-brand-card border border-brand-border/40 text-center relative overflow-hidden group shadow-2xl animate-fade-in-up">
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent pointer-events-none" />
+          <div className="w-20 h-20 rounded-full bg-brand-accent/5 border border-brand-accent/20 flex items-center justify-center text-4xl mx-auto mb-6 animate-pulse">
+            {categoryFilter === "creators" ? "👥" : "🕯️"}
+          </div>
+          <h3 className="font-serif text-2xl text-brand-text mb-3">
+            {categoryFilter === "creators" ? "No Creators Found" : "A Quiet Sanctuary"}
+          </h3>
+          <p className="text-sm font-serif italic text-brand-soft/80 leading-relaxed mb-8">
+            {categoryFilter === "creators" 
+              ? "The path you searched has no creators active right now. Perhaps they are resting."
+              : "No words have been written under this light yet. The room is completely quiet today."}
+          </p>
+          <button
+            onClick={() => {
+              setFeedSource("all");
+              setCategoryFilter("all");
+            }}
+            className="px-6 py-2.5 rounded-full text-[10px] uppercase tracking-widest font-bold bg-brand-text text-brand-bg hover:scale-105 transition-transform cursor-pointer"
+          >
+            Clear Filters
+          </button>
+        </div>
+      ) : (
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+          {categoryFilter === "creators" ? (
+            displayedProfiles && displayedProfiles.length > 0 && displayedProfiles.map((profile) => (
               <article key={profile.id} className="break-inside-avoid bg-brand-card border border-brand-border/30 p-8 rounded-[2rem] hover:border-brand-accent/50 transition-colors duration-500 group relative overflow-hidden flex flex-col min-h-[250px] items-center text-center animate-fade-in-up">
                 <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                 
@@ -177,13 +205,7 @@ export default function ReadingRoomClient({
               </article>
             ))
           ) : (
-            <div className="col-span-full text-center py-20 text-brand-soft italic font-serif text-lg">
-              No creators found for this filter.
-            </div>
-          )
-        ) : (
-          displayedPosts && displayedPosts.length > 0 ? (
-            displayedPosts.map((post) => (
+            displayedPosts && displayedPosts.length > 0 && displayedPosts.map((post) => (
               <article key={post.id} className="break-inside-avoid bg-brand-card border border-brand-border/30 p-8 rounded-[2rem] hover:border-brand-accent/50 transition-colors duration-500 group relative overflow-hidden flex flex-col min-h-[250px] animate-fade-in-up">
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                 
@@ -236,13 +258,9 @@ export default function ReadingRoomClient({
                 </div>
               </article>
             ))
-          ) : (
-            <div className="col-span-full text-center py-20 text-brand-soft italic font-serif text-lg">
-              The room is completely quiet today. Try adjusting your filters.
-            </div>
-          )
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

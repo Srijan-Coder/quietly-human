@@ -14,6 +14,7 @@ const profileSchema = z.object({
   displayName: z.string().min(1).max(50).optional(),
   username: z.string().min(3).max(30).regex(/^[a-zA-Z0-9_]+$/).optional(),
   avatarUrl: z.string().url().optional(),
+  bio: z.string().max(200).optional(),
 });
 
 export async function POST(req: Request) {
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid profile data provided." }, { status: 400 });
     }
 
-    const { displayName, username, avatarUrl } = parsed.data;
+    const { displayName, username, avatarUrl, bio } = parsed.data;
 
     // Fetch current profile
     const { data: currentProfile } = await supabaseAdmin
@@ -87,6 +88,10 @@ export async function POST(req: Request) {
 
     if (avatarUrl !== undefined) {
       updates.avatar_url = avatarUrl;
+    }
+
+    if (bio !== undefined) {
+      updates.bio = sanitizeText(bio);
     }
 
     if (Object.keys(updates).length > 0) {

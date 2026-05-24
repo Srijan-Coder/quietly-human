@@ -65,27 +65,27 @@ export default function DashboardFeedClient({
   }, [initialPosts, feedSource, categoryFilter, sortOrder, currentUserId, followingIds]);
 
   return (
-    <div className="w-full">
+    <div className="w-full text-brand-text">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <h2 className="text-2xl font-serif text-white">Your Writings & Network Feed</h2>
+        <h2 className="text-2xl font-serif text-brand-text">Your Writings & Network Feed</h2>
         
         {/* Source Toggle */}
-        <div className="flex bg-black/50 p-1.5 rounded-full border border-white/10 shrink-0">
+        <div className="flex bg-brand-card p-1.5 rounded-full border border-brand-border shrink-0">
           <button 
             onClick={() => setFeedSource("all")}
-            className={`text-[9px] uppercase tracking-widest px-4 py-2 rounded-full transition-all duration-300 font-bold ${feedSource === "all" ? "bg-white text-black" : "text-white/50 hover:text-white"}`}
+            className={`text-[9px] uppercase tracking-widest px-4 py-2 rounded-full transition-all duration-300 font-bold cursor-pointer ${feedSource === "all" ? "bg-brand-text text-brand-bg" : "text-brand-soft hover:text-brand-text"}`}
           >
             Network
           </button>
           <button 
             onClick={() => setFeedSource("following")}
-            className={`text-[9px] uppercase tracking-widest px-4 py-2 rounded-full transition-all duration-300 font-bold ${feedSource === "following" ? "bg-white text-black" : "text-white/50 hover:text-white"}`}
+            className={`text-[9px] uppercase tracking-widest px-4 py-2 rounded-full transition-all duration-300 font-bold cursor-pointer ${feedSource === "following" ? "bg-brand-text text-brand-bg" : "text-brand-soft hover:text-brand-text"}`}
           >
             Following
           </button>
           <button 
             onClick={() => setFeedSource("me")}
-            className={`text-[9px] uppercase tracking-widest px-4 py-2 rounded-full transition-all duration-300 font-bold ${feedSource === "me" ? "bg-white text-black" : "text-white/50 hover:text-white"}`}
+            className={`text-[9px] uppercase tracking-widest px-4 py-2 rounded-full transition-all duration-300 font-bold cursor-pointer ${feedSource === "me" ? "bg-brand-text text-brand-bg" : "text-brand-soft hover:text-brand-text"}`}
           >
             My Writings
           </button>
@@ -93,14 +93,14 @@ export default function DashboardFeedClient({
       </div>
 
       {/* Filters Bar */}
-      <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4 border-b border-white/10 pb-6 mb-6">
+      <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4 border-b border-brand-border/30 pb-6 mb-6">
         {/* Categories */}
         <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
           {categories.map(cat => (
             <button
               key={cat.id}
               onClick={() => setCategoryFilter(cat.id as CategoryFilter)}
-              className={`px-3 py-1.5 rounded-full text-[9px] uppercase tracking-widest transition-all whitespace-nowrap border ${categoryFilter === cat.id ? 'bg-brand-accent/10 border-brand-accent text-brand-accent font-bold' : 'bg-transparent border-white/10 text-brand-soft hover:text-white'}`}
+              className={`px-3 py-1.5 rounded-full text-[9px] uppercase tracking-widest transition-all whitespace-nowrap border cursor-pointer ${categoryFilter === cat.id ? 'bg-brand-accent/10 border-brand-accent text-brand-accent font-bold' : 'bg-transparent border-brand-border/40 text-brand-soft hover:text-brand-text'}`}
             >
               {cat.label}
             </button>
@@ -113,8 +113,8 @@ export default function DashboardFeedClient({
           <select 
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-            className="bg-black/50 border border-white/10 text-white text-[10px] uppercase tracking-wider py-1.5 px-3 rounded-full outline-none focus:border-brand-accent appearance-none cursor-pointer pr-8 relative"
-            style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px top 50%', backgroundSize: '6px auto' }}
+            className="bg-brand-card border border-brand-border/40 text-brand-text text-[10px] uppercase tracking-wider py-1.5 px-3 rounded-full outline-none focus:border-brand-accent appearance-none cursor-pointer pr-8 relative"
+            style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px top 50%', backgroundSize: '6px auto' }}
           >
             <option value="newest">Newest</option>
             <option value="best_today">Best of Today</option>
@@ -123,13 +123,13 @@ export default function DashboardFeedClient({
         </div>
       </div>
 
-      <div className="bg-[#121212] border border-white/5 rounded-[2rem] overflow-hidden">
+      <div className="bg-brand-card border border-brand-border/40 rounded-[2rem] overflow-hidden">
         {displayedPosts && displayedPosts.length > 0 ? (
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-brand-border/30">
             {displayedPosts.map((post: any) => (
               <div 
                 key={post.id} 
-                className="p-6 md:p-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:bg-white/5 transition-colors group animate-fade-in-up"
+                className="p-6 md:p-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:bg-brand-bg/50 transition-colors group animate-fade-in-up"
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
@@ -141,12 +141,12 @@ export default function DashboardFeedClient({
                         {post.profiles?.avatar_url && (
                           <Image src={post.profiles.avatar_url} alt="author" width={16} height={16} className="rounded-full" />
                         )}
-                        <span className="text-[10px] text-white">@{post.profiles?.username || "unknown"}</span>
+                        <span className="text-[10px] text-brand-soft">@{post.profiles?.username || "unknown"}</span>
                       </div>
                     )}
                   </div>
                   
-                  <Link href={`/room/${post.profiles?.username || currentUsername}/${post.slug || post.id}`} className="text-xl font-serif text-white group-hover:text-brand-accent transition-colors block mb-2">
+                  <Link href={`/room/${post.profiles?.username || currentUsername}/${post.slug || post.id}`} className="text-xl font-serif text-brand-text group-hover:text-brand-accent transition-colors block mb-2">
                     {post.title}
                   </Link>
                   
@@ -166,9 +166,9 @@ export default function DashboardFeedClient({
                     />
                   ) : (
                     <div className="flex items-center gap-4 text-xs font-sans text-brand-soft">
-                      <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">🕯️ {post.candle_count || 0}</span>
-                      <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">👁️ {post.view_count ?? 0}</span>
-                      <Link href={`/room/${post.profiles?.username || 'unknown'}/${post.slug || post.id}`} className="text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all px-6 py-2.5 rounded-full font-bold ml-2">
+                      <span className="bg-brand-bg border border-brand-border/20 px-3 py-1.5 rounded-full">🕯️ {post.candle_count || 0}</span>
+                      <span className="bg-brand-bg border border-brand-border/20 px-3 py-1.5 rounded-full">👁️ {post.view_count ?? 0}</span>
+                      <Link href={`/room/${post.profiles?.username || 'unknown'}/${post.slug || post.id}`} className="text-[10px] uppercase tracking-widest text-brand-bg bg-brand-text hover:scale-105 transition-all px-6 py-2.5 rounded-full font-bold ml-2 cursor-pointer">
                         Read
                       </Link>
                     </div>
@@ -182,7 +182,7 @@ export default function DashboardFeedClient({
             <span className="text-4xl opacity-30 mb-6 block grayscale">🍃</span>
             <p className="text-brand-soft italic text-lg mb-6">No writings found for these filters.</p>
             {feedSource === "me" && (
-              <Link href="/write" className="text-[10px] uppercase tracking-widest text-white border-b border-white/30 pb-1 hover:border-white transition-colors">
+              <Link href="/write" className="text-[10px] uppercase tracking-widest text-brand-text border-b border-brand-border/30 pb-1 hover:border-brand-accent transition-colors">
                 Write your first thought
               </Link>
             )}
