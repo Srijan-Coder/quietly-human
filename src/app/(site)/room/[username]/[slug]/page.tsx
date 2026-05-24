@@ -22,11 +22,13 @@ export default async function PostPage({ params }: Props) {
 
   // Fetch post
   // The slug parameter might be the ID if they don't have a slug yet, so we query by either.
+  const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(slug);
+
   const { data: post } = await supabaseClient
     .from("posts")
     .select("*")
     .eq("author_id", profile.id)
-    .or(`slug.eq.${slug},id.eq.${slug}`)
+    .or(isUuid ? `slug.eq.${slug},id.eq.${slug}` : `slug.eq.${slug}`)
     .eq("is_draft", false)
     .single();
 
