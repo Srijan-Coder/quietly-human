@@ -69,9 +69,9 @@ export default function PilgrimClient({ initialNotes }: { initialNotes: any[] })
       </AnimatePresence>
 
       {/* Masonry-style Grid for Notes */}
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-        {initialNotes && initialNotes.length > 0 ? (
-          initialNotes.map((note: any) => (
+      {initialNotes && initialNotes.length > 0 ? (
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+          {initialNotes.map((note: any) => (
             <div 
               key={note.id} 
               className={`break-inside-avoid relative group transition-all duration-700 ${getNoteOpacity(note.created_at)}`}
@@ -102,13 +102,13 @@ export default function PilgrimClient({ initialNotes }: { initialNotes: any[] })
                 </div>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="col-span-full text-center py-32 text-brand-soft italic font-serif text-xl">
-            The wall is completely bare. Be the first to leave a mark.
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-32 text-brand-soft italic font-serif text-xl">
+          The wall is completely bare. Be the first to leave a mark.
+        </div>
+      )}
     </div>
   );
 }

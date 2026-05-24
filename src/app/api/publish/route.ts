@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     content = sanitizeHtml(content);
 
     // Check if user is premium to allow attached pins
-    let finalAttachedPins = [];
+    let finalAttachedPins: string[] = [];
     if (attachedPins && attachedPins.length > 0) {
       const { data: profile } = await supabaseAdmin
         .from("profiles")
