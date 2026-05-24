@@ -72,10 +72,7 @@ export async function POST(req: Request) {
       console.error("Moderation fetch error", e);
     }
 
-    // Save to Supabase
-    const { data, error } = await supabaseAdmin
-      .from("posts")
-      .insert([{
+    const payload: any = {
         author_id: user.id,
         type,
         title,
@@ -86,9 +83,19 @@ export async function POST(req: Request) {
         cover_image_url: coverImageUrl || null,
         pdf_file_url: (type === 'ebook' && pdfFileUrl) ? pdfFileUrl : null,
         is_draft: false,
-        attached_pins: finalAttachedPins,
         published_at: new Date().toISOString()
-      }])
+    };
+
+    // Only add attached_pins if the user explicitly provided them, 
+    // to avoid PGRST204 error if the column is missing in their DB
+    if (attachedPins !== undefined && attachedPins !== null) {
+        payload.attached_pins = finalAttachedPins;
+    }
+
+    // Save to Supabase
+    const { data, error } = await supabaseAdmin
+      .from("posts")
+      .insert([payload])
       .select()
       .single();
 

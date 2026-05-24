@@ -50,18 +50,23 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       }
     }
 
-    const { error } = await supabaseAdmin
-      .from("posts")
-      .update({
+    const payload: any = {
         title,
         content,
         type,
         category: category || "Uncategorized",
         post_theme: postTheme || "default",
         cover_image_url: coverImageUrl || null,
-        pdf_file_url: (type === 'ebook' && pdfFileUrl) ? pdfFileUrl : null,
-        attached_pins: finalAttachedPins
-      })
+        pdf_file_url: (type === 'ebook' && pdfFileUrl) ? pdfFileUrl : null
+    };
+
+    if (attachedPins !== undefined && attachedPins !== null) {
+        payload.attached_pins = finalAttachedPins;
+    }
+
+    const { error } = await supabaseAdmin
+      .from("posts")
+      .update(payload)
       .eq("id", id);
 
     if (error) throw error;

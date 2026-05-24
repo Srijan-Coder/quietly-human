@@ -131,6 +131,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
   }
   
   const [selectedPinIndexes, setSelectedPinIndexes] = useState<number[]>(initialPinIndexes);
+  const [enablePins, setEnablePins] = useState(initialPinIndexes.length > 0);
   const [coverImageUrl, setCoverImageUrl] = useState(initialPost?.cover_image_url || "");
   const [pdfFileUrl, setPdfFileUrl] = useState(initialPost?.pdf_file_url || "");
   const [isUploadingCover, setIsUploadingCover] = useState(false);
@@ -351,8 +352,10 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
         pdfFileUrl: type === 'ebook' ? pdfFileUrl : null 
       };
       
-      if (selectedPinIndexes.length > 0 && isPremium) {
+      if (enablePins && selectedPinIndexes.length > 0 && isPremium) {
         payload.attachedPins = selectedPinIndexes.map(i => pins[i]);
+      } else {
+        payload.attachedPins = null;
       }
 
       const url = initialPost ? `/api/posts/${initialPost.id}` : "/api/publish";
@@ -447,10 +450,24 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
 
           {/* Attach Store Products */}
           <div className="flex flex-col gap-2 w-full">
-            <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans flex items-center gap-2">
-              <span className={`w-1.5 h-1.5 rounded-full ${isPremium ? 'bg-brand-accent' : 'bg-brand-soft'}`}></span>
-              Attach Products {isPremium ? '(Up to 3)' : '🔒 Premium Required'}
-            </label>
+            <div className="flex items-center gap-4">
+              <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans flex items-center gap-2">
+                <span className={`w-1.5 h-1.5 rounded-full ${isPremium ? 'bg-brand-accent' : 'bg-brand-soft'}`}></span>
+                Attach Products {isPremium ? '(Up to 3)' : '🔒 Premium Required'}
+              </label>
+              
+              {isPremium && pins.length > 0 && (
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={enablePins}
+                    onChange={(e) => setEnablePins(e.target.checked)}
+                    className="w-4 h-4 rounded border-brand-border/50 text-brand-accent focus:ring-brand-accent bg-transparent"
+                  />
+                  <span className="text-xs font-sans text-brand-soft">Enable Pins for this post</span>
+                </label>
+              )}
+            </div>
             
             {!isPremium ? (
               <div className="text-xs font-sans text-brand-soft/70 bg-brand-bg/40 border border-brand-border/30 p-3 rounded-xl">
@@ -460,7 +477,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
               <div className="text-xs font-sans text-brand-soft/70 bg-brand-bg/40 border border-brand-border/30 p-3 rounded-xl">
                 You haven't added any Store Pins yet. Go to Settings to add some!
               </div>
-            ) : (
+            ) : enablePins ? (
               <div className="flex gap-2 flex-wrap">
                 {pins.map((pin, i) => (
                   <button
@@ -477,7 +494,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
                   </button>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
 
