@@ -152,7 +152,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {displayPosts.map((post: any) => (
-            <Link key={post.id} href={post.slug ? `/read/${post.slug}` : `/reading-room`}
+            <Link key={post.id} href={`/room/${post.profiles?.username || 'unknown'}/${post.slug || post.id}`}
               className="group p-5 rounded-2xl transition-all flex flex-col bg-brand-card border border-brand-border hover:border-brand-accent/50 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[9px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full text-brand-accent bg-brand-accent/10 border border-brand-accent/20">
