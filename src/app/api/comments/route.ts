@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       await supabaseAdmin.from("notifications").insert([{
         user_id: post.author_id,
         actor_id: user.id,
-        type: "comment_post",
+        type: "comment",
         target_id: postId
       }]);
     }
