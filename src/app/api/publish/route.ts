@@ -14,10 +14,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 });
     }
 
-    const { title, content, type } = await req.json();
+    const { title, content, type, attachedPin } = await req.json();
 
     if (!title || !content || !type) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    }
+
+    // Check if user is premium to allow attached pins
+    let finalAttachedPin = null;
+    if (attachedPin) {
+      const { data: profile } = await supabaseAdmin
+        .from("profiles")
+        .select("is_premium")
+        .eq("id", user.id)
+        .single();
+        
+      if (profile?.is_premium) {
+        finalAttachedPin = attachedPin;
+      }
     }
 
     // Generate slug from title
@@ -68,6 +82,7 @@ export async function POST(req: Request) {
         content,
         slug,
         is_draft: false,
+        attached_pin: finalAttachedPin,
         published_at: new Date().toISOString()
       }])
       .select()

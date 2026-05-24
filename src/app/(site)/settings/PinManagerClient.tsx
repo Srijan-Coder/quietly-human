@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function PinManagerClient({ initialPins, userId }: { initialPins: any[], userId: string }) {
+export default function PinManagerClient({ initialPins, userId, isPremium }: { initialPins: any[], userId: string, isPremium: boolean }) {
   const [pins, setPins] = useState(initialPins);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,8 +32,12 @@ export default function PinManagerClient({ initialPins, userId }: { initialPins:
   };
 
   const addPin = () => {
-    if (pins.length >= 4) {
-      setError("Maximum 4 pins allowed.");
+    if (!isPremium && pins.length >= 2) {
+      setError("Free rooms are limited to 2 pins. Upgrade to the Sanctuary Pass to unlock unlimited store pins and post embeds.");
+      return;
+    }
+    if (pins.length >= 10) {
+      setError("Maximum 10 pins allowed per room.");
       return;
     }
     setPins([...pins, { emoji: "🔗", title: "New Link", subtitle: "Description", url: "https://" }]);
@@ -54,7 +58,7 @@ export default function PinManagerClient({ initialPins, userId }: { initialPins:
       {error && <div className="text-red-400 mb-4 text-sm font-sans bg-red-500/10 p-3 rounded-lg border border-red-500/20">{error}</div>}
       
       <p className="text-brand-soft text-sm font-sans mb-8">
-        Add up to 4 pins to your Creator Room. You can link your Gumroad products, your social media, or any other link. Use a price tag emoji (🏷️) or link emoji (🔗).
+        Add up to {isPremium ? "10" : "2"} pins to your Creator Room. You can link your Gumroad products, your social media, or any other link. Use a price tag emoji (🏷️) or link emoji (🔗).
       </p>
 
       <div className="space-y-4 mb-8">
@@ -113,10 +117,10 @@ export default function PinManagerClient({ initialPins, userId }: { initialPins:
       <div className="flex justify-between items-center bg-[#121212] border border-white/5 p-6 rounded-2xl">
         <button 
           onClick={addPin} 
-          disabled={pins.length >= 4}
+          disabled={isPremium ? pins.length >= 10 : pins.length >= 2}
           className="text-xs uppercase tracking-widest text-white hover:text-brand-accent transition-colors font-sans disabled:opacity-50 flex items-center gap-2 font-bold"
         >
-          <span className="text-xl">+</span> Add Pin ({pins.length}/4)
+          <span className="text-xl">+</span> Add Pin ({pins.length}/{isPremium ? "10" : "2"})
         </button>
         
         <button 

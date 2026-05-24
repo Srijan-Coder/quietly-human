@@ -24,13 +24,14 @@ CREATE TABLE public.follows (
 CREATE TABLE public.posts (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   author_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
-  type text NOT NULL CHECK (type IN ('letter', 'quote', 'blog')),
-  title text,
+  type text NOT NULL CHECK (type IN ('blog', 'quote', 'letter')),
+  title text NOT NULL,
   slug text UNIQUE,
   content text NOT NULL,
   candle_count integer DEFAULT 0,
   is_draft boolean DEFAULT false,
-  published_at timestamp with time zone,
+  attached_pin jsonb, -- Stores { url, title, subtitle, emoji } for premium product embeds
+  published_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

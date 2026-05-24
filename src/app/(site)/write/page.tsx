@@ -17,7 +17,7 @@ export default async function WritePage() {
   // Ensure they have a profile
   const { data: profile } = await supabaseClient
     .from("profiles")
-    .select("id")
+    .select("id, is_premium, pins")
     .eq("id", user.id)
     .single();
 
@@ -39,7 +39,7 @@ export default async function WritePage() {
           </p>
         </header>
 
-        <WriteEditorClient />
+        <WriteEditorClient isPremium={profile.is_premium || false} pins={profile.pins || []} />
       </div>
     </div>
   );

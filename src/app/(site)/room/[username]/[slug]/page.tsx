@@ -72,6 +72,34 @@ export default async function PostPage({ params }: Props) {
         {post.content}
       </div>
 
+      {/* Embedded Premium Product Card */}
+      {post.attached_pin && (
+        <div className="mb-16 border-t border-b border-white/5 py-12 flex justify-center">
+          <a href={`/api/analytics/click?url=${encodeURIComponent(post.attached_pin.url)}&profile_id=${profile.id}`} target="_blank" rel="noopener noreferrer" className="block max-w-md w-full group">
+            <div className="bg-[#121212] border border-brand-accent/20 rounded-3xl overflow-hidden shadow-[0_0_30px_rgba(252,163,17,0.05)] hover:shadow-[0_0_40px_rgba(252,163,17,0.15)] hover:border-brand-accent/60 transition-all duration-700 relative">
+              <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent pointer-events-none" />
+              <div className="bg-black/60 py-8 px-6 text-center border-b border-white/5 relative z-10 group-hover:bg-white/5 transition-colors">
+                <span className="text-6xl filter grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110 block">
+                  {post.attached_pin.emoji || "🔗"}
+                </span>
+              </div>
+              <div className="p-8 relative z-10 text-center">
+                <span className="text-[10px] uppercase tracking-widest text-brand-accent font-bold mb-3 block">Featured by {profile.display_name || username}</span>
+                <h3 className="text-2xl text-white mb-2 font-serif group-hover:text-brand-accent transition-colors">
+                  {post.attached_pin.title}
+                </h3>
+                <p className="text-sm font-sans text-brand-soft mb-6">
+                  {post.attached_pin.subtitle}
+                </p>
+                <div className="inline-block bg-white text-black px-8 py-3 rounded-full text-xs uppercase tracking-widest font-bold group-hover:scale-105 transition-transform">
+                  View Details
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      )}
+
       <div className="flex flex-col items-center border-t border-brand-border pt-12">
         <p className="text-sm text-brand-soft font-sans mb-4">Did these words help you?</p>
         <CandleButton targetId={post.id} targetType="post" initialCount={post.candle_count || 0} />

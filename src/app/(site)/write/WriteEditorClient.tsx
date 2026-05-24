@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function WriteEditorClient() {
+export default function WriteEditorClient({ isPremium, pins }: { isPremium: boolean, pins: any[] }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [type, setType] = useState("letter");
+  const [attachedPinIndex, setAttachedPinIndex] = useState("-1");
   const [isPublishing, setIsPublishing] = useState(false);
   const [error, setError] = useState("");
   const [saveStatus, setSaveStatus] = useState("Draft saved locally");
@@ -47,10 +48,17 @@ export default function WriteEditorClient() {
     setError("");
 
     try {
+      const payload: any = { title, content, type };
+      
+      // If a pin is selected and they are premium, attach it
+      if (attachedPinIndex !== "-1" && isPremium) {
+        payload.attachedPin = pins[parseInt(attachedPinIndex)];
+      }
+
       const res = await fetch("/api/publish", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content, type })
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
@@ -83,20 +91,40 @@ export default function WriteEditorClient() {
         
         {/* Editor Controls */}
         <div className="flex justify-between items-end gap-4 flex-wrap relative z-10 mb-12 border-b border-white/5 pb-8">
-          <div className="flex flex-col gap-3 flex-1 min-w-[200px]">
-            <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
-              Type of writing
-            </label>
-            <select 
-              value={type} 
-              onChange={e => setType(e.target.value)}
-              className="bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent font-sans text-sm appearance-none cursor-pointer hover:bg-white/5 transition-colors"
-            >
-              <option value="letter">Midnight Letter (Long form)</option>
-              <option value="quote">Quiet Quote (Short thought)</option>
-              <option value="blog">Journal Entry (Updates/Thoughts)</option>
-            </select>
+          <div className="flex gap-4 flex-wrap w-full md:w-auto">
+            <div className="flex flex-col gap-3 flex-1 min-w-[200px]">
+              <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
+                Type of writing
+              </label>
+              <select 
+                value={type} 
+                onChange={e => setType(e.target.value)}
+                className="bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent font-sans text-sm appearance-none cursor-pointer hover:bg-white/5 transition-colors"
+              >
+                <option value="letter">Midnight Letter (Long form)</option>
+                <option value="quote">Quiet Quote (Short thought)</option>
+                <option value="blog">Journal Entry (Updates/Thoughts)</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-3 flex-1 min-w-[200px] relative">
+              <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans flex items-center gap-2">
+                <span className={`w-1.5 h-1.5 rounded-full ${isPremium ? 'bg-brand-accent' : 'bg-brand-soft'}`}></span>
+                Attach Product {isPremium ? '' : '🔒'}
+              </label>
+              <select 
+                value={attachedPinIndex} 
+                onChange={e => setAttachedPinIndex(e.target.value)}
+                disabled={!isPremium || pins.length === 0}
+                className={`bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent font-sans text-sm appearance-none cursor-pointer hover:bg-white/5 transition-colors ${!isPremium ? 'opacity-50' : ''}`}
+              >
+                <option value="-1">No product attached</option>
+                {pins.map((pin, i) => (
+                  <option key={i} value={i.toString()}>{pin.emoji} {pin.title}</option>
+                ))}
+              </select>
+            </div>
           </div>
           
           <div className="text-[10px] uppercase tracking-widest text-brand-soft/50 font-sans hidden sm:flex items-center gap-2 mb-4">

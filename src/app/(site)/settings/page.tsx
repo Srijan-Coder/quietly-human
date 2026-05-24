@@ -13,7 +13,7 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabaseClient
     .from("profiles")
-    .select("pins")
+    .select("pins, is_premium")
     .eq("id", user.id)
     .single();
 
@@ -37,7 +37,7 @@ export default async function SettingsPage() {
             Manage your shop links and pinned content to showcase your work.
           </p>
           
-          <PinManagerClient initialPins={profile.pins || []} userId={user.id} />
+          <PinManagerClient initialPins={profile.pins || []} userId={user.id} isPremium={profile.is_premium || false} />
         </section>
       </div>
     </div>
