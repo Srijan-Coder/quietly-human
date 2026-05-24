@@ -1,6 +1,7 @@
 import { supabaseClient } from "@/lib/supabase";
 import GentleAd from "@/components/global/GentleAd";
 import ReadingRoomClient from "./ReadingRoomClient";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const metadata = {
   title: "The Reading Room | Quietly Humans",
@@ -10,21 +11,39 @@ export const metadata = {
 export const revalidate = 60; // Revalidate every minute
 
 export default async function ReadingRoomPage() {
-  // Fetch latest published posts joined with author profiles
-  // We added view_count implicitly, it might not exist yet in DB but supabase returns what it has
-  const { data: posts, error } = await supabaseClient
+  const user = await currentUser();
+  let followingIds: string[] = [];
+
+  if (user) {
+    // Fetch who the user is following
+    const { data: follows } = await supabaseClient
+      .from("follows")
+      .select("following_id")
+      .eq("follower_id", user.id);
+      
+    if (follows) {
+      followingIds = follows.map(f => f.following_id);
+    }
+  }
+
+  // Fetch a larger batch of posts to allow client-side filtering and sorting
+  const { data: posts } = await supabaseClient
     .from("posts")
     .select(`
-      id, title, slug, type, content, published_at, candle_count, view_count,
+      id, title, slug, type, content, published_at, candle_count, view_count, author_id,
       profiles ( id, username, display_name, avatar_url )
     `)
     .eq("is_draft", false)
     .order("published_at", { ascending: false })
-    .limit(30);
+    .limit(100);
 
   return (
     <>
-      <ReadingRoomClient initialPosts={posts || []} />
+      <ReadingRoomClient 
+        initialPosts={posts || []} 
+        currentUserId={user?.id || null}
+        followingIds={followingIds}
+      />
       <div className="pb-32 bg-[#0d0d0d]">
         <GentleAd />
       </div>
