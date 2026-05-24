@@ -227,7 +227,7 @@ export default function ReadingRoomClient({
                       <span className="text-sm">🕯️</span> {post.candle_count || 0}
                     </span>
                     <span className="text-xs text-brand-soft/80 font-sans flex items-center gap-2 bg-brand-bg/50 px-3 py-1.5 rounded-full border border-brand-border/10">
-                      <span className="text-sm">👁️</span> {post.view_count || Math.floor(Math.random() * 500) + 12}
+                      <span className="text-sm">👁️</span> {post.view_count ?? 0}
                     </span>
                   </div>
                   <span className="text-[10px] text-brand-soft font-sans uppercase tracking-widest">

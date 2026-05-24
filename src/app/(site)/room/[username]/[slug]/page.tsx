@@ -34,6 +34,15 @@ export default async function PostPage({ params }: Props) {
 
   if (!post) notFound();
 
+  // Increment view count asynchronously
+  supabaseClient
+    .from("posts")
+    .update({ view_count: (post.view_count || 0) + 1 })
+    .eq("id", post.id)
+    .then(({ error }) => {
+      if (error) console.error("Failed to increment view_count", error);
+    });
+
   // Map theme to Tailwind background color
   const getThemeClasses = (theme: string) => {
     switch(theme) {

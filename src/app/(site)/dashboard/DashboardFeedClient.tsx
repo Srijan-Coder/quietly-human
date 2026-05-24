@@ -167,7 +167,7 @@ export default function DashboardFeedClient({
                   ) : (
                     <div className="flex items-center gap-4 text-xs font-sans text-brand-soft">
                       <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">🕯️ {post.candle_count || 0}</span>
-                      <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">👁️ {post.view_count || Math.floor(Math.random() * 500) + 12}</span>
+                      <span className="bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">👁️ {post.view_count ?? 0}</span>
                       <Link href={`/room/${post.profiles?.username || 'unknown'}/${post.slug || post.id}`} className="text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all px-6 py-2.5 rounded-full font-bold ml-2">
                         Read
                       </Link>
