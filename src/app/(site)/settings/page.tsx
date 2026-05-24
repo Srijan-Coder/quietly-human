@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase";
 import PinManagerClient from "./PinManagerClient";
 import RoomThemeSelectorClient from "./RoomThemeSelectorClient";
+import ProfileSettingsClient from "./ProfileSettingsClient";
 
 export const metadata = {
   title: "Settings | Quietly Humans",
@@ -14,7 +15,7 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabaseClient
     .from("profiles")
-    .select("pins, is_premium, room_theme")
+    .select("username, display_name, avatar_url, last_name_change_at, pins, is_premium, room_theme")
     .eq("id", user.id)
     .single();
 
@@ -31,6 +32,15 @@ export default async function SettingsPage() {
 
       {/* Settings Sections */}
       <div className="space-y-16">
+        {/* Public Profile */}
+        <section className="bg-[#121212] border border-white/5 p-8 rounded-[2rem]">
+          <h2 className="text-xl text-white mb-2 font-serif">Public Profile</h2>
+          <p className="text-brand-soft text-sm mb-8 font-sans">
+            Update your avatar, display name, and username. (Names can only be changed once every 14 days).
+          </p>
+          <ProfileSettingsClient initialProfile={profile} />
+        </section>
+
         {/* Appearance */}
         <section className="bg-[#121212] border border-white/5 p-8 rounded-[2rem]">
           <h2 className="text-xl text-white mb-2 font-serif">Room Theme</h2>

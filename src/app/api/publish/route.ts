@@ -7,6 +7,21 @@ const supabaseAdmin = createClient(
   (process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder")
 );
 
+import { rateLimiter } from "@/lib/rate-limit";
+import { sanitizeHtml, sanitizeText } from "@/lib/sanitize";
+import { z } from "zod";
+
+const publishSchema = z.object({
+  title: z.string().min(1).max(200),
+  content: z.string().min(1).max(100000), // Max 100k chars
+  type: z.string(),
+  category: z.string().optional(),
+  postTheme: z.string().optional(),
+  attachedPins: z.array(z.string()).optional(),
+  coverImageUrl: z.string().url().optional().or(z.literal("")),
+  pdfFileUrl: z.string().url().optional().or(z.literal("")),
+});
+
 export async function POST(req: Request) {
   try {
     const user = await currentUser();
@@ -14,11 +29,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 });
     }
 
-    const { title, content, type, category, postTheme, attachedPins, coverImageUrl, pdfFileUrl } = await req.json();
-
-    if (!title || !content || !type) {
-      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    // Rate Limit: 10 posts per hour per user
+    const rateLimit = rateLimiter.check(user.id + "_publish", 10, 60 * 60 * 1000);
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Too many posts published recently. Please wait." }, { status: 429 });
     }
+
+    const body = await req.json();
+    const parsed = publishSchema.safeParse(body);
+    
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid payload data." }, { status: 400 });
+    }
+
+    let { title, content, type, category, postTheme, attachedPins, coverImageUrl, pdfFileUrl } = parsed.data;
+
+    // Sanitize user inputs
+    title = sanitizeText(title);
+    content = sanitizeHtml(content);
 
     // Check if user is premium to allow attached pins
     let finalAttachedPins = [];

@@ -27,13 +27,37 @@ export async function GET(req: Request) {
   return NextResponse.json({ comments: data });
 }
 
+import { rateLimiter } from "@/lib/rate-limit";
+import { sanitizeText } from "@/lib/sanitize";
+import { z } from "zod";
+
+const commentSchema = z.object({
+  postId: z.string().uuid(),
+  content: z.string().min(1).max(2000), // Max 2k chars for comments
+});
+
 export async function POST(req: Request) {
   try {
     const user = await currentUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { postId, content } = await req.json();
-    if (!postId || !content) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    // Rate Limit: 10 comments per 5 minutes per user
+    const rateLimit = rateLimiter.check(user.id + "_comment", 10, 5 * 60 * 1000);
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Too many comments. Please wait." }, { status: 429 });
+    }
+
+    const body = await req.json();
+    const parsed = commentSchema.safeParse(body);
+    
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid payload data." }, { status: 400 });
+    }
+
+    let { postId, content } = parsed.data;
+
+    // Sanitize comment
+    content = sanitizeText(content);
 
     const { data, error } = await supabaseAdmin
       .from("comments")

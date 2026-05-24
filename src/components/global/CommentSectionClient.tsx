@@ -52,9 +52,13 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
       if (res.ok) {
         setNewComment("");
         fetchComments();
+      } else {
+        const errorData = await res.json();
+        alert(`Failed to post thought: ${errorData.error || 'Unknown error'}`);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      alert(`Network error: ${e.message}`);
     } finally {
       setIsSubmitting(false);
     }
