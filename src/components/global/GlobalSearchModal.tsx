@@ -38,6 +38,7 @@ export function GlobalSearchModal({ isOpen, onClose }: { isOpen: boolean, onClos
   }, [query]);
 
   const getUrl = (item: GlobalSearchResult) => {
+    if (item._type === "profile" && item.username) return `/room/${item.username}`;
     const slug = item.slug?.current;
     if (!slug) return "#";
     switch (item._type) {
@@ -51,6 +52,7 @@ export function GlobalSearchModal({ isOpen, onClose }: { isOpen: boolean, onClos
 
   const getLabel = (type: string) => {
     switch (type) {
+      case "profile": return "Creator";
       case "post": return "Thought";
       case "letter": return "Letter";
       case "guide": return "Guide";
