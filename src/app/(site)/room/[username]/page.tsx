@@ -81,36 +81,38 @@ export default async function CreatorRoomPage({ params }: Props) {
         
         {/* Profile Header (Full-width Hero) */}
         <header className="flex flex-col items-center text-center pb-16">
-          <div className="relative group">
-            <div className={`absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+          <div className="relative group animate-fade-in-up" style={{ animationDelay: '0s' }}>
+            <div className={`absolute -inset-8 bg-brand-accent/20 rounded-full blur-3xl animate-pulse-glow`} />
+            <div className={`absolute -inset-4 bg-gradient-to-tr from-brand-accent/30 via-transparent to-brand-accent/30 rounded-full blur-2xl opacity-60 animate-[spin_10s_linear_infinite]`} />
+            
             {profile.avatar_url ? (
-              <Image src={profile.avatar_url} alt={profile.username} width={120} height={120} className="rounded-full mb-6 border-2 border-white/10 relative z-10" />
+              <Image src={profile.avatar_url} alt={profile.username} width={130} height={130} className="rounded-full mb-6 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.1)] relative z-10" />
             ) : (
-              <div className="w-[120px] h-[120px] rounded-full mb-6 bg-black/50 border-2 border-white/10 flex items-center justify-center text-4xl font-sans text-brand-soft relative z-10">
+              <div className="w-[130px] h-[130px] rounded-full mb-6 bg-[#1a1a1a] border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex items-center justify-center text-5xl font-serif text-white relative z-10">
                 {profile.display_name?.charAt(0) || profile.username.charAt(0)}
               </div>
             )}
           </div>
           
-          <h1 className="text-5xl md:text-6xl font-serif text-white mb-4">
+          <h1 className="text-5xl md:text-7xl font-serif text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             {profile.display_name || profile.username}
           </h1>
-          <p className="text-xs font-sans tracking-widest uppercase text-brand-soft mb-8 flex items-center gap-4 bg-black/40 px-6 py-2 rounded-full border border-white/5">
+          <p className="text-xs font-sans tracking-[0.2em] uppercase text-brand-soft mb-8 flex items-center gap-4 bg-black/40 px-6 py-2.5 rounded-full border border-white/10 backdrop-blur-md animate-fade-in-up shadow-lg" style={{ animationDelay: '0.2s' }}>
             <span>@{profile.username}</span>
-            <span className="w-1 h-1 rounded-full bg-brand-soft/50"></span>
+            <span className="w-1 h-1 rounded-full bg-brand-accent animate-pulse-glow"></span>
             <span>{followersCount || 0} Followers</span>
           </p>
           
           {profile.bio && (
-            <p className="text-brand-soft max-w-2xl mx-auto text-xl font-serif italic mb-10 leading-relaxed">
+            <p className="text-brand-soft max-w-2xl mx-auto text-xl md:text-2xl font-serif italic mb-10 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               "{profile.bio}"
             </p>
           )}
 
-          <div className="flex flex-col items-center gap-6 w-full">
+          <div className="flex flex-col items-center gap-8 w-full animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="flex gap-4">
               {isOwnProfile ? (
-                <Link href="/settings" className="bg-white text-black px-8 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <Link href="/settings" className="bg-white text-black px-8 py-4 rounded-full text-xs uppercase tracking-[0.2em] font-bold hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
                   Edit Room
                 </Link>
               ) : (

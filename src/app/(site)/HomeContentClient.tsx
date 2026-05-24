@@ -91,33 +91,18 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       {/* ===== 1. HERO ===== */}
       <section className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col justify-center items-center px-4 md:px-6 text-center">
         <div className="z-10 flex flex-col items-center max-w-4xl mt-16 md:mt-12">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-6 flex items-center gap-3 text-brand-soft"
-          >
+          <p className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-6 flex items-center gap-3 text-brand-soft animate-fade-in-up" style={{ animationDelay: '0s' }}>
             <span className="w-2 h-2 rounded-full animate-pulse-glow bg-brand-accent" />
             {greeting}
-          </motion.p>
+          </p>
           
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-serif tracking-tight leading-[1.1] mb-6 text-brand-text"
-          >
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] font-serif tracking-tight leading-[1.1] mb-6 text-brand-text animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             The quietest corner <br className="hidden md:block"/> of the internet.
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="text-base md:text-xl max-w-2xl leading-relaxed mb-8 font-serif italic px-4 text-brand-soft"
-          >
+          <p className="text-base md:text-xl max-w-2xl leading-relaxed mb-8 font-serif italic px-4 text-brand-soft animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
             A digital sanctuary for overthinkers. Write midnight letters, use clinical toolkits, and remember how to breathe.
-          </motion.p>
+          </p>
 
           <div className="flex flex-col items-center gap-3 w-full px-4">
             <Link href="/onboarding" className="w-full sm:w-auto px-8 py-4 rounded-full text-[10px] tracking-widest uppercase font-bold hover:scale-105 transition-transform shadow-lg text-center bg-brand-text text-brand-bg">

@@ -30,6 +30,11 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
       return;
     }
 
+    if (file.size > 4 * 1024 * 1024) {
+      setMessage({ text: "File is too large. Please upload an image smaller than 4MB.", type: "error" });
+      return;
+    }
+
     setIsUploading(true);
     setMessage(null);
 
@@ -129,7 +134,7 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
             {isUploading ? "Uploading..." : "Upload New Picture"}
             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} disabled={isUploading} />
           </label>
-          <p className="text-[10px] text-brand-soft mt-3 font-sans">Square image, max 5MB.</p>
+          <p className="text-[10px] text-brand-soft mt-3 font-sans">Square image, max 4MB.</p>
         </div>
       </div>
 
