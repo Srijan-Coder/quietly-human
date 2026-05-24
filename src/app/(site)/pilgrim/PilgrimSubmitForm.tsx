@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 
-export default function PilgrimSubmitForm() {
+export default function PilgrimSubmitForm({ onSuccess }: { onSuccess?: () => void }) {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -39,6 +39,7 @@ export default function PilgrimSubmitForm() {
 
       setContent("");
       router.refresh(); // Reload the feed
+      if (onSuccess) onSuccess();
     } catch (err: any) {
       setError(err.message);
     } finally {
