@@ -5,6 +5,8 @@ import Link from "next/link";
 import DashboardPostActionsClient from "./DashboardPostActionsClient";
 import SubscriberListClient from "./SubscribersListClient";
 
+import DashboardFeedClient from "./DashboardFeedClient";
+
 export const metadata = {
   title: "Creator Dashboard | Quietly Humans",
 };
@@ -22,12 +24,27 @@ export default async function DashboardPage() {
 
   if (!profile) redirect("/onboarding");
 
-  // Fetch their posts to calculate total candles
-  const { data: posts } = await supabaseClient
+  // Fetch all published posts for the Feed
+  const { data: allPosts } = await supabaseClient
     .from("posts")
-    .select("id, title, slug, candle_count, created_at")
-    .eq("author_id", user.id)
-    .order("created_at", { ascending: false });
+    .select(`
+      id, title, slug, type, content, published_at, created_at, candle_count, view_count, author_id,
+      profiles ( id, username, display_name, avatar_url )
+    `)
+    .eq("is_draft", false)
+    .order("published_at", { ascending: false })
+    .limit(100);
+
+  // Fetch who the user is following
+  let followingIds: string[] = [];
+  const { data: followsList } = await supabaseClient
+    .from("follows")
+    .select("following_id")
+    .eq("follower_id", user.id);
+      
+  if (followsList) {
+    followingIds = followsList.map(f => f.following_id);
+  }
 
   // Fetch subscribers
   const { data: subscribers } = await supabaseClient
@@ -54,7 +71,8 @@ export default async function DashboardPage() {
     .select("*", { count: "exact", head: true })
     .eq("profile_id", user.id);
 
-  const totalCandles = posts?.reduce((acc, post) => acc + (post.candle_count || 0), 0) || 0;
+  const myPosts = allPosts?.filter(p => p.author_id === user.id) || [];
+  const totalCandles = myPosts.reduce((acc, post) => acc + (post.candle_count || 0), 0) || 0;
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32 font-serif">
@@ -104,35 +122,13 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Recent Posts */}
-      <h2 className="text-2xl font-serif text-white mb-6">Your Writings</h2>
-      <div className="bg-[#121212] border border-white/5 rounded-[2rem] overflow-hidden">
-        {posts && posts.length > 0 ? (
-          <div className="divide-y divide-white/5">
-            {posts.map((post: any) => (
-              <div key={post.id} className="p-6 md:p-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:bg-white/5 transition-colors group">
-                <div>
-                  <Link href={`/room/${profile.username}/${post.slug}`} className="text-xl font-serif text-white group-hover:text-brand-accent transition-colors block mb-2">
-                    {post.title}
-                  </Link>
-                  <span className="text-[10px] uppercase tracking-widest text-brand-soft font-sans opacity-70">
-                    Published {new Date(post.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-                  <DashboardPostActionsClient postId={post.id} slug={post.slug} username={profile.username} candleCount={post.candle_count || 0} />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="p-16 text-center flex flex-col items-center justify-center">
-            <span className="text-4xl opacity-30 mb-6 block grayscale">🍃</span>
-            <p className="text-brand-soft italic text-lg mb-6">You haven't published anything yet.</p>
-            <Link href="/write" className="text-[10px] uppercase tracking-widest text-white border-b border-white/30 pb-1 hover:border-white transition-colors">
-              Write your first thought
-            </Link>
-          </div>
-        )}
-      </div>
+      {/* Advanced Network Feed & Writings */}
+      <DashboardFeedClient 
+        initialPosts={allPosts || []}
+        currentUserId={user.id}
+        currentUsername={profile.username}
+        followingIds={followingIds}
+      />
 
       {/* Revenue & Store Section */}
       <h2 className="text-2xl font-serif text-white mt-16 mb-6">Creator Store & Revenue</h2>
