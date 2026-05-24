@@ -118,7 +118,7 @@ export default function WriteEditorClient() {
           placeholder="Write what is heavy on your mind..."
           value={content}
           onChange={e => setContent(e.target.value)}
-          className="w-full bg-transparent border-none outline-none text-xl md:text-2xl text-brand-soft font-serif placeholder:text-white/10 resize-none min-h-[50vh] leading-relaxed relative z-10"
+          className="w-full bg-transparent border-none outline-none text-xl md:text-2xl text-brand-soft font-serif placeholder:text-white/10 resize-none min-h-[70vh] leading-relaxed relative z-10"
         />
 
         {/* Action Bar */}
