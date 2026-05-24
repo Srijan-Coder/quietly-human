@@ -1,10 +1,10 @@
 import HomeContentClient from "./HomeContentClient";
 import { supabaseClient } from "@/lib/supabase";
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 60;
 
 export default async function Home() {
-  // Fetch some live stats for the Pulse section
+  // Fetch live stats
   const { count: postsCount } = await supabaseClient.from("posts").select("*", { count: "exact", head: true });
   const { count: notesCount } = await supabaseClient.from("pilgrim_notes").select("*", { count: "exact", head: true });
   const { count: candlesCount } = await supabaseClient.from("candles").select("*", { count: "exact", head: true });
@@ -15,22 +15,29 @@ export default async function Home() {
     candles: candlesCount || 0
   };
 
-  // Fetch top 3 latest pilgrim notes for the Bento box
+  // Fetch 3 latest pilgrim notes
   const { data: latestNotes } = await supabaseClient
     .from("pilgrim_notes")
     .select("id, content, created_at, profiles(username)")
     .order("created_at", { ascending: false })
     .limit(3);
 
-  // Fetch 2 latest posts for the Bento box
+  // Fetch 6 latest posts (for trending section)
   const { data: latestPosts } = await supabaseClient
     .from("posts")
-    .select("id, title, slug, excerpt, created_at, profiles(username, display_name)")
+    .select("id, title, slug, excerpt, type, created_at, candle_count, view_count, profiles(username, display_name, avatar_url)")
     .eq("is_draft", false)
     .order("created_at", { ascending: false })
-    .limit(2);
+    .limit(6);
 
-  // Fetch featured products (pins from profiles) for the Store promo section
+  // Fetch top 6 creators (by post count or just profiles)
+  const { data: topCreators } = await supabaseClient
+    .from("profiles")
+    .select("id, username, display_name, avatar_url, bio, is_premium")
+    .order("created_at", { ascending: true })
+    .limit(6);
+
+  // Fetch featured products (pins from profiles)
   let featuredProducts: any[] = [];
   try {
     const { data: profiles } = await supabaseClient
@@ -50,8 +57,6 @@ export default async function Home() {
           });
         });
       });
-      // Shuffle and take top 4
-      featuredProducts = featuredProducts.sort(() => 0.5 - Math.random()).slice(0, 4);
     }
   } catch (e) {
     console.error("Failed to fetch products for homepage:", e);
@@ -62,6 +67,7 @@ export default async function Home() {
       stats={stats} 
       latestNotes={latestNotes || []} 
       latestPosts={latestPosts || []} 
+      topCreators={topCreators || []}
       featuredProducts={featuredProducts}
     />
   );
