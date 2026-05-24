@@ -37,10 +37,18 @@ export default async function ReadingRoomPage() {
     .order("published_at", { ascending: false })
     .limit(100);
 
+  // Fetch top profiles for Creator discovery
+  const { data: profiles } = await supabaseClient
+    .from("profiles")
+    .select("id, username, display_name, avatar_url, bio, is_premium")
+    .order("created_at", { ascending: false })
+    .limit(50);
+
   return (
     <>
       <ReadingRoomClient 
         initialPosts={posts || []} 
+        initialProfiles={profiles || []}
         currentUserId={user?.id || null}
         followingIds={followingIds}
       />

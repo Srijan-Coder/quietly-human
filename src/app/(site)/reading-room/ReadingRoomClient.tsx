@@ -7,14 +7,16 @@ import { motion, AnimatePresence } from "framer-motion";
 
 type FeedSource = "all" | "following" | "me";
 type SortOrder = "newest" | "best_today" | "most_lit";
-type CategoryFilter = "all" | "blog" | "letter" | "ebook" | "guide" | "quote";
+type CategoryFilter = "all" | "blog" | "letter" | "ebook" | "guide" | "quote" | "creators";
 
 export default function ReadingRoomClient({ 
   initialPosts, 
+  initialProfiles = [],
   currentUserId,
   followingIds 
 }: { 
   initialPosts: any[], 
+  initialProfiles?: any[],
   currentUserId: string | null,
   followingIds: string[]
 }) {
@@ -24,6 +26,7 @@ export default function ReadingRoomClient({
 
   const categories = [
     { id: "all", label: "All Types" },
+    { id: "creators", label: "Creators" },
     { id: "blog", label: "Quiet Thoughts" },
     { id: "quote", label: "Quiet Words" },
     { id: "letter", label: "Midnight Letters" },
@@ -42,7 +45,7 @@ export default function ReadingRoomClient({
     }
 
     // 2. Filter by Category
-    if (categoryFilter !== "all") {
+    if (categoryFilter !== "all" && categoryFilter !== "creators") {
       posts = posts.filter(p => p.type === categoryFilter);
     }
 
@@ -59,6 +62,16 @@ export default function ReadingRoomClient({
 
     return posts;
   }, [initialPosts, feedSource, categoryFilter, sortOrder, currentUserId, followingIds]);
+
+  const displayedProfiles = useMemo(() => {
+    let profiles = [...initialProfiles];
+    if (feedSource === "following") {
+      profiles = profiles.filter(p => followingIds.includes(p.id));
+    } else if (feedSource === "me") {
+      profiles = profiles.filter(p => p.id === currentUserId);
+    }
+    return profiles;
+  }, [initialProfiles, feedSource, currentUserId, followingIds]);
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-32 font-sans bg-[#0d0d0d] text-white">
@@ -135,64 +148,107 @@ export default function ReadingRoomClient({
           transition={{ duration: 0.5 }}
           className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
         >
-          {displayedPosts && displayedPosts.length > 0 ? (
-            displayedPosts.map((post) => (
-              <article key={post.id} className="break-inside-avoid bg-[#121212] border border-white/5 p-8 rounded-[2rem] hover:border-brand-accent/50 transition-colors duration-500 group relative overflow-hidden flex flex-col min-h-[250px]">
-                <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                
-                <div className="flex items-center gap-3 mb-6 relative z-10 shrink-0">
-                  <Link href={`/room/${post.profiles?.username}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity z-20">
-                    {post.profiles?.avatar_url ? (
-                      <Image src={post.profiles.avatar_url} alt={post.profiles.username} width={32} height={32} className="rounded-full border border-white/10" />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white">
-                        {post.profiles?.display_name?.charAt(0) || post.profiles?.username?.charAt(0) || '?'}
-                      </div>
-                    )}
-                    <div>
-                      <span className="text-sm text-white font-bold block leading-tight">
-                        {post.profiles?.display_name || post.profiles?.username || 'Unknown'}
-                      </span>
-                      <span className="text-[10px] text-white/40 uppercase tracking-widest">@{post.profiles?.username || 'unknown'}</span>
-                    </div>
-                  </Link>
-                </div>
-
-                <Link href={`/room/${post.profiles?.username}/${post.slug || post.id}`} className="block group-hover:opacity-90 transition-opacity relative z-10 flex-grow">
-                  <span className="text-[9px] uppercase tracking-widest text-brand-accent bg-brand-accent/10 border border-brand-accent/20 px-3 py-1 rounded-full mb-4 inline-block">
-                    {categories.find(c => c.id === post.type)?.label || post.type}
-                  </span>
+          {categoryFilter === "creators" ? (
+            displayedProfiles && displayedProfiles.length > 0 ? (
+              displayedProfiles.map((profile) => (
+                <article key={profile.id} className="break-inside-avoid bg-[#121212] border border-white/5 p-8 rounded-[2rem] hover:border-brand-accent/50 transition-colors duration-500 group relative overflow-hidden flex flex-col min-h-[250px] items-center text-center">
+                  <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                   
-                  {post.title && (
-                    <h2 className="text-2xl font-serif text-white mb-4 leading-snug group-hover:text-brand-accent transition-colors">
-                      {post.title}
-                    </h2>
+                  {profile.avatar_url ? (
+                    <Image src={profile.avatar_url} alt={profile.username} width={80} height={80} className="rounded-full border border-white/10 mb-4" />
+                  ) : (
+                    <div className="w-20 h-20 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-2xl font-bold text-white mb-4">
+                      {profile.display_name?.charAt(0) || profile.username?.charAt(0) || '?'}
+                    </div>
                   )}
 
-                  <p className="text-brand-soft leading-relaxed line-clamp-4 font-serif italic text-lg mb-6">
-                    {post.content}
-                  </p>
-                </Link>
-                
-                <div className="pt-6 border-t border-white/5 flex items-center justify-between relative z-10 shrink-0 mt-auto">
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-white/50 font-sans flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-white/5">
-                      <span className="text-sm">🕯️</span> {post.candle_count || 0}
+                  <h2 className="text-2xl font-serif text-white mb-1 group-hover:text-brand-accent transition-colors relative z-10">
+                    {profile.display_name || profile.username || 'Unknown'}
+                  </h2>
+                  <span className="text-[10px] text-white/40 uppercase tracking-widest block mb-4 relative z-10">@{profile.username}</span>
+
+                  {profile.bio && (
+                    <p className="text-brand-soft leading-relaxed line-clamp-3 font-sans text-sm mb-6 relative z-10">
+                      {profile.bio}
+                    </p>
+                  )}
+
+                  {profile.is_premium && (
+                    <span className="text-[9px] uppercase tracking-widest text-brand-accent bg-brand-accent/10 border border-brand-accent/20 px-3 py-1 rounded-full mb-4 inline-block relative z-10">
+                      Guardian 🌿
                     </span>
-                    <span className="text-xs text-white/50 font-sans flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-white/5">
-                      <span className="text-sm">👁️</span> {post.view_count || Math.floor(Math.random() * 500) + 12}
+                  )}
+
+                  <Link href={`/room/${profile.username}`} className="mt-auto relative z-10 bg-white text-black px-6 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform">
+                    Enter Room
+                  </Link>
+                </article>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-20 text-brand-soft italic font-serif text-lg">
+                No creators found for this filter.
+              </div>
+            )
+          ) : (
+            displayedPosts && displayedPosts.length > 0 ? (
+              displayedPosts.map((post) => (
+                <article key={post.id} className="break-inside-avoid bg-[#121212] border border-white/5 p-8 rounded-[2rem] hover:border-brand-accent/50 transition-colors duration-500 group relative overflow-hidden flex flex-col min-h-[250px]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                  
+                  <div className="flex items-center gap-3 mb-6 relative z-10 shrink-0">
+                    <Link href={`/room/${post.profiles?.username}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity z-20">
+                      {post.profiles?.avatar_url ? (
+                        <Image src={post.profiles.avatar_url} alt={post.profiles.username} width={32} height={32} className="rounded-full border border-white/10" />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white">
+                          {post.profiles?.display_name?.charAt(0) || post.profiles?.username?.charAt(0) || '?'}
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-sm text-white font-bold block leading-tight">
+                          {post.profiles?.display_name || post.profiles?.username || 'Unknown'}
+                        </span>
+                        <span className="text-[10px] text-white/40 uppercase tracking-widest">@{post.profiles?.username || 'unknown'}</span>
+                      </div>
+                    </Link>
+                  </div>
+
+                  <Link href={`/room/${post.profiles?.username}/${post.slug || post.id}`} className="block group-hover:opacity-90 transition-opacity relative z-10 flex-grow">
+                    <span className="text-[9px] uppercase tracking-widest text-brand-accent bg-brand-accent/10 border border-brand-accent/20 px-3 py-1 rounded-full mb-4 inline-block">
+                      {categories.find(c => c.id === post.type)?.label || post.type}
+                    </span>
+                    
+                    {post.title && (
+                      <h2 className="text-2xl font-serif text-white mb-4 leading-snug group-hover:text-brand-accent transition-colors">
+                        {post.title}
+                      </h2>
+                    )}
+
+                    <p className="text-brand-soft leading-relaxed line-clamp-4 font-serif italic text-lg mb-6">
+                      {post.content}
+                    </p>
+                  </Link>
+                  
+                  <div className="pt-6 border-t border-white/5 flex items-center justify-between relative z-10 shrink-0 mt-auto">
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-white/50 font-sans flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-white/5">
+                        <span className="text-sm">🕯️</span> {post.candle_count || 0}
+                      </span>
+                      <span className="text-xs text-white/50 font-sans flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-full border border-white/5">
+                        <span className="text-sm">👁️</span> {post.view_count || Math.floor(Math.random() * 500) + 12}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-brand-soft font-sans uppercase tracking-widest">
+                      {new Date(post.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                     </span>
                   </div>
-                  <span className="text-[10px] text-brand-soft font-sans uppercase tracking-widest">
-                    {new Date(post.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                  </span>
-                </div>
-              </article>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-20 text-brand-soft italic font-serif text-lg">
-              The room is completely quiet today. Try adjusting your filters.
-            </div>
+                </article>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-20 text-brand-soft italic font-serif text-lg">
+                The room is completely quiet today. Try adjusting your filters.
+              </div>
+            )
           )}
         </motion.div>
       </AnimatePresence>
