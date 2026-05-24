@@ -12,7 +12,6 @@ import { subscriberType } from './subscriberType'
 import { leadMagnetSettings } from './leadMagnetSettings'
 import { quoteType } from './quoteType'
 import { resourceType } from './resourceType'
-import { testimonialType } from './testimonialType'
 import { announcementType } from './announcementType'
 import { blogSeriesType } from './blogSeriesType'
 import { socialLinkType } from './socialLinkType'
@@ -28,7 +27,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     blockContentType, categoryType, postType, authorType,
     productType, guideType, letterType, ebookType, bookType,
     subscriberType, leadMagnetSettings,
-    quoteType, resourceType, testimonialType, announcementType,
+    quoteType, resourceType, announcementType,
     blogSeriesType, socialLinkType, seoEmotionPageType, timeCapsuleType, userCollectionType, sharedKitType,
   ],
 }

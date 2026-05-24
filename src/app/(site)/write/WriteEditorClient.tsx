@@ -165,11 +165,11 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
                 Format
               </label>
               <select value={type} onChange={e => setType(e.target.value)} className="bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent font-sans text-sm appearance-none cursor-pointer hover:bg-white/5 transition-colors">
-                <option value="letter">Midnight Letter (Long)</option>
-                <option value="quote">Quiet Quote (Short)</option>
-                <option value="blog">Journal Entry</option>
-                <option value="ebook">Ebook / Book</option>
-                <option value="guide">Guide / Course</option>
+                <option value="letter" className="bg-[#1a1a1a] text-white">Midnight Letter (Long)</option>
+                <option value="quote" className="bg-[#1a1a1a] text-white">Quiet Quote (Short)</option>
+                <option value="blog" className="bg-[#1a1a1a] text-white">Journal Entry</option>
+                <option value="ebook" className="bg-[#1a1a1a] text-white">Ebook / Book</option>
+                <option value="guide" className="bg-[#1a1a1a] text-white">Guide / Course</option>
               </select>
             </div>
 
@@ -179,7 +179,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
                 Category
               </label>
               <select value={category} onChange={e => setCategory(e.target.value)} className="bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent font-sans text-sm appearance-none cursor-pointer hover:bg-white/5 transition-colors">
-                {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                {CATEGORIES.map(c => <option key={c} value={c} className="bg-[#1a1a1a] text-white">{c}</option>)}
               </select>
             </div>
 
@@ -189,7 +189,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
                 Post Theme
               </label>
               <select value={postTheme} onChange={e => setPostTheme(e.target.value)} className="bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent font-sans text-sm appearance-none cursor-pointer hover:bg-white/5 transition-colors">
-                {POST_THEMES.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                {POST_THEMES.map(t => <option key={t.id} value={t.id} className="bg-[#1a1a1a] text-white">{t.name}</option>)}
               </select>
             </div>
           </div>

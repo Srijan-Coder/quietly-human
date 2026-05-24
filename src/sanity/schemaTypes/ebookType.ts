@@ -11,10 +11,18 @@ export const ebookType = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: { source: 'title' },
+      name: 'ebookFormat',
+      title: 'Ebook Format',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Free Ebook', value: 'free' },
+          { title: 'Premium Ebook', value: 'premium' },
+          { title: 'Physical Book', value: 'physical' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'free',
     }),
     defineField({
       name: 'author',

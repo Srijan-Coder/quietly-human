@@ -11,10 +11,17 @@ export const letterType = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: { source: 'title' },
+      name: 'letterFormat',
+      title: 'Letter Format',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Free Letter', value: 'free' },
+          { title: 'Premium Letter', value: 'premium' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'free',
     }),
     defineField({
       name: 'guestName',
