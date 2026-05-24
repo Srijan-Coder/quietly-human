@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase";
 import Link from "next/link";
 import NotificationClearClient from "./NotificationClearClient";
+import NotificationsListClient from "./NotificationsListClient";
 
 export const metadata = {
   title: "Notifications | Quietly Humans",
@@ -44,51 +45,7 @@ export default async function NotificationsPage() {
         <NotificationClearClient userId={user.id} />
       </header>
 
-      <div className="bg-brand-card border border-brand-border rounded-2xl overflow-hidden">
-        {notifications && notifications.length > 0 ? (
-          <div className="divide-y divide-brand-border/50">
-            {notifications.map((notif: any) => {
-              const actor = notif.profiles;
-              const actorName = actor.display_name || actor.username;
-              let message = "";
-              let icon = "";
-              
-              if (notif.type === "follow") {
-                message = `quietly entered your room.`;
-                icon = "🚪";
-              } else if (notif.type === "candle_post") {
-                message = `lit a candle for your writing.`;
-                icon = "🕯️";
-              } else if (notif.type === "candle_note") {
-                message = `lit a candle for your Pilgrim Note.`;
-                icon = "🕯️";
-              }
-
-              return (
-                <div key={notif.id} className={`p-6 flex items-start gap-4 hover:bg-brand-bg/50 transition-colors ${!notif.is_read ? 'bg-brand-accent/5' : ''}`}>
-                  <span className="text-2xl">{icon}</span>
-                  <div>
-                    <p className="text-brand-text leading-relaxed">
-                      <Link href={`/room/${actor.username}`} className="font-bold hover:text-brand-accent transition-colors">
-                        {actorName}
-                      </Link>{" "}
-                      <span className="text-brand-soft">{message}</span>
-                    </p>
-                    <span className="text-xs text-brand-soft font-sans opacity-50">
-                      {new Date(notif.created_at).toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="p-16 text-center">
-            <span className="text-4xl filter grayscale opacity-30 mb-4 block">🍃</span>
-            <p className="text-brand-soft italic">Your notifications are silent.</p>
-          </div>
-        )}
-      </div>
+      <NotificationsListClient initialNotifications={notifications || []} />
     </div>
   );
 }

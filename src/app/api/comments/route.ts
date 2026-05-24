@@ -47,7 +47,16 @@ export async function POST(req: Request) {
 
     if (error) throw error;
 
-    // Optional: send notification to post author
+    // Send notification to post author
+    const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", postId).single();
+    if (post && post.author_id !== user.id) {
+      await supabaseAdmin.from("notifications").insert([{
+        user_id: post.author_id,
+        actor_id: user.id,
+        type: "comment_post",
+        target_id: postId
+      }]);
+    }
 
     return NextResponse.json({ comment: data });
   } catch (err: any) {
