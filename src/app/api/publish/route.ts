@@ -94,7 +94,7 @@ export async function POST(req: Request) {
 
     if (error) {
       console.error("Supabase insert error", error);
-      return NextResponse.json({ error: "Failed to publish post." }, { status: 500 });
+      return NextResponse.json({ error: `Failed to publish post: ${error.message} (Code: ${error.code})` }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, post: data });
