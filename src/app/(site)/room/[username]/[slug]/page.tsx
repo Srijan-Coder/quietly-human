@@ -5,8 +5,47 @@ import Image from "next/image";
 import CandleButton from "./CandleButton";
 import GentleAd from "@/components/global/GentleAd";
 import CommentSectionClient from "@/components/global/CommentSectionClient";
+import ViewTracker from "./ViewTracker";
+import type { Metadata } from "next";
+
+const BASE_URL = "https://www.quietlyhumans.space";
 
 type Props = { params: Promise<{ username: string, slug: string }> };
+
+// Dynamic OG metadata per post
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { username, slug } = await params;
+  const { data: profile } = await supabaseClient.from("profiles").select("display_name").eq("username", username).single();
+  const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(slug);
+  const { data: post } = await supabaseClient.from("posts").select("title, excerpt, cover_image_url")
+    .or(isUuid ? `slug.eq.${slug},id.eq.${slug}` : `slug.eq.${slug}`)
+    .single();
+
+  if (!post) return { title: "Quietly Humans" };
+
+  const title = `${post.title} | Quietly Humans`;
+  const description = post.excerpt || `A quiet writing by ${profile?.display_name || username}`;
+  const imageUrl = post.cover_image_url || `${BASE_URL}/og-default.png`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/room/${username}/${slug}`,
+      siteName: "Quietly Humans",
+      images: [{ url: imageUrl, width: 1200, height: 630 }],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
 
 export default async function PostPage({ params }: Props) {
   const { username, slug } = await params;
@@ -14,7 +53,7 @@ export default async function PostPage({ params }: Props) {
   // Fetch author
   const { data: profile } = await supabaseClient
     .from("profiles")
-    .select("id, display_name, avatar_url, is_premium")
+    .select("id, username, display_name, avatar_url, bio, is_premium")
     .eq("username", username)
     .single();
 
@@ -34,9 +73,16 @@ export default async function PostPage({ params }: Props) {
 
   if (!post) notFound();
 
-  // Increment view count asynchronously via backend API to bypass RLS
-  fetch(`${process.env.NEXT_PUBLIC_APP_URL || "https://www.quietlyhumans.space"}/api/posts/${post.id}/view`, { method: "POST" })
-    .catch(err => console.error("Failed to increment views:", err));
+  // Fetch 2 other posts from same author for "Read Next"
+  const { data: otherPosts } = await supabaseClient
+    .from("posts")
+    .select("id, title, slug, type, candle_count")
+    .eq("author_id", profile.id)
+    .eq("is_draft", false)
+    .neq("id", post.id)
+    .order("candle_count", { ascending: false })
+    .limit(2);
+
 
   // Map theme to Tailwind background color
   const getThemeClasses = (theme: string) => {
@@ -54,9 +100,10 @@ export default async function PostPage({ params }: Props) {
   return (
     <div className={`min-h-screen pt-32 px-6 md:px-12 w-full pb-32 font-serif relative ${themeBg} bg-brand-bg text-brand-text transition-colors duration-1000`}>
       <div className="max-w-2xl mx-auto w-full relative">
-        <Link href="/reading-room" className="absolute -top-12 left-0 text-sm text-brand-soft hover:text-brand-text transition-colors">
-          ← Back to Reading Room
+        <Link href={`/room/${username}`} className="absolute -top-12 left-0 text-sm text-brand-soft hover:text-brand-text transition-colors">
+          ← {profile.display_name || username}'s Room
         </Link>
+        <ViewTracker postId={post.id} />
 
         <header className="mb-12 border-b border-brand-border/30 pb-12 text-center">
           <div className="flex justify-center gap-3 mb-6">
@@ -117,7 +164,7 @@ export default async function PostPage({ params }: Props) {
             </Link>
             <span className="text-brand-border text-sm">|</span>
             <span className="text-sm text-brand-soft font-sans">
-              {new Date(post.published_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+              {new Date(post.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </span>
           </div>
         </header>
@@ -162,10 +209,72 @@ export default async function PostPage({ params }: Props) {
           </div>
         )}
 
-        <div className="flex flex-col items-center border-t border-brand-border/30 pt-12">
-          <p className="text-sm text-brand-soft font-sans mb-4">Did these words help you?</p>
+        {/* Candle + Share */}
+        <div className="flex flex-col items-center border-t border-brand-border/30 pt-12 gap-6">
+          <p className="text-sm text-brand-soft font-sans">Did these words help you?</p>
           <CandleButton targetId={post.id} targetType="post" initialCount={post.candle_count || 0} />
+          
+          {/* Share buttons */}
+          <div className="flex items-center gap-3">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${post.title}" — @quietlyhuman\n\n`)}&url=${encodeURIComponent(`${BASE_URL}/room/${username}/${post.slug || post.id}`)}`}
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-sans font-bold transition-all hover:scale-105 bg-brand-card border border-brand-border hover:border-brand-accent/50 text-brand-soft"
+            >
+              𝕏 Share
+            </a>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`${post.title} — ${BASE_URL}/room/${username}/${post.slug || post.id}`)}`}
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-sans font-bold transition-all hover:scale-105 bg-brand-card border border-brand-border hover:border-brand-accent/50 text-brand-soft"
+            >
+              💬 WhatsApp
+            </a>
+          </div>
         </div>
+
+        {/* Author Bio Card */}
+        <div className="mt-16 mb-8 p-6 md:p-8 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-5 bg-brand-card border border-brand-border/50">
+          <Link href={`/room/${username}`} className="shrink-0">
+            {profile.avatar_url ? (
+              <Image src={profile.avatar_url} alt={profile.display_name || username} width={64} height={64} className="rounded-full border border-brand-border/30" />
+            ) : (
+              <div className="w-16 h-16 rounded-full bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center text-2xl font-serif text-brand-text">
+                {(profile.display_name || username).charAt(0).toUpperCase()}
+              </div>
+            )}
+          </Link>
+          <div className="flex-1 min-w-0">
+            <Link href={`/room/${username}`} className="font-serif text-lg text-brand-text hover:text-brand-accent transition-colors">
+              {profile.display_name || username}
+            </Link>
+            <p className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-2">@{username}</p>
+            {profile.bio && <p className="text-sm text-brand-soft leading-relaxed font-serif italic line-clamp-2">{profile.bio}</p>}
+          </div>
+          <Link href={`/room/${username}`} className="shrink-0 px-5 py-2.5 rounded-full text-[10px] uppercase tracking-widest font-bold transition-all hover:scale-105 bg-brand-text text-brand-bg">
+            Visit Room
+          </Link>
+        </div>
+
+        {/* Read Next */}
+        {otherPosts && otherPosts.length > 0 && (
+          <div className="mb-16">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-brand-soft font-sans mb-4 flex items-center gap-3">
+              <span className="w-6 h-px bg-brand-border inline-block" />
+              More from {profile.display_name || username}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {otherPosts.map((p) => (
+                <Link key={p.id} href={`/room/${username}/${p.slug || p.id}`}
+                  className="group p-5 rounded-xl bg-brand-card border border-brand-border hover:border-brand-accent/50 transition-all">
+                  <span className="text-[9px] uppercase tracking-widest text-brand-accent font-bold block mb-2">{p.type}</span>
+                  <h3 className="font-serif text-brand-text group-hover:text-brand-accent transition-colors leading-snug line-clamp-2">{p.title}</h3>
+                  <p className="text-[10px] text-brand-soft mt-2">🕯️ {p.candle_count || 0}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <CommentSectionClient postId={post.id} postAuthorId={post.author_id} isPremium={profile.is_premium || false} />
 

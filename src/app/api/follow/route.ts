@@ -26,14 +26,15 @@ export async function POST(req: Request) {
         .insert([{ follower_id: user.id, following_id: targetUserId }]);
       
       if (!insertError) {
-        await supabaseAdmin.from("notifications").insert([{
+        // In-app notification (non-blocking)
+        supabaseAdmin.from("notifications").insert([{
           user_id: targetUserId,
           actor_id: user.id,
           type: "follow"
-        }]);
+        }]).then();
       }
 
-      if (insertError && insertError.code !== "23505") { // Ignore unique violation if already following
+      if (insertError && insertError.code !== "23505") { // 23505 = already following
         console.error(insertError);
         return NextResponse.json({ error: "Failed to follow" }, { status: 500 });
       }
@@ -56,4 +57,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
-

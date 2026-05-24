@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Private dashboard/write/admin pages
+Disallow: /dashboard
+Disallow: /write
+Disallow: /edit/
+Disallow: /admin
+Disallow: /settings
+Disallow: /notifications
+Disallow: /api/
+
+Sitemap: https://www.quietlyhumans.space/sitemap.xml

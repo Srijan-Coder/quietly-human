@@ -847,9 +847,16 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
 
         {/* Dynamic Action Bottom Bar */}
         <div className="fixed sm:absolute bottom-6 left-6 right-6 sm:bottom-12 sm:left-12 sm:right-12 flex justify-between items-center bg-black/90 sm:bg-transparent backdrop-blur-xl sm:backdrop-blur-none p-4 sm:p-0 rounded-2xl sm:rounded-none border sm:border-none border-white/10 z-50 shadow-2xl sm:shadow-none">
-          <span className="text-[10px] uppercase tracking-widest text-brand-soft flex items-center gap-2">
-            <span className="animate-pulse text-brand-accent">●</span> {saveStatus}
-          </span>
+          <div className="flex flex-col gap-0.5">
+            <span className="text-[10px] uppercase tracking-widest text-brand-soft flex items-center gap-2">
+              <span className="animate-pulse text-brand-accent">●</span> {saveStatus}
+            </span>
+            {type !== 'quote' && (
+              <span className="text-[9px] text-brand-soft/50 font-sans tracking-widest">
+                {content.trim().split(/\s+/).filter(Boolean).length} words
+              </span>
+            )}
+          </div>
           <button
             onClick={handlePublish}
             disabled={isPublishing}

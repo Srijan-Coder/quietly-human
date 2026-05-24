@@ -149,7 +149,7 @@ export default function CommentSectionClient({ postId, postAuthorId, isPremium }
                     {comment.author.id === postAuthorId && (
                       <span className="bg-brand-accent/20 text-brand-accent text-[9px] uppercase px-2 py-0.5 rounded-full border border-brand-accent/30">Author</span>
                     )}
-                    <span className="text-brand-soft text-[10px]">• {new Date(comment.created_at).toLocaleDateString()}</span>
+                    <span className="text-brand-soft text-[10px]">• {new Date(comment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                   </div>
                 </div>
                 

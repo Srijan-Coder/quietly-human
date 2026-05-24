@@ -33,7 +33,7 @@ export default async function SettingsPage() {
       {/* Settings Sections */}
       <div className="space-y-16">
         {/* Public Profile */}
-        <section className="bg-[#121212] border border-white/5 p-8 rounded-[2rem]">
+        <section className="bg-brand-card border border-brand-border p-8 rounded-[2rem]">
           <h2 className="text-xl text-white mb-2 font-serif">Public Profile</h2>
           <p className="text-brand-soft text-sm mb-8 font-sans">
             Update your avatar, display name, and username. (Names can only be changed once every 14 days).
@@ -42,7 +42,7 @@ export default async function SettingsPage() {
         </section>
 
         {/* Appearance */}
-        <section className="bg-[#121212] border border-white/5 p-8 rounded-[2rem]">
+        <section className="bg-brand-card border border-brand-border p-8 rounded-[2rem]">
           <h2 className="text-xl text-white mb-2 font-serif">Room Theme</h2>
           <p className="text-brand-soft text-sm mb-8 font-sans">
             Choose the aesthetic for your public Creator Room.
@@ -51,7 +51,7 @@ export default async function SettingsPage() {
         </section>
 
         {/* Store & Pins */}
-        <section className="bg-[#121212] border border-white/5 p-8 rounded-[2rem]">
+        <section className="bg-brand-card border border-brand-border p-8 rounded-[2rem]">
           <h2 className="text-xl text-white mb-2 font-serif">Store & Pins</h2>
           <p className="text-brand-soft text-sm mb-8 font-sans">
             Manage your shop links and pinned content to showcase your work.

@@ -8,6 +8,7 @@ const sections = [
     label: "Read & Discover",
     items: [
       { title: "The Reading Room", path: "/reading-room", emoji: "📖", desc: "Network feed, curated posts & creator profiles." },
+      { title: "Discover Creators", path: "/creators", emoji: "✨", desc: "Find quiet writers and thinkers sharing their rooms." },
       { title: "The Quiet Store", path: "/store", emoji: "🏷️", desc: "Books, journals, Notion templates & digital products." },
       { title: "The Library", path: "/library", emoji: "📚", desc: "Browse the full archive of published writings." },
       { title: "Quotes", path: "/quotes", emoji: "💬", desc: "A collection of quiet words from quiet minds." },

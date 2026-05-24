@@ -5,8 +5,48 @@ import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import FollowButton from "./FollowButton";
 import SubscribeFormClient from "@/components/global/SubscribeFormClient";
+import type { Metadata } from "next";
+
+const BASE_URL = "https://www.quietlyhumans.space";
 
 type Props = { params: Promise<{ username: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { username } = await params;
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("display_name, bio, avatar_url")
+    .eq("username", username)
+    .single();
+
+  if (!profile) return { title: "Quietly Humans" };
+
+  const name = profile.display_name || username;
+  const title = `${name}'s Room | Quietly Humans`;
+  const description = profile.bio || `Read writings and letters from ${name} on Quietly Humans.`;
+  const imageUrl = profile.avatar_url || `${BASE_URL}/og-default.png`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/room/${username}`,
+      siteName: "Quietly Humans",
+      images: [{ url: imageUrl, width: 400, height: 400 }],
+      type: "profile",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
+
 
 const typeLabels: Record<string, string> = {
   "quiet-thought": "Quiet Thought",

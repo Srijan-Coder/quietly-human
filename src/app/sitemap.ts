@@ -1,55 +1,66 @@
-import { MetadataRoute } from 'next'
-import { client } from '@/sanity/lib/client'
-import { allPostSlugsQuery, allGuideSlugsQuery, allLetterSlugsQuery } from '@/sanity/lib/queries'
+import { supabaseClient } from "@/lib/supabase";
+import { MetadataRoute } from "next";
+
+const BASE_URL = "https://www.quietlyhumans.space";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.quietlyhumans.space'
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
+    { url: `${BASE_URL}/reading-room`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.9 },
+    { url: `${BASE_URL}/toolkit`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/pilgrim`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
+    { url: `${BASE_URL}/breathe`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/focus`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/3am`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/store`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE_URL}/books`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
+    { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/start`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/sanctuary-pass`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/quotes`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.5 },
+    { url: `${BASE_URL}/library`, lastModified: new Date(), changeFrequency: "daily", priority: 0.6 },
+  ];
 
-  // Fetch dynamic slugs
-  const [postSlugs, guideSlugs, letterSlugs] = await Promise.all([
-    client.fetch(allPostSlugsQuery) as Promise<string[]>,
-    client.fetch(allGuideSlugsQuery) as Promise<string[]>,
-    client.fetch(allLetterSlugsQuery) as Promise<string[]>,
-  ])
+  // Dynamic post pages
+  let postPages: MetadataRoute.Sitemap = [];
+  try {
+    const { data: posts } = await supabaseClient
+      .from("posts")
+      .select("slug, published_at, profiles!inner(username)")
+      .eq("is_draft", false)
+      .not("slug", "is", null)
+      .order("published_at", { ascending: false })
+      .limit(500);
 
-  // Static routes
-  const routes = [
-    '',
-    '/guides',
-    '/breathe',
-    '/reset',
-    '/letters',
-    '/blog',
-    '/collection',
-    '/search',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1 : 0.8,
-  }))
+    if (posts) {
+      postPages = posts.map((post: any) => ({
+        url: `${BASE_URL}/room/${post.profiles?.username}/${post.slug}`,
+        lastModified: new Date(post.published_at),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      }));
+    }
+  } catch { /* sitemap generation should never crash */ }
 
-  // Dynamic routes
-  const posts = postSlugs.map((slug) => ({
-    url: `${baseUrl}/blog/${slug}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }))
+  // Dynamic creator room pages
+  let roomPages: MetadataRoute.Sitemap = [];
+  try {
+    const { data: profiles } = await supabaseClient
+      .from("profiles")
+      .select("username, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200);
 
-  const guides = guideSlugs.map((slug) => ({
-    url: `${baseUrl}/guides/${slug}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.9,
-  }))
+    if (profiles) {
+      roomPages = profiles.map((p: any) => ({
+        url: `${BASE_URL}/room/${p.username}`,
+        lastModified: new Date(p.created_at),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      }));
+    }
+  } catch { /* sitemap generation should never crash */ }
 
-  const letters = letterSlugs.map((slug) => ({
-    url: `${baseUrl}/letters/${slug}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }))
-
-  return [...routes, ...posts, ...guides, ...letters]
+  return [...staticPages, ...postPages, ...roomPages];
 }
