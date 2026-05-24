@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase";
 import Link from "next/link";
+import DashboardPostActionsClient from "./DashboardPostActionsClient";
 
 export const metadata = {
   title: "Creator Dashboard | Quietly Humans",
@@ -105,12 +106,7 @@ export default async function DashboardPage() {
                     Published {new Date(post.created_at).toLocaleDateString()}
                   </span>
                 </div>
-                <div className="flex items-center gap-6">
-                  <span className="text-sm font-sans text-brand-soft bg-black/50 px-4 py-2 rounded-full border border-white/5">🕯️ {post.candle_count}</span>
-                  <Link href={`/room/${profile.username}/${post.slug}`} className="text-[10px] uppercase tracking-widest text-white hover:text-black hover:bg-white transition-all font-sans border border-white/20 px-6 py-2.5 rounded-full">
-                    View
-                  </Link>
-                </div>
+                  <DashboardPostActionsClient postId={post.id} slug={post.slug} username={profile.username} candleCount={post.candle_count || 0} />
               </div>
             ))}
           </div>
@@ -132,12 +128,12 @@ export default async function DashboardPage() {
           <div className="flex-1">
             <h3 className="text-3xl text-brand-text mb-4 font-serif">Monetize your Room</h3>
             <p className="text-brand-soft font-sans leading-relaxed mb-6">
-              Quietly Humans allows you to sell digital products (Notion templates, ebooks, journaling guides) directly from your Creator Room. We use <strong>Gumroad</strong> to process all payments globally.
+              Quietly Humans allows you to pin <strong>anything</strong> to your Creator Room. Link your digital products (Notion templates, ebooks, journaling guides via Gumroad), your social media profiles, or your personal website. 
             </p>
             <ol className="list-decimal pl-5 text-brand-soft font-sans space-y-3 mb-8">
-              <li>Upload your digital product to your own Gumroad account.</li>
-              <li>Copy the checkout link provided by Gumroad.</li>
-              <li>Go to <strong>Settings {`>`} Pins</strong> and add your product link.</li>
+              <li>Upload your digital product to Gumroad, or copy any external URL.</li>
+              <li>Go to <strong>Settings {`>`} Pins</strong> and add your link.</li>
+              <li>Attach up to 3 links to any post you write!</li>
             </ol>
             <Link href="/settings" className="bg-brand-accent text-white px-6 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform inline-block">
               Set up your Store Pins

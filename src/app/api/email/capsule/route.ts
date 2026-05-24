@@ -65,4 +65,7 @@ async function handler(req: Request) {
 }
 
 // Ensure ONLY Upstash can trigger this route
-export const POST = verifySignatureAppRouter(handler);
+export const POST = verifySignatureAppRouter(handler, {
+  currentSigningKey: process.env.QSTASH_CURRENT_SIGNING_KEY || "placeholder",
+  nextSigningKey: process.env.QSTASH_NEXT_SIGNING_KEY || "placeholder",
+});

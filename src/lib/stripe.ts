@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder", {
   apiVersion: "2026-04-22.dahlia" as any, // Bypass TS strict check to ensure compatibility with installed stripe package
   appInfo: {
     name: "Quietly Humans",

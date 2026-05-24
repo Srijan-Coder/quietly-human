@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase";
 import PinManagerClient from "./PinManagerClient";
+import RoomThemeSelectorClient from "./RoomThemeSelectorClient";
 
 export const metadata = {
   title: "Settings | Quietly Humans",
@@ -13,7 +14,7 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabaseClient
     .from("profiles")
-    .select("pins, is_premium")
+    .select("pins, is_premium, room_theme")
     .eq("id", user.id)
     .single();
 
@@ -30,9 +31,18 @@ export default async function SettingsPage() {
 
       {/* Settings Sections */}
       <div className="space-y-16">
+        {/* Appearance */}
+        <section className="bg-[#121212] border border-white/5 p-8 rounded-[2rem]">
+          <h2 className="text-xl text-white mb-2 font-serif">Room Theme</h2>
+          <p className="text-brand-soft text-sm mb-8 font-sans">
+            Choose the aesthetic for your public Creator Room.
+          </p>
+          <RoomThemeSelectorClient initialTheme={profile.room_theme || "dark"} userId={user.id} />
+        </section>
+
         {/* Store & Pins */}
-        <section className="bg-brand-card border border-brand-border p-8 rounded-2xl">
-          <h2 className="text-xl text-brand-text mb-2 font-serif">Store & Pins</h2>
+        <section className="bg-[#121212] border border-white/5 p-8 rounded-[2rem]">
+          <h2 className="text-xl text-white mb-2 font-serif">Store & Pins</h2>
           <p className="text-brand-soft text-sm mb-8 font-sans">
             Manage your shop links and pinned content to showcase your work.
           </p>

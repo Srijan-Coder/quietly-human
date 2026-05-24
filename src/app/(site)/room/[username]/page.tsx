@@ -58,31 +58,30 @@ export default async function CreatorRoomPage({ params }: Props) {
     }).then();
   });
 
-  // Map ambiance to Tailwind colors
-  const getAmbianceClasses = (ambiance: string) => {
-    switch(ambiance) {
-      case 'sky': return 'from-blue-900/20';
-      case 'forest': return 'from-emerald-900/20';
-      case 'dusk': return 'from-purple-900/20';
-      case 'midnight': return 'from-slate-900/20';
-      case 'ember': return 'from-brand-accent/20';
-      default: return 'from-[#121212]';
+  // Map theme to Tailwind background color
+  const getThemeClasses = (theme: string) => {
+    switch(theme) {
+      case 'midnight-blue': return 'bg-[#0a0f1c]';
+      case 'forest-green': return 'bg-[#0a120c]';
+      case 'crimson': return 'bg-[#1a0a0a]';
+      case 'sepia': return 'bg-[#1c1812]';
+      default: return 'bg-[#121212]';
     }
   };
 
-  const ambianceColor = getAmbianceClasses(profile.room_ambiance || 'midnight');
+  const themeBg = getThemeClasses(profile.room_theme || 'dark');
 
   return (
-    <div className={`min-h-screen bg-[#0d0d0d] text-white font-sans overflow-x-hidden relative pb-32`}>
+    <div className={`min-h-screen ${themeBg} text-white font-sans overflow-x-hidden relative pb-32 transition-colors duration-1000`}>
       {/* Dynamic Ambiance Background Glow */}
-      <div className={`absolute top-0 left-0 right-0 h-[600px] bg-gradient-to-b ${ambianceColor} to-transparent pointer-events-none opacity-50 blur-3xl`} />
+      <div className={`absolute top-0 left-0 right-0 h-[600px] bg-gradient-to-b from-white/5 to-transparent pointer-events-none opacity-50 blur-3xl`} />
 
       <div className="relative z-10 pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full">
         
         {/* Profile Header (Full-width Hero) */}
         <header className="flex flex-col items-center text-center pb-16">
           <div className="relative group">
-            <div className={`absolute inset-0 bg-gradient-to-b ${ambianceColor} to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+            <div className={`absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
             {profile.avatar_url ? (
               <Image src={profile.avatar_url} alt={profile.username} width={120} height={120} className="rounded-full mb-6 border-2 border-white/10 relative z-10" />
             ) : (

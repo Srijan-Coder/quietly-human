@@ -3,8 +3,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co"),
+  (process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder")
 );
 
 export async function POST(req: Request) {
@@ -14,15 +14,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 });
     }
 
-    const { title, content, type, attachedPin } = await req.json();
+    const { title, content, type, category, postTheme, attachedPins } = await req.json();
 
     if (!title || !content || !type) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
     // Check if user is premium to allow attached pins
-    let finalAttachedPin = null;
-    if (attachedPin) {
+    let finalAttachedPins = [];
+    if (attachedPins && attachedPins.length > 0) {
       const { data: profile } = await supabaseAdmin
         .from("profiles")
         .select("is_premium")
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         .single();
         
       if (profile?.is_premium) {
-        finalAttachedPin = attachedPin;
+        finalAttachedPins = attachedPins.slice(0, 3); // Max 3 pins
       }
     }
 
@@ -81,8 +81,10 @@ export async function POST(req: Request) {
         title,
         content,
         slug,
+        category: category || "Uncategorized",
+        post_theme: postTheme || "default",
         is_draft: false,
-        attached_pin: finalAttachedPin,
+        attached_pins: finalAttachedPins,
         published_at: new Date().toISOString()
       }])
       .select()
@@ -99,3 +101,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
