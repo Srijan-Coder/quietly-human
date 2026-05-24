@@ -33,10 +33,10 @@ export async function POST(req: Request) {
       // Find the author of the post or note to send them a notification
       let authorId = null;
       if (targetType === "post") {
-        const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", targetId).single();
+        const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", targetId).maybeSingle();
         authorId = post?.author_id;
       } else if (targetType === "note") {
-        const { data: note } = await supabaseAdmin.from("pilgrim_notes").select("author_id").eq("id", targetId).single();
+        const { data: note } = await supabaseAdmin.from("pilgrim_notes").select("author_id").eq("id", targetId).maybeSingle();
         authorId = note?.author_id;
       }
 
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       .from(table)
       .select("candle_count")
       .eq("id", targetId)
-      .single();
+      .maybeSingle();
       
     if (current) {
       await supabaseAdmin

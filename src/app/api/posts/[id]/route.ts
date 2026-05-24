@@ -15,7 +15,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     const { id } = await params;
 
     // Verify ownership
-    const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", id).single();
+    const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", id).maybeSingle();
     if (!post || post.author_id !== user.id) {
       return NextResponse.json({ error: "Unauthorized or not found" }, { status: 403 });
     }
@@ -36,7 +36,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const { title, content, type, category, postTheme, attachedPins, coverImageUrl, pdfFileUrl } = await req.json();
 
     // Verify ownership
-    const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", id).single();
+    const { data: post } = await supabaseAdmin.from("posts").select("author_id").eq("id", id).maybeSingle();
     if (!post || post.author_id !== user.id) {
       return NextResponse.json({ error: "Unauthorized or not found" }, { status: 403 });
     }
@@ -44,7 +44,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     // Check premium for pins
     let finalAttachedPins = [];
     if (attachedPins && attachedPins.length > 0) {
-      const { data: profile } = await supabaseAdmin.from("profiles").select("is_premium").eq("id", user.id).single();
+      const { data: profile } = await supabaseAdmin.from("profiles").select("is_premium").eq("id", user.id).maybeSingle();
       if (profile?.is_premium) {
         finalAttachedPins = attachedPins.slice(0, 3);
       }

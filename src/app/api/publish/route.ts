@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
+import { ensureProfileExists } from "@/lib/self-heal";
 
 const supabaseAdmin = createClient(
   (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co"),
@@ -42,6 +43,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid payload data." }, { status: 400 });
     }
 
+    const profileExists = await ensureProfileExists(user);
+    if (!profileExists) {
+      return NextResponse.json({ error: "Failed to verify your profile. Please try completing onboarding." }, { status: 500 });
+    }
+
     let { title, content, type, category, postTheme, attachedPins, coverImageUrl, pdfFileUrl } = parsed.data;
 
     // Sanitize user inputs
@@ -55,7 +61,7 @@ export async function POST(req: Request) {
         .from("profiles")
         .select("is_premium")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
         
       if (profile?.is_premium) {
         finalAttachedPins = attachedPins.slice(0, 3); // Max 3 pins
@@ -125,7 +131,7 @@ export async function POST(req: Request) {
       .from("posts")
       .insert([payload])
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("Supabase insert error", error);

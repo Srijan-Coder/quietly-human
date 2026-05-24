@@ -13,7 +13,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       .from("posts")
       .select("view_count")
       .eq("id", postId)
-      .single();
+      .maybeSingle();
 
     if (fetchError || !post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });

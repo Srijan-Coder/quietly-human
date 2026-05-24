@@ -39,11 +39,19 @@ async function moderateContent(content: string): Promise<boolean> {
   }
 }
 
+import { ensureProfileExists } from "@/lib/self-heal";
+
 export async function POST(req: Request) {
   try {
     const user = await currentUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 });
+    }
+
+    // Ensure the user has a profile in the DB (in case they bypassed onboarding or it was dropped)
+    const profileExists = await ensureProfileExists(user);
+    if (!profileExists) {
+      return NextResponse.json({ error: "Failed to verify your profile. Please try completing onboarding." }, { status: 500 });
     }
 
     // Rate limit: 5 notes per 10 minutes

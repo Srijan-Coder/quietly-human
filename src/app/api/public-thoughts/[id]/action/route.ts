@@ -20,7 +20,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       .from("comments")
       .select("post_id, author_id, candle_count, has_creator_heart, is_pinned")
       .eq("id", id)
-      .single();
+      .maybeSingle();
 
     if (fetchErr || !comment) throw new Error("Comment not found");
 
@@ -29,7 +29,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       .from("posts")
       .select("author_id")
       .eq("id", comment.post_id)
-      .single();
+      .maybeSingle();
 
     if (action === "heart" || action === "pin") {
       if (post?.author_id !== user.id) {
@@ -40,7 +40,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         await supabaseAdmin.from("comments").update({ has_creator_heart: !comment.has_creator_heart }).eq("id", id);
       } else if (action === "pin") {
         // verify premium
-        const { data: profile } = await supabaseAdmin.from("profiles").select("is_premium").eq("id", user.id).single();
+        const { data: profile } = await supabaseAdmin.from("profiles").select("is_premium").eq("id", user.id).maybeSingle();
         if (!profile?.is_premium) {
           return NextResponse.json({ error: "Sanctuary Pass required to pin comments" }, { status: 403 });
         }
@@ -54,7 +54,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         .eq("user_id", user.id)
         .eq("target_type", "comment")
         .eq("target_id", id)
-        .single();
+        .maybeSingle();
 
       if (existing) {
         await supabaseAdmin.from("candles").delete().eq("user_id", user.id).eq("target_type", "comment").eq("target_id", id);
