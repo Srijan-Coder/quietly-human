@@ -30,8 +30,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized. Please sign in." }, { status: 401 });
     }
 
-    // Rate Limit: 10 posts per hour per user
-    const rateLimit = rateLimiter.check(user.id + "_publish", 10, 60 * 60 * 1000);
+    // Rate Limit: 100 posts per hour per user (increased for bulk uploads)
+    const rateLimit = rateLimiter.check(user.id + "_publish", 100, 60 * 60 * 1000);
     if (!rateLimit.success) {
       return NextResponse.json({ error: "Too many posts published recently. Please wait." }, { status: 429 });
     }
