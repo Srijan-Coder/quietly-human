@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { QuietAdInline, QuietAdBanner } from "@/components/global/QuietAd";
 
 export const metadata: Metadata = {
   title: "Journaling for Anxiety: How to Start When You Feel Overwhelmed",
@@ -103,7 +104,11 @@ export default function JournalingForAnxietyPage() {
         <p>
           If you need more structure, explore our <Link href="/toolkit" className="text-brand-accent underline">Soft Toolkit</Link>. It includes guided journaling frameworks, emotional regulation tools, and safe digital spaces to leave your worries behind.
         </p>
+        {/* Quiet House Ad */}
+        <QuietAdInline tags={["book", "ebook"]} />
       </div>
+      {/* Quiet House Ad — banner */}
+      <QuietAdBanner tags={["membership", "notion"]} exclude={["toolkit-promo"]} />
     </article>
   );
 }

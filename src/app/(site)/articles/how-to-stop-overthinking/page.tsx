@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { QuietAdInline, QuietAdBanner } from "@/components/global/QuietAd";
 
 export const metadata: Metadata = {
   title: "How to Stop Overthinking: A Clinical & Empathetic Guide",
@@ -129,11 +130,17 @@ export default function HowToStopOverthinkingPage() {
         </p>
       </div>
       
+      {/* Quiet House Ad — inline recommendation */}
+      <QuietAdInline tags={["book", "ebook"]} />
+
       <div className="mt-16 pt-8 border-t border-brand-border/30 text-center">
         <Link href="/toolkit" className="inline-block px-8 py-4 bg-brand-text text-brand-bg rounded-full text-sm uppercase tracking-widest font-bold hover:scale-105 transition-transform shadow-xl">
           Explore the Soft Toolkit
         </Link>
       </div>
+
+      {/* Quiet House Ad — banner at end */}
+      <QuietAdBanner tags={["membership", "notion"]} exclude={["toolkit-promo"]} />
     </article>
   );
 }

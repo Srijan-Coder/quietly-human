@@ -3,6 +3,7 @@ import { postBySlugQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { CustomPortableText } from "@/components/global/CustomPortableText";
 import SocialConnectCTA from "@/components/global/SocialConnectCTA";
+import { QuietAdInline, QuietAdBanner } from "@/components/global/QuietAd";
 import ListenButton from "@/components/global/ListenButton";
 import { SaveButton } from "@/components/global/SaveButton";
 import { LikeButton } from "@/components/global/LikeButton";
@@ -103,7 +104,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {post.body ? <CustomPortableText value={post.body} /> : <p className="text-brand-soft">The thoughts are empty.</p>}
       </div>
 
+      {/* Quiet House Ad — blends with reading flow */}
+      <QuietAdInline tags={["book", "ebook", "free"]} />
+
       <SocialConnectCTA />
+
+      {/* Quiet House Ad — after social CTA */}
+      <QuietAdBanner tags={["toolkit", "membership"]} />
     </article>
   );
 }

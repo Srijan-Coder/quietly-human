@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { QuietAdInline, QuietAdBanner } from "@/components/global/QuietAd";
 
 export const metadata: Metadata = {
   title: "Digital Minimalism for Anxious Minds: How to Reclaim Your Focus",
@@ -90,7 +91,11 @@ export default function DigitalMinimalismPage() {
           Reclaiming your attention is an act of rebellion. You are allowed to unplug. You are allowed to be unreachable. 
           The world will keep spinning without you watching it.
         </p>
+        {/* Quiet House Ad */}
+        <QuietAdInline tags={["book", "ebook"]} />
       </div>
+      {/* Quiet House Ad — banner */}
+      <QuietAdBanner tags={["membership", "notion"]} exclude={["toolkit-promo"]} />
     </article>
   );
 }

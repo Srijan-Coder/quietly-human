@@ -9,6 +9,7 @@ import { ReadingTextWrapper } from "@/components/global/ReadingTextWrapper";
 import { LetterPaperBox } from "@/components/global/LetterPaperBox";
 import { ClientCopyButton } from "@/components/global/ClientCopyButton";
 import SocialConnectCTA from "@/components/global/SocialConnectCTA";
+import { QuietAdInline } from "@/components/global/QuietAd";
 import ListenButton from "@/components/global/ListenButton";
 import { LikeButton } from "@/components/global/LikeButton";
 import { Metadata } from "next";
@@ -128,6 +129,9 @@ export default async function LetterPage({ params }: { params: Promise<{ slug: s
           <p className="text-brand-soft text-sm mb-6">Forward it to a friend who might need these words tonight.</p>
           <ClientCopyButton />
         </div>
+
+        {/* Quiet House Ad — gentle recommendation */}
+        <QuietAdInline tags={["book", "ebook", "emotional"]} />
 
         <SocialConnectCTA />
       </article>

@@ -3,6 +3,7 @@ import { groq } from "next-sanity";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
 import { CategoryFilter } from "@/components/global/CategoryFilter";
+import { QuietAdCard, QuietAdBanner } from "@/components/global/QuietAd";
 
 export const revalidate = 60; // revalidate this page every 60 seconds
 
@@ -60,32 +61,39 @@ export default async function BlogPage(props: {
       <CategoryFilter categories={categoryList} currentCategory={currentCategory} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {filteredPosts.filter((post: Post) => post.slug).map((post: Post) => (
-          <Link href={`/blog/${post.slug}`} key={post._id} className="group flex flex-col gap-4">
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-card rounded-xl border border-brand-border shadow-sm">
-              {post.mainImage ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={urlFor(post.mainImage)?.url()}
-                  alt={post.title}
-                  className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center opacity-30">
-                  <span className="font-serif text-lg">No Cover</span>
-                </div>
-              )}
-            </div>
-            <div>
-              <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block">
-                {post.guestName ? `${post.guestName}` : post.categories?.[0] || "Blog Post"}
-              </span>
-              <h2 className="font-serif text-2xl group-hover:text-brand-accent transition-colors text-brand-text">{post.title}</h2>
-              <span className="text-xs uppercase tracking-widest text-brand-soft mt-3 block group-hover:text-brand-text transition-colors">Read Article</span>
-            </div>
-          </Link>
+        {filteredPosts.filter((post: Post) => post.slug).map((post: Post, index: number) => (
+          <>
+            <Link href={`/blog/${post.slug}`} key={post._id} className="group flex flex-col gap-4">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-card rounded-xl border border-brand-border shadow-sm">
+                {post.mainImage ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={urlFor(post.mainImage)?.url()}
+                    alt={post.title}
+                    className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center opacity-30">
+                    <span className="font-serif text-lg">No Cover</span>
+                  </div>
+                )}
+              </div>
+              <div>
+                <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block">
+                  {post.guestName ? `${post.guestName}` : post.categories?.[0] || "Blog Post"}
+                </span>
+                <h2 className="font-serif text-2xl group-hover:text-brand-accent transition-colors text-brand-text">{post.title}</h2>
+                <span className="text-xs uppercase tracking-widest text-brand-soft mt-3 block group-hover:text-brand-text transition-colors">Read Article</span>
+              </div>
+            </Link>
+            {/* Inject a house ad card after the 3rd post */}
+            {index === 2 && <QuietAdCard key="quiet-ad-card" tags={["book", "ebook", "tool"]} />}
+          </>
         ))}
       </div>
+
+      {/* Quiet House Ad — full-width banner below grid */}
+      <QuietAdBanner tags={["membership", "toolkit"]} />
       
       {filteredPosts.length === 0 && (
         <div className="py-24 text-center text-brand-soft">

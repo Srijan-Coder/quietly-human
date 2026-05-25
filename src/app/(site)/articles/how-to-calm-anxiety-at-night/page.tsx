@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { QuietAdInline, QuietAdBanner } from "@/components/global/QuietAd";
 
 export const metadata: Metadata = {
   title: "How to Calm Anxiety at Night: A Guide for 3AM Spirals",
@@ -87,7 +88,11 @@ export default function CalmAnxietyAtNightPage() {
           The night always ends. The sun always comes up. The things you are terrified of right now will look entirely different in the daylight. 
           If you need a safe place to land right now, visit the <Link href="/toolkit" className="text-brand-accent underline">Soft Toolkit</Link> for free, guided grounding exercises.
         </p>
+        {/* Quiet House Ad */}
+        <QuietAdInline tags={["book", "ebook"]} />
       </div>
+      {/* Quiet House Ad — banner */}
+      <QuietAdBanner tags={["membership", "notion"]} exclude={["toolkit-promo"]} />
     </article>
   );
 }

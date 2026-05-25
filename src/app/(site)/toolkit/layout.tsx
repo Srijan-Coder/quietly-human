@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { SaveToCollectionButton } from "@/components/global/SaveToCollectionButton";
+import { QuietAdBanner } from "@/components/global/QuietAd";
 
 export default function ToolkitLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -27,6 +28,12 @@ export default function ToolkitLayout({ children }: { children: React.ReactNode 
         </div>
       )}
       {children}
+      {/* Quiet House Ad — shown after individual tool pages */}
+      {!isToolkitIndex && (
+        <div className="pb-24">
+          <QuietAdBanner tags={["book", "ebook", "membership"]} exclude={["toolkit-promo"]} />
+        </div>
+      )}
     </div>
   );
 }
