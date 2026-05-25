@@ -19,9 +19,9 @@ import { ThemeProvider } from "@/components/global/ThemeProvider";
 import { ReadingModeProvider } from "@/context/ReadingModeContext";
 import { AnnouncementBar } from "@/components/global/AnnouncementBar";
 import { client } from "@/sanity/lib/client";
-
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://quietlyhumans.space'),
@@ -111,6 +111,7 @@ export default async function RootLayout({
             <ReadingModeProvider>
               <AnnouncementBar data={announcement} />
               {children}
+              <Toaster position="bottom-right" richColors theme="dark" />
             </ReadingModeProvider>
             <Analytics />
             <SpeedInsights />

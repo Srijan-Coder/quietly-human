@@ -22,19 +22,30 @@ export default function BulkUploaderClient() {
   const [jsonInput, setJsonInput] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState({ current: 0, total: 0, successful: 0, failed: 0 });
+  const [errorDetails, setErrorDetails] = useState<string | null>(null);
 
   const handleUpload = async () => {
+    setErrorDetails(null);
     if (!jsonInput.trim()) {
       toast.error("Please paste the JSON output from ChatGPT.");
       return;
     }
 
+    // Strip markdown wrappers if pasted from ChatGPT
+    let cleanedJson = jsonInput.trim();
+    if (cleanedJson.startsWith("```")) {
+      const lines = cleanedJson.split("\n");
+      const filteredLines = lines.filter(line => !line.trim().startsWith("```"));
+      cleanedJson = filteredLines.join("\n").trim();
+    }
+
     let posts: AI_Post[] = [];
     try {
-      posts = JSON.parse(jsonInput);
+      posts = JSON.parse(cleanedJson);
       if (!Array.isArray(posts)) throw new Error("JSON must be an array of posts");
-    } catch (e) {
-      toast.error("Invalid JSON format. Make sure it is exactly as ChatGPT outputted it.");
+    } catch (e: any) {
+      setErrorDetails(`JSON Parse Error: ${e.message}. Ensure there are no trailing commas, extra characters, or broken quotes in your pasted JSON.`);
+      toast.error("Invalid JSON format.");
       return;
     }
 
@@ -197,6 +208,16 @@ export default function BulkUploaderClient() {
           Paste the JSON array of posts. The importer will automatically format and publish Midnight Letters, Journal Entries, Quotes, Ebooks, and Guides matching the Creator Write templates.
         </p>
       </header>
+
+      {errorDetails && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-6 rounded-[2rem] mb-8 font-sans flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-red-400" />
+          <div>
+            <h4 className="font-bold text-sm uppercase tracking-widest text-red-400 mb-1">Import Error</h4>
+            <p className="text-sm text-red-400/90 leading-relaxed">{errorDetails}</p>
+          </div>
+        </div>
+      )}
 
       {/* JSON Import Section */}
       <div className="bg-brand-card border border-brand-border/40 rounded-[2rem] p-8 mb-8">
