@@ -9,6 +9,8 @@ import { SaveButton } from "@/components/global/SaveButton";
 import { auth } from "@clerk/nextjs/server";
 import { SignInButton } from "@clerk/nextjs";
 import { CustomPortableText } from "@/components/global/CustomPortableText";
+import { supabaseAdmin } from "@/lib/supabase";
+import CommentSectionClient from "@/components/global/CommentSectionClient";
 
 export const revalidate = 60;
 
@@ -90,7 +92,7 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
       "hasChapters": defined(chapters)
     }`,
     { baseSlug, ebookSlug }
-  );
+);
 
   if (!documents || documents.length === 0) {
     notFound();
@@ -107,6 +109,67 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
 
   const hasPhysical = baseBook.bookFormat === 'physical' || (baseBook.purchaseLinks && baseBook.purchaseLinks.length > 0);
   const hasEbook = !!ebookBook;
+
+  // Sync Sanity Book with Supabase posts table to enable comment/reviews section
+  let supabasePost = null;
+  try {
+    const { data: existingPost } = await supabaseAdmin
+      .from("posts")
+      .select("id, author_id")
+      .eq("slug", baseSlug)
+      .maybeSingle();
+
+    if (existingPost) {
+      supabasePost = existingPost;
+    } else {
+      // Find the first/earliest profile in the database (admin/creator)
+      const { data: firstProfile } = await supabaseAdmin
+        .from("profiles")
+        .select("id")
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (firstProfile) {
+        const { data: newPost, error: insertError } = await supabaseAdmin
+          .from("posts")
+          .insert([{
+            author_id: firstProfile.id,
+            type: "ebook",
+            title: title,
+            slug: baseSlug,
+            content: "sanity_book_sync",
+            is_draft: false,
+            published_at: new Date().toISOString()
+          }])
+          .select("id, author_id")
+          .maybeSingle();
+
+        if (insertError) {
+          console.error("Failed to insert synced post for comments:", insertError);
+        } else {
+          supabasePost = newPost;
+        }
+      }
+    }
+  } catch (dbError) {
+    console.error("Database connection error in book syncing:", dbError);
+  }
+
+  // Get viewer's premium status
+  let isPremiumViewer = false;
+  if (userId) {
+    try {
+      const { data: viewerProf } = await supabaseAdmin
+        .from("profiles")
+        .select("is_premium")
+        .eq("id", userId)
+        .maybeSingle();
+      isPremiumViewer = viewerProf?.is_premium || false;
+    } catch (e) {
+      console.error("Failed to fetch viewer profile premium status:", e);
+    }
+  }
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32">
@@ -181,109 +244,120 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
             </div>
           )}
 
-          {/* Purchase / Download Options Card */}
-          <div className="pt-8 border-t border-brand-border flex flex-col gap-6 w-full">
+          {/* Purchase / Download Options Cards (Side by Side Grid) */}
+          <div className={`pt-8 border-t border-brand-border grid gap-6 w-full items-stretch ${
+            hasEbook && hasPhysical ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"
+          }`}>
             
             {/* EBOOK FORMAT OPTION */}
             {hasEbook && ebookBook && (
-              <div className="p-6 bg-brand-card border border-brand-border rounded-2xl shadow-lg relative overflow-hidden group w-full">
+              <div className="p-6 bg-brand-card border border-brand-border rounded-2xl shadow-lg relative overflow-hidden group flex flex-col justify-between">
                 <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                <h3 className="text-xs uppercase tracking-widest text-brand-text mb-4 font-sans font-bold flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span>
-                  Digital Ebook
-                </h3>
                 
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-6 mb-2">
-                    {ebookBook.bookFormat === 'premium' ? (
-                      <span className="text-3xl font-serif text-brand-text">${ebookBook.price || 0}</span>
-                    ) : (
-                      <span className="text-3xl font-serif text-brand-accent">Free Download</span>
-                    )}
-                  </div>
+                <div>
+                  <h3 className="text-xs uppercase tracking-widest text-brand-text mb-4 font-sans font-bold flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span>
+                    Digital Ebook
+                  </h3>
                   
-                  {/* Action Button */}
-                  <div className="flex flex-wrap gap-4 w-full">
-                    {ebookBook.bookFormat === 'premium' ? (
-                      ebookBook.purchaseUrl || ebookBook.productLink ? (
-                        <a 
-                          href={ebookBook.purchaseUrl || ebookBook.productLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block px-10 py-4 bg-brand-accent text-white rounded-full text-sm uppercase tracking-widest hover:bg-brand-text transition-all duration-300 shadow-[0_0_20px_rgba(252,163,17,0.2)] hover:shadow-[0_0_30px_rgba(252,163,17,0.4)] text-center w-full md:w-auto font-sans font-bold cursor-pointer"
-                        >
-                          Purchase Ebook (${ebookBook.price || 0})
-                        </a>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-6 mb-2">
+                      {ebookBook.bookFormat === 'premium' ? (
+                        <span className="text-3xl font-serif text-brand-text">${ebookBook.price || 0}</span>
                       ) : (
-                        <button disabled className="px-8 py-4 bg-brand-card text-brand-soft border border-brand-border rounded-full text-sm uppercase tracking-widest cursor-not-allowed font-sans">
-                          Currently Unavailable
-                        </button>
-                      )
-                    ) : (
-                      // Free Ebook actions
-                      <div className="flex flex-wrap gap-4 w-full">
-                        {userId ? (
-                          <>
-                            {ebookBook.fileUrl && <SecureDownloadButton fileUrl={ebookBook.fileUrl} title={title} />}
-                            {ebookBook.notionUrl && (
-                              <a 
-                                href={ebookBook.notionUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-block px-8 py-4 bg-brand-text text-brand-bg rounded-full text-sm uppercase tracking-widest hover:bg-brand-accent transition-colors shadow-lg font-sans font-bold"
-                              >
-                                Open in Notion
-                              </a>
-                            )}
-                            {ebookBook.hasChapters && (
-                              <Link 
-                                href={`/read/${ebookBook.slug}`}
-                                className="inline-block px-8 py-4 bg-brand-card border border-brand-border text-brand-text rounded-full text-sm uppercase tracking-widest hover:border-brand-accent transition-colors font-sans font-bold"
-                              >
-                                Read Online
-                              </Link>
-                            )}
-                          </>
-                        ) : (
-                          <div>
-                            <SignInButton mode="modal">
-                              <button className="px-8 py-4 bg-brand-accent text-white rounded-full text-sm uppercase tracking-widest hover:bg-brand-text transition-colors shadow-lg font-sans font-bold">
-                                Create Account to Download
-                              </button>
-                            </SignInButton>
-                            <p className="text-xs text-brand-soft mt-3 italic font-serif">
-                              * This file is encrypted. Please sign in to download.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Bullet points for what's included ("bullet point bar") */}
-                  {ebookBook.whatsIncluded && ebookBook.whatsIncluded.length > 0 && (
-                    <div className="mt-4 border-t border-brand-border/20 pt-4 font-sans">
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-                        {ebookBook.whatsIncluded.map((item: string, i: number) => (
-                          <li key={i} className="text-brand-soft flex items-start gap-2 text-xs">
-                            <span className="text-brand-accent mt-0.5 font-bold">✓</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                        <span className="text-3xl font-serif text-brand-accent">Free Download</span>
+                      )}
                     </div>
-                  )}
+                    
+                    {/* Action Button */}
+                    <div className="flex flex-wrap gap-4 w-full">
+                      {ebookBook.bookFormat === 'premium' ? (
+                        ebookBook.purchaseUrl || ebookBook.productLink ? (
+                          <a 
+                            href={ebookBook.purchaseUrl || ebookBook.productLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block px-8 py-4 bg-brand-accent text-white rounded-full text-xs uppercase tracking-widest hover:bg-brand-text transition-all duration-300 shadow-[0_0_20px_rgba(252,163,17,0.2)] hover:shadow-[0_0_30px_rgba(252,163,17,0.4)] text-center w-full font-sans font-bold cursor-pointer"
+                          >
+                            Purchase Ebook (${ebookBook.price || 0})
+                          </a>
+                        ) : (
+                          <button disabled className="px-8 py-4 bg-brand-card text-brand-soft border border-brand-border rounded-full text-xs uppercase tracking-widest cursor-not-allowed font-sans w-full">
+                            Currently Unavailable
+                          </button>
+                        )
+                      ) : (
+                        // Free Ebook actions
+                        <div className="flex flex-wrap gap-4 w-full">
+                          {userId ? (
+                            <>
+                              {ebookBook.fileUrl && <SecureDownloadButton fileUrl={ebookBook.fileUrl} title={title} />}
+                              {ebookBook.notionUrl && (
+                                <a 
+                                  href={ebookBook.notionUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-block px-8 py-4 bg-brand-text text-brand-bg rounded-full text-xs uppercase tracking-widest hover:bg-brand-accent transition-colors shadow-lg font-sans font-bold w-full text-center"
+                                >
+                                  Open in Notion
+                                </a>
+                              )}
+                              {ebookBook.hasChapters && (
+                                <Link 
+                                  href={`/read/${ebookBook.slug}`}
+                                  className="inline-block px-8 py-4 bg-brand-card border border-brand-border text-brand-text rounded-full text-xs uppercase tracking-widest hover:border-brand-accent transition-colors font-sans font-bold w-full text-center"
+                                >
+                                  Read Online
+                                </Link>
+                              )}
+                            </>
+                          ) : (
+                            <div className="w-full">
+                              <SignInButton mode="modal">
+                                <button className="px-8 py-4 bg-brand-accent text-white rounded-full text-xs uppercase tracking-widest hover:bg-brand-text transition-colors shadow-lg font-sans font-bold w-full">
+                                  Create Account to Download
+                                </button>
+                              </SignInButton>
+                              <p className="text-[10px] text-brand-soft mt-3 italic font-serif">
+                                * Signed-in members only.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
+                
+                {/* Bullet points for what's included ("bullet point bar") */}
+                {ebookBook.whatsIncluded && ebookBook.whatsIncluded.length > 0 && (
+                  <div className="mt-6 border-t border-brand-border/20 pt-4 font-sans w-full">
+                    <ul className="flex flex-col gap-2">
+                      {ebookBook.whatsIncluded.map((item: string, i: number) => (
+                        <li key={i} className="text-brand-soft flex items-start gap-2 text-[10px] leading-relaxed">
+                          <span className="text-brand-accent font-bold">✓</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
 
             {/* PHYSICAL PRINT OPTION */}
             {hasPhysical && (
-              <div className="p-6 bg-brand-card/45 border border-brand-border rounded-2xl shadow-sm w-full">
-                <h3 className="text-xs uppercase tracking-widest text-brand-text mb-4 font-sans font-bold">
-                  Print Edition
-                </h3>
-                <div className="flex flex-wrap gap-4">
+              <div className="p-6 bg-brand-card/45 border border-brand-border rounded-2xl shadow-sm flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xs uppercase tracking-widest text-brand-text mb-4 font-sans font-bold">
+                    Print Edition
+                  </h3>
+                  <p className="text-[11px] text-brand-soft leading-relaxed mb-6 font-sans">
+                    Read the print edition on paper or your digital reader. Available in physical formats at major bookstores.
+                  </p>
+                </div>
+                
+                <div className="flex flex-col gap-3">
                   {baseBook.purchaseLinks && baseBook.purchaseLinks.length > 0 ? (
                     baseBook.purchaseLinks.map((link: any, i: number) => (
                       <a 
@@ -291,13 +365,13 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 bg-brand-card border border-brand-border text-brand-text rounded-xl text-xs uppercase tracking-widest hover:border-brand-accent hover:text-brand-accent transition-colors font-sans font-bold cursor-pointer"
+                        className="px-5 py-3 bg-brand-card border border-brand-border text-brand-text rounded-xl text-[10px] uppercase tracking-widest hover:border-brand-accent hover:text-brand-accent transition-colors font-sans font-bold cursor-pointer text-center"
                       >
                         {link.store} ({link.format})
                       </a>
                     ))
                   ) : (
-                    <span className="text-brand-soft text-sm font-serif italic">Links coming soon.</span>
+                    <span className="text-brand-soft text-sm font-serif italic text-center">Links coming soon.</span>
                   )}
                 </div>
               </div>
@@ -319,6 +393,22 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
           </div>
         </div>
       )}
+
+      {/* Reviews/Comments Section */}
+      {supabasePost && (
+        <div className="mt-32 pt-20 border-t border-brand-border/20 max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-serif text-brand-text mb-2">Reader Reviews</h2>
+            <p className="text-brand-soft text-xs uppercase tracking-widest font-sans">Share your thoughts and review this book</p>
+          </div>
+          <CommentSectionClient 
+            postId={supabasePost.id} 
+            postAuthorId={supabasePost.author_id} 
+            isPremium={isPremiumViewer} 
+          />
+        </div>
+      )}
+
     </div>
   );
 }
