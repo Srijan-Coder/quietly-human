@@ -1,4 +1,10 @@
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "The Library Hub | Quietly Humans",
+  description: "Your gateway to books, ebooks, guides, and digital resources for emotional wellness."
+};
 
 export default function LibraryHub() {
   return (

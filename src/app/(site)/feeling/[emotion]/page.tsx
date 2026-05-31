@@ -125,6 +125,20 @@ export default async function SEOEmotionPage({ params }: { params: Promise<{ emo
           </div>
         )}
 
+        {!!page.relatedBooks?.length && (
+          <div className="mb-24">
+            <h2 className="text-xs uppercase tracking-widest text-brand-accent mb-8 text-center">Books for this season</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {page.relatedBooks?.map((book) => (
+                 <Link key={book._id} href={`/books/${book.slug?.current}`} className="group flex flex-col p-6 rounded-2xl border border-brand-border hover:border-brand-accent transition-colors bg-brand-bg">
+                    <h3 className="font-serif text-xl text-brand-text group-hover:text-brand-accent mb-3">{book.title}</h3>
+                    {book.price != null && <p className="text-brand-soft text-sm">{book.price === 0 ? "Free" : `$${book.price}`}</p>}
+                 </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="text-center p-12 bg-brand-card rounded-3xl border border-brand-border">
           <span className="text-xs uppercase tracking-widest text-brand-accent mb-4 block">A Gentle Start</span>
           <h3 className="font-serif text-3xl text-brand-text mb-4">The 7-Day Emotional Reset</h3>

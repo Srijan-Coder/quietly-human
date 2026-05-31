@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 
 export default function CandleButton({ targetId, targetType, initialCount }: { targetId: string, targetType: "post" | "note", initialCount: number }) {
@@ -39,6 +39,7 @@ export default function CandleButton({ targetId, targetType, initialCount }: { t
     } catch (error) {
       setIsLit(false);
       setCount(c => c - 1);
+      setError("Failed to light candle");
     } finally {
       setLoading(false);
     }

@@ -1,10 +1,11 @@
 import Link from "next/link";
 
+export const metadata = { title: "Page Not Found — Quietly Humans" };
+
 export default function NotFound() {
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center text-center px-6 font-serif relative overflow-hidden"
-      style={{ background: "var(--color-bg, #0d0d0d)" }}
+      className="min-h-screen flex flex-col items-center justify-center text-center px-6 font-serif relative overflow-hidden bg-brand-bg"
     >
       {/* Ambient glow */}
       <div
@@ -15,15 +16,15 @@ export default function NotFound() {
       />
 
       <div className="relative z-10">
-        <p className="text-[10px] uppercase tracking-[0.35em] mb-6 font-sans" style={{ color: "var(--color-accent, #C9A46A)" }}>
+        <p className="text-[10px] uppercase tracking-[0.35em] mb-6 font-sans text-brand-accent">
           404 — lost in the quiet
         </p>
 
         <h1
-          className="font-serif mb-6 leading-none"
+          className="font-serif mb-6 leading-none text-brand-text"
           style={{
             fontSize: "clamp(5rem, 20vw, 14rem)",
-            background: "linear-gradient(180deg, var(--color-text, #EBE5DF) 0%, rgba(235,229,223,0.2) 100%)",
+            background: "linear-gradient(180deg, var(--color-text) 0%, rgba(235,229,223,0.2) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -32,29 +33,23 @@ export default function NotFound() {
           404
         </h1>
 
-        <p className="text-xl md:text-2xl mb-3" style={{ color: "var(--color-text, #EBE5DF)" }}>
+        <p className="text-xl md:text-2xl mb-3 text-brand-text">
           This room doesn&apos;t exist.
         </p>
-        <p className="text-base mb-12 max-w-sm mx-auto italic leading-relaxed" style={{ color: "var(--color-soft, #A39E99)" }}>
+        <p className="text-base mb-12 max-w-sm mx-auto italic leading-relaxed text-brand-soft">
           The page you&apos;re looking for has wandered off into the quiet.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/"
-            className="px-8 py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all hover:scale-105 font-sans"
-            style={{ background: "var(--color-text, #EBE5DF)", color: "var(--color-bg, #0d0d0d)" }}
+            className="px-8 py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all hover:scale-105 font-sans bg-brand-text text-brand-bg"
           >
             Return home
           </Link>
           <Link
             href="/reading-room"
-            className="px-8 py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all hover:scale-105 font-sans"
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "var(--color-soft, #A39E99)",
-            }}
+            className="px-8 py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all hover:scale-105 font-sans bg-brand-bg text-brand-soft border border-brand-border"
           >
             Reading Room →
           </Link>

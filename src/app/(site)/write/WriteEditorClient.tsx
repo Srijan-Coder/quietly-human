@@ -862,7 +862,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
           <button
             onClick={handlePublish}
             disabled={isPublishing}
-            className="ml-auto px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-black rounded-full text-xs uppercase tracking-widest hover:scale-105 transition-all font-bold disabled:opacity-50 shadow-xl"
+            className="ml-auto px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-black rounded-full text-xs uppercase tracking-widest hover:scale-105 transition-all font-bold disabled:opacity-50 shadow-xl cursor-pointer"
           >
             {isPublishing ? "Publishing..." : "Publish to Sanctuary"}
           </button>

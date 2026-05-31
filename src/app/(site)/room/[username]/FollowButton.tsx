@@ -23,7 +23,7 @@ export default function FollowButton({
     }
 
     setLoading(true);
-    setIsFollowing(!isFollowing); // optimistic
+    setIsFollowing(prev => !prev); // optimistic
 
     try {
       const res = await fetch("/api/follow", {
@@ -39,7 +39,7 @@ export default function FollowButton({
 
       router.refresh();
     } catch {
-      setIsFollowing(isFollowing); // revert
+      setIsFollowing(prev => !prev); // revert
     } finally {
       setLoading(false);
     }

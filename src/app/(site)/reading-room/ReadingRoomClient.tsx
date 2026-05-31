@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+
 
 type FeedSource = "all" | "following" | "me";
 type SortOrder = "newest" | "best_today" | "most_lit";
@@ -57,7 +57,7 @@ export default function ReadingRoomClient({
       posts.sort((a, b) => (b.candle_count || 0) - (a.candle_count || 0));
     } else {
       // Newest
-      posts.sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
+      posts.sort((a, b) => new Date(b.published_at || b.created_at).getTime() - new Date(a.published_at || a.created_at).getTime());
     }
 
     return posts;
@@ -239,7 +239,7 @@ export default function ReadingRoomClient({
                   )}
 
                   <p className="text-brand-soft leading-relaxed line-clamp-4 font-serif italic text-lg mb-6">
-                    {post.content.replace(/<[^>]*>/g, '').substring(0, 180)}${post.content.replace(/<[^>]*>/g, '').length > 180 ? '...' : ''}
+                    {post.content?.replace(/<[^>]*>/g, '').substring(0, 180)}{(post.content?.replace(/<[^>]*>/g, '').length || 0) > 180 ? '...' : ''}
                   </p>
                 </Link>
                 

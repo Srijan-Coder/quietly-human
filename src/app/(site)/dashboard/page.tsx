@@ -8,7 +8,7 @@ import SubscriberListClient from "./SubscribersListClient";
 import DashboardFeedClient from "./DashboardFeedClient";
 
 export const metadata = {
-  title: "Creator Dashboard",
+  title: "Creator Dashboard — Quietly Humans",
 };
 
 export default async function DashboardPage() {
@@ -24,16 +24,31 @@ export default async function DashboardPage() {
 
   if (!profile) redirect("/onboarding");
 
-  // Fetch all published posts for the Feed
-  const { data: allPosts } = await supabaseClient
+  // Fetch the user's own published posts
+  const { data: myOwnPosts } = await supabaseClient
     .from("posts")
     .select(`
       id, title, slug, type, content, published_at, created_at, candle_count, view_count, author_id,
       profiles ( id, username, display_name, avatar_url )
     `)
+    .eq("author_id", user.id)
     .eq("is_draft", false)
     .order("published_at", { ascending: false })
-    .limit(100);
+    .limit(50);
+
+  // Fetch network feed (posts from other users, limited)
+  const { data: networkPosts } = await supabaseClient
+    .from("posts")
+    .select(`
+      id, title, slug, type, content, published_at, created_at, candle_count, view_count, author_id,
+      profiles ( id, username, display_name, avatar_url )
+    `)
+    .neq("author_id", user.id)
+    .eq("is_draft", false)
+    .order("published_at", { ascending: false })
+    .limit(50);
+
+  const allPosts = [...(myOwnPosts || []), ...(networkPosts || [])];
 
   // Fetch who the user is following
   let followingIds: string[] = [];

@@ -1,7 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase";
-import Link from "next/link";
 import NotificationClearClient from "./NotificationClearClient";
 import NotificationsListClient from "./NotificationsListClient";
 
@@ -24,14 +23,10 @@ export default async function NotificationsPage() {
     .order("created_at", { ascending: false })
     .limit(30);
 
-  // Mark all as read when visited (we do this safely via a Client Component or Server Action, but here we can just update them)
-  if (notifications && notifications.some(n => !n.is_read)) {
-    await supabaseClient
-      .from("notifications")
-      .update({ is_read: true })
-      .eq("user_id", user.id)
-      .eq("is_read", false);
-  }
+  // Collect unread IDs so the client component can mark them as read after a delay
+  const unreadIds = (notifications || [])
+    .filter(n => !n.is_read)
+    .map(n => n.id);
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-3xl mx-auto w-full pb-32 font-serif">
@@ -42,10 +37,10 @@ export default async function NotificationsPage() {
             Quiet echoes from the sanctuary.
           </p>
         </div>
-        <NotificationClearClient userId={user.id} />
+        <NotificationClearClient />
       </header>
 
-      <NotificationsListClient initialNotifications={notifications || []} />
+      <NotificationsListClient initialNotifications={notifications || []} unreadIds={unreadIds} />
     </div>
   );
 }

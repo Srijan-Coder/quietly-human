@@ -21,7 +21,8 @@ export default async function CreatorsPage() {
   const { data: postCounts } = await supabaseClient
     .from("posts")
     .select("author_id")
-    .eq("is_draft", false);
+    .eq("is_draft", false)
+    .limit(5000);
 
   const countMap: Record<string, number> = {};
   if (postCounts) {

@@ -1,8 +1,7 @@
-import { client } from "@/sanity/lib/client";
-import { groq } from "next-sanity";
-import Link from "next/link";
+"use client";
 
-export const revalidate = 60;
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export interface Letter {
   _id: string;
@@ -12,18 +11,53 @@ export interface Letter {
   guestName?: string;
 }
 
-export default async function LettersIndex() {
-  let letters = [];
-  try {
-    letters = await client.fetch(groq`*[_type == "letter" && isApproved != false] | order(coalesce(publishedAt, _createdAt) desc) {
-      _id,
-      title,
-      "slug": slug.current,
-      "publishedAt": coalesce(publishedAt, _createdAt),
-      guestName
-    }`);
-  } catch (error) {
-    console.warn("Failed to fetch letters:", error);
+export default function LettersIndex() {
+  const [letters, setLetters] = useState<Letter[]>([]);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchLetters() {
+      try {
+        const res = await fetch("/api/letters");
+        if (res.ok) {
+          const data = await res.json();
+          setLetters(data);
+        }
+      } catch {
+        // silently fail
+      }
+    }
+    fetchLetters();
+  }, []);
+
+  async function handleSubscribe(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "Letters Page" }),
+      });
+
+      if (res.ok) {
+        setSuccess(true);
+        setEmail("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -73,16 +107,29 @@ export default async function LettersIndex() {
         <p className="text-brand-soft mb-8 max-w-md mx-auto">
           Twice a month, I send a gentle reminder that you are allowed to rest. No spam, no pressure.
         </p>
-        <form className="flex flex-col md:flex-row max-w-md mx-auto gap-4">
+        <form onSubmit={handleSubscribe} className="flex flex-col md:flex-row max-w-md mx-auto gap-4">
           <input 
             type="email" 
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Your email address" 
             className="flex-1 bg-brand-bg border border-brand-border px-6 py-4 rounded-full focus:outline-none focus:border-brand-accent transition-colors text-brand-text placeholder-brand-soft/50"
           />
-          <button type="button" className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-colors duration-500 rounded-full text-sm tracking-widest uppercase">
-            Subscribe
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="px-8 py-4 bg-brand-text text-brand-bg hover:bg-brand-accent hover:text-white transition-colors duration-500 rounded-full text-sm tracking-widest uppercase disabled:opacity-50"
+          >
+            {loading ? "Sending..." : "Subscribe"}
           </button>
         </form>
+        {success && (
+          <p className="text-green-500 text-sm mt-4">You&apos;re in. Watch your inbox for the next letter. 💌</p>
+        )}
+        {error && (
+          <p className="text-red-500 text-sm mt-4">{error}</p>
+        )}
       </div>
     </div>
   );

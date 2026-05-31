@@ -1,4 +1,5 @@
 import { supabaseClient } from "@/lib/supabase";
+import DOMPurify from 'isomorphic-dompurify';
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -155,7 +156,7 @@ export default async function PostPage({ params }: Props) {
             <div className="w-full h-[40vh] min-h-[300px] mb-8 relative rounded-3xl overflow-hidden border border-brand-border/40 shadow-2xl">
               <Image 
                 src={post.cover_image_url} 
-                alt="Cover Image" 
+                alt={`${post.title || 'Post'} cover image`} 
                 fill 
                 className="object-cover hover:scale-105 transition-transform duration-1000" 
               />
@@ -200,7 +201,7 @@ export default async function PostPage({ params }: Props) {
         {/* Content Render: we use prose adaptive classes */}
         <div 
           className="prose dark:prose-invert prose-lg md:prose-xl max-w-none mb-16 leading-relaxed font-serif text-brand-text"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }}
         />
 
         {/* Embedded Premium Product Cards (Up to 3) */}

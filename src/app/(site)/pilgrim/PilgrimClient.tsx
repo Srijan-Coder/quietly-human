@@ -33,6 +33,7 @@ export default function PilgrimClient({ initialNotes }: { initialNotes: any[] })
         <button 
           onClick={() => setIsFormOpen(true)}
           className="bg-brand-accent text-white w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-[0_0_30px_rgba(201,164,106,0.3)] hover:scale-110 transition-transform duration-300"
+          aria-label="Leave a pilgrim note"
         >
           +
         </button>
@@ -58,6 +59,7 @@ export default function PilgrimClient({ initialNotes }: { initialNotes: any[] })
               <button 
                 onClick={() => setIsFormOpen(false)}
                 className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors text-xl"
+                aria-label="Close"
               >
                 ✕
               </button>
@@ -88,8 +90,8 @@ export default function PilgrimClient({ initialNotes }: { initialNotes: any[] })
                 
                 <div className="flex justify-between items-end relative z-10">
                   <div className="flex flex-col gap-1">
-                    <Link href={`/room/${note.profiles.username}`} className="text-[10px] font-sans tracking-widest uppercase text-brand-accent hover:text-white transition-colors font-bold">
-                      — {note.profiles.display_name || note.profiles.username}
+                    <Link href={`/room/${note.profiles?.username || 'anonymous'}`} className="text-[10px] font-sans tracking-widest uppercase text-brand-accent hover:text-white transition-colors font-bold">
+                      — {note.profiles?.display_name || note.profiles?.username || 'anonymous'}
                     </Link>
                     <span className="text-[9px] text-white/30 font-sans uppercase tracking-widest">
                       {new Date(note.created_at).toLocaleDateString()}

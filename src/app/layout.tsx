@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Quietly Humans",
     images: [
       {
-        url: "/og-image.jpg", // The user can upload this to the public folder later
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Quietly Humans Studio",
@@ -86,7 +86,8 @@ export default async function RootLayout({
         <head>
           <link rel="manifest" href="/manifest.json" />
           <meta name="p:domain_verify" content="025eccd49b84b60e7aa23c302d7ec28d" />
-          <meta name="theme-color" content="#0d0d0d" />
+          <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)" />
+          <meta name="theme-color" content="#FAF8F5" media="(prefers-color-scheme: light)" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
           <script
@@ -112,7 +113,7 @@ export default async function RootLayout({
             <ReadingModeProvider>
               <AnnouncementBar data={announcement} />
               {children}
-              <Toaster position="bottom-right" richColors theme="dark" />
+              <Toaster position="bottom-right" richColors theme="system" />
             </ReadingModeProvider>
             <Analytics />
             <SpeedInsights />

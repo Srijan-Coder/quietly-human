@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+
 import AmbientBackground from "@/components/global/AmbientBackground";
 
 // Products with pricing — books go to /books, not Gumroad
@@ -31,7 +31,7 @@ const testimonials = [
   { quote: "Finally a place for people who think too much. This community gets me.", name: "Jordan", source: "Email" },
 ];
 
-const categoryLabels: Record<string, string> = { blog: "Quiet Thought", letter: "Midnight Letter", guide: "Pillar Guide", ebook: "Book", quote: "Quiet Word" };
+const categoryLabels: Record<string, string> = { blog: "Quiet Thought", letter: "Midnight Letter", guide: "Pillar Guide", ebook: "Free Ebook", quote: "Quiet Word" };
 
 // Fallback posts when DB is empty
 const fallbackPosts = [
@@ -43,7 +43,7 @@ const fallbackPosts = [
   { id: "f6", title: "Digital minimalism for anxious minds", slug: "digital-minimalism", excerpt: "Your phone is making your anxiety worse. Here's how to fix that.", type: "blog", candle_count: 33, profiles: { username: "srijan", display_name: "Srijan" } },
 ];
 
-export default function HomeContentClient({ stats, latestNotes, latestPosts, topCreators, featuredProducts }: { stats: any, latestNotes: any[], latestPosts: any[], topCreators: any[], featuredProducts: any[] }) {
+export default function HomeContentClient({ stats, latestNotes, latestPosts }: { stats: any, latestNotes: any[], latestPosts: any[] }) {
   const [greeting, setGreeting] = useState("Welcome to the sanctuary.");
   const [email, setEmail] = useState("");
   const [subStatus, setSubStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -84,7 +84,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
   const allProducts = storeProducts;
 
   return (
-    <div className="relative min-h-screen w-full font-sans selection:bg-amber-600 selection:text-white overflow-hidden bg-brand-bg text-brand-text">
+    <div className="relative min-h-screen w-full font-sans selection:bg-brand-accent selection:text-white overflow-hidden bg-brand-bg text-brand-text">
       <AmbientBackground />
       
       {/* ===== 1. HERO ===== */}
@@ -201,7 +201,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
           <div className="flex flex-col gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
             {displayNotes.map((note: any) => (
               <div key={note.id} className="p-3 rounded-xl text-xs italic font-serif line-clamp-2 bg-brand-bg border border-brand-border text-brand-soft">
-                &ldquo;{note.content.substring(0, 60)}...&rdquo;
+                &ldquo;{(note.content ?? "").substring(0, 60)}{(note.content ?? "").length > 60 ? "..." : ""}&rdquo;
               </div>
             ))}
           </div>
@@ -211,7 +211,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
       {/* ===== 5. TESTIMONIALS ===== */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20">
         <div className="text-center mb-8">
-          <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold text-brand-accent">Social Proof</span>
+          <span className="text-[10px] uppercase tracking-widest mb-2 block font-bold text-brand-accent">Kind Words</span>
           <h2 className="text-3xl md:text-4xl font-serif text-brand-text">What quiet humans say</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -311,7 +311,7 @@ export default function HomeContentClient({ stats, latestNotes, latestPosts, top
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" required
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" required aria-label="Email address"
                   className="flex-1 rounded-full px-5 py-3 text-sm outline-none transition-colors bg-brand-bg border border-brand-border text-brand-text focus:border-brand-accent" />
                 <button type="submit" disabled={subStatus === "loading"}
                   className="px-6 py-3 rounded-full text-[10px] uppercase tracking-widest font-bold hover:scale-105 transition-transform disabled:opacity-50 shrink-0 bg-brand-text text-brand-bg">

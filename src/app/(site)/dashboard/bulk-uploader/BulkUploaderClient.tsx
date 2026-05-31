@@ -277,7 +277,7 @@ export default function BulkUploaderClient() {
           <div className="w-full bg-brand-border/30 rounded-full h-1.5 mb-4 overflow-hidden">
             <div 
               className="bg-brand-accent h-full transition-all duration-300"
-              style={{ width: `${(progress.current / progress.total) * 100}%` }}
+              style={{ width: `${progress.total > 0 ? (progress.current / progress.total) * 100 : 0}%` }}
             />
           </div>
           <div className="flex gap-4 text-xs font-sans uppercase tracking-widest text-brand-soft">

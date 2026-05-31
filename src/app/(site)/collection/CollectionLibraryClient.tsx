@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useAudioNotes } from "@/hooks/useAudioNotes";
 
 function CollectionItemCard({ item, folders }: { item: CollectionItem; folders: { id: string; name: string; createdAt: string }[] }) {
@@ -263,7 +264,7 @@ export default function CollectionLibraryClient() {
               onClick={async () => {
                 const folderName = folders.find((f) => f.id === activeFolderId)?.name;
                 const items = collection.filter((i) => i.folderId === activeFolderId);
-                if (!folderName || items.length === 0) { alert("Folder is empty"); return; }
+                if (!folderName || items.length === 0) { toast.error("Folder is empty"); return; }
 
                 const res = await fetch("/api/share-folder", {
                   method: "POST",
@@ -274,9 +275,9 @@ export default function CollectionLibraryClient() {
                 if (data.success) {
                   const url = `${window.location.origin}/kit/${data.kitId}`;
                   navigator.clipboard.writeText(url);
-                  alert("Shareable link copied to clipboard!");
+                  toast("Shareable link copied to clipboard!");
                 } else {
-                  alert("Failed to create link: " + data.error);
+                  toast.error("Failed to create link: " + data.error);
                 }
               }}
               className="text-[10px] uppercase tracking-widest text-brand-accent border border-brand-accent/30 px-4 py-2 rounded-full hover:bg-brand-accent hover:text-brand-bg transition-colors flex items-center gap-2"

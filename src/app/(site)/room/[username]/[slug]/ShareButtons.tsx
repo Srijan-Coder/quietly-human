@@ -16,7 +16,7 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy link", err);
+      // Clipboard write failed silently
     }
   };
 

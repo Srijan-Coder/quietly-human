@@ -22,13 +22,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: post.title,
-    description: "Read this quiet thought on the Quietly Humans Studio.",
+    description: post.excerpt || "Read this quiet thought on the Quietly Humans Studio.",
     alternates: {
       canonical: `https://www.quietlyhumans.space/blog/${post.slug}`,
     },
     openGraph: {
       title: post.title,
-      description: "Read this quiet thought on the Quietly Humans Studio.",
+      description: post.excerpt || "Read this quiet thought on the Quietly Humans Studio.",
       type: "article",
       publishedTime: post.publishedAt,
       url: `https://www.quietlyhumans.space/blog/${post.slug}`,
@@ -75,7 +75,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Link href="/blog" className="text-xs uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mb-8 block">
-        ← Back to Library
+        ← Back to Quiet Thoughts
       </Link>
       
       <header className="mb-16">
@@ -97,7 +97,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <div className="flex justify-center items-center gap-6 mb-16">
         <ListenButton />
         <LikeButton documentId={post._id} initialLikes={post.likes} />
-        <SaveButton item={{ id: post.slug, title: post.title, type: "letter", url: `/blog/${post.slug}` }} className="px-6 py-3 border border-brand-border bg-brand-card rounded-full" />
+        <SaveButton item={{ id: post.slug, title: post.title, type: "post", url: `/blog/${post.slug}` }} className="px-6 py-3 border border-brand-border bg-brand-card rounded-full" />
       </div>
 
       <div id="article-content" className="max-w-none">

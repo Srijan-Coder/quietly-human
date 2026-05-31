@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Metadata } from "next";
+import RandomToolButton from "./RandomToolButton";
 
 export const metadata: Metadata = {
   title: "20 Free Mental Health Tools — Soft Toolkit",
@@ -34,17 +35,15 @@ export default function ToolkitHub() {
   const standardTools = tools.slice(1);
 
   return (
-    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-32 font-sans bg-[#0d0d0d] text-white">
+    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-32 font-sans bg-brand-bg text-brand-text">
       <header className="mb-20 text-center flex flex-col items-center">
         <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-4 font-bold">Interactive</span>
-        <h1 className="text-5xl md:text-7xl font-serif text-white mb-6">Soft Toolkit</h1>
+        <h1 className="text-5xl md:text-7xl font-serif text-brand-text mb-6">Soft Toolkit</h1>
         <p className="text-brand-soft text-lg max-w-2xl mx-auto text-balance font-serif italic mb-10">
           Small, beautiful tools designed to intercept overthinking and guide you back to the present moment.
         </p>
         <div className="flex gap-4">
-          <button className="bg-brand-accent text-white px-8 py-3 rounded-full text-xs uppercase tracking-widest font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(201,164,106,0.3)]">
-            Pick a Random Tool
-          </button>
+          <RandomToolButton />
         </div>
       </header>
 
@@ -63,13 +62,13 @@ export default function ToolkitHub() {
             <div className="max-w-xl">
               <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-4 block bg-black/50 w-fit px-3 py-1 rounded-full border border-white/5">Daily Featured Tool</span>
               <div className="text-4xl mb-6 grayscale group-hover:grayscale-0 transition-all duration-500">{featuredTool.icon}</div>
-              <h2 className="font-serif text-4xl text-white mb-4 group-hover:text-brand-accent transition-colors">
+              <h2 className="font-serif text-4xl text-brand-text mb-4 group-hover:text-brand-accent transition-colors">
                 {featuredTool.title}
               </h2>
               <p className="text-brand-soft text-lg mb-8 leading-relaxed">
                 {featuredTool.desc}
               </p>
-              <span className="text-xs uppercase tracking-widest text-white border-b border-white/30 pb-1 group-hover:border-white transition-colors">
+              <span className="text-xs uppercase tracking-widest text-brand-text border-b border-brand-text/30 pb-1 group-hover:border-brand-text transition-colors">
                 Open Tool →
               </span>
             </div>
@@ -102,7 +101,7 @@ export default function ToolkitHub() {
             
             <div className="text-3xl mb-6 relative z-10 grayscale group-hover:grayscale-0 transition-all duration-500">{tool.icon}</div>
             
-            <h2 className="font-serif text-2xl text-white mb-3 group-hover:text-brand-accent transition-colors relative z-10">
+            <h2 className="font-serif text-2xl text-brand-text mb-3 group-hover:text-brand-accent transition-colors relative z-10">
               {tool.title}
             </h2>
             
@@ -110,7 +109,7 @@ export default function ToolkitHub() {
               {tool.desc}
             </p>
             
-            <span className="text-[10px] uppercase tracking-widest text-white/50 group-hover:text-white transition-colors relative z-10 font-bold">
+            <span className="text-[10px] uppercase tracking-widest text-brand-text/50 group-hover:text-brand-text transition-colors relative z-10 font-bold">
               Open →
             </span>
           </Link>

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import html2canvas from "html2canvas";
+import { toast } from 'sonner';
 
 interface Candle {
   id: number;
@@ -128,7 +129,7 @@ export default function ThreeAMRoom() {
       }
     } catch (error: any) {
       console.error("Failed to share:", error);
-      alert("Failed to create the image. Please try again.");
+      toast.error("Failed to capture the moment. Please try again.");
     } finally {
       setIsSharing(false);
     }

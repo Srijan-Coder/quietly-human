@@ -3,7 +3,10 @@ import { groq } from "next-sanity";
 import { QuoteWall, type Quote } from "@/components/global/QuoteWall";
 
 export const revalidate = 60;
-export const metadata = { title: "Quiet Words — Quote Wall" };
+export const metadata = {
+  title: "Quiet Words — Curated Quotes | Quietly Humans",
+  description: "A collection of curated quotes about life, anxiety, healing, and soft living."
+};
 
 export default async function QuotesPage() {
   let quotes: Quote[] = [];
@@ -11,7 +14,7 @@ export default async function QuotesPage() {
     quotes = await client.fetch(groq`*[_type == "quote"] | order(_createdAt desc) {
       _id, text, author, emotionTags, cardColor, featured
     }`);
-  } catch (error) { console.error(error); }
+  } catch { /* silently fail */ }
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-12">

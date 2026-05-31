@@ -189,6 +189,7 @@ export default function FocusPage() {
       <div className={`absolute top-6 right-6 md:top-12 md:right-12 z-50 flex items-center gap-4 bg-brand-card/80 backdrop-blur-md border border-brand-border rounded-full p-2 shadow-sm transition-all duration-700 ${isZenMode ? "opacity-0 pointer-events-none translate-y-[-20px]" : "opacity-100 translate-y-0"}`}>
         <button 
           onClick={toggleMute}
+          aria-label={isMuted ? "Unmute" : "Mute"}
           className="p-2 rounded-full text-brand-text hover:text-brand-accent transition-colors flex items-center justify-center"
         >
           {isMuted ? (
@@ -207,6 +208,7 @@ export default function FocusPage() {
           max="100" 
           value={volume} 
           onChange={handleVolumeChange}
+          aria-label="Volume"
           className="w-24 md:w-32 h-1 bg-brand-border rounded-lg appearance-none cursor-pointer accent-brand-accent hidden md:block mr-4"
         />
       </div>

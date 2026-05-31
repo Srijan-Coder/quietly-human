@@ -49,10 +49,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 
 const typeLabels: Record<string, string> = {
-  "quiet-thought": "Quiet Thought",
-  "midnight-letter": "Midnight Letter",
-  "pillar-guide": "Pillar Guide",
-  "book": "Book",
+  blog: "Quiet Thought",
+  letter: "Midnight Letter",
+  guide: "Pillar Guide",
+  ebook: "Book",
+  quote: "Quiet Words"
 };
 
 export default async function CreatorRoomPage({ params }: Props) {

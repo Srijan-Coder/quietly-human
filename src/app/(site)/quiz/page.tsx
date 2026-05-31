@@ -30,23 +30,20 @@ export default async function QuizPage({ searchParams }: { searchParams: Promise
   // If result is present, fetch the curated recommendations based on the archetype's tags!
   const archetype = archetypes[resultId];
   
-  // Create a GROQ string array from tags
-  const tagsStr = JSON.stringify(archetype.tags);
-
   let data: any = null;
   try {
     data = await client.fetch(groq`{
-      "guide": *[_type == "guide" && count((emotionTags[])[@ in ${tagsStr}]) > 0] | order(_createdAt desc)[0]{_id, title, slug, excerpt},
-      "ebook": *[_type == "ebook" && count((emotionTags[])[@ in ${tagsStr}]) > 0] | order(_createdAt desc)[0]{_id, title, slug, coverImage},
-      "post": *[_type == "post" && count((categories[]->slug.current)[@ in ${tagsStr}]) > 0] | order(publishedAt desc)[0]{_id, title, slug, excerpt},
-      "letter": *[_type == "letter" && count((emotionTags[])[@ in ${tagsStr}]) > 0] | order(publishedAt desc)[0]{_id, title, slug}
-    }`);
+      "guide": *[_type == "guide" && count((emotionTags[])[@ in $tags]) > 0] | order(_createdAt desc)[0]{_id, title, slug, excerpt},
+      "ebook": *[_type == "ebook" && count((emotionTags[])[@ in $tags]) > 0] | order(_createdAt desc)[0]{_id, title, slug, coverImage},
+      "post": *[_type == "post" && count((categories[]->slug.current)[@ in $tags]) > 0] | order(publishedAt desc)[0]{_id, title, slug, excerpt},
+      "letter": *[_type == "letter" && count((emotionTags[])[@ in $tags]) > 0] | order(publishedAt desc)[0]{_id, title, slug}
+    }`, { tags: archetype.tags });
   } catch (error) {
     console.error("Failed to fetch recommendations:", error);
   }
 
   // Fallbacks if tags didn't match anything specific
-  const fetchGeneric = async (type: string) => client.fetch(groq`*[_type == "${type}"] | order(_createdAt desc)[0]{_id, title, slug, excerpt, coverImage}`);
+  const fetchGeneric = async (type: string) => client.fetch(groq`*[_type == $type] | order(_createdAt desc)[0]{_id, title, slug, excerpt, coverImage}`, { type });
   
   const recommendedGuide = data?.guide || await fetchGeneric('guide');
   const recommendedEbook = data?.ebook || await fetchGeneric('ebook');

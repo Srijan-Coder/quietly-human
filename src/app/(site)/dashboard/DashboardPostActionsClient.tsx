@@ -22,7 +22,6 @@ export default function DashboardPostActionsClient({ postId, slug, username, can
       }
     } catch (e: any) {
       setError("Error");
-      console.error(e);
     } finally {
       setIsDeleting(false);
     }

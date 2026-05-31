@@ -87,14 +87,6 @@ export default async function LetterPage({ params }: { params: Promise<{ slug: s
             <span className="text-xs tracking-widest uppercase text-brand-soft font-mono">
               Sent: {new Date(letter.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </span>
-            <SaveButton 
-              item={{
-                id: letter._id,
-                title: letter.title,
-                url: `/letters/${resolvedParams.slug}`,
-                type: "letter"
-              }} 
-            />
           </div>
           <h1 className="text-4xl md:text-5xl font-serif text-brand-text mb-8 text-balance">
             {letter.title}
@@ -109,7 +101,7 @@ export default async function LetterPage({ params }: { params: Promise<{ slug: s
         <div className="flex justify-center items-center gap-6 mb-12">
           <ListenButton />
           <LikeButton documentId={letter._id} initialLikes={letter.likes} />
-          <SaveButton item={{ id: letter.slug, title: letter.title, type: "letter", url: `/letters/${letter.slug}` }} className="px-6 py-3 border border-brand-border bg-brand-card rounded-full" />
+          <SaveButton item={{ id: letter._id, title: letter.title, type: "letter", url: `/letters/${letter.slug}` }} className="px-6 py-3 border border-brand-border bg-brand-card rounded-full" />
         </div>
 
         <ReadingTextWrapper>

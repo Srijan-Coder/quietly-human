@@ -27,50 +27,16 @@ export default async function Home() {
   // Fetch 6 latest posts (for trending section)
   const { data: latestPosts } = await supabaseClient
     .from("posts")
-    .select("id, title, slug, excerpt, type, created_at, candle_count, view_count, profiles(username, display_name, avatar_url)")
+    .select("id, title, slug, excerpt, type, created_at, candle_count, profiles(username, display_name, avatar_url)")
     .eq("is_draft", false)
     .order("created_at", { ascending: false })
     .limit(6);
-
-  // Fetch top 6 creators
-  const { data: topCreators } = await supabaseClient
-    .from("profiles")
-    .select("id, username, display_name, avatar_url, bio, is_premium")
-    .order("created_at", { ascending: true })
-    .limit(6);
-
-  // Fetch featured products (pins from profiles)
-  let featuredProducts: any[] = [];
-  try {
-    const { data: profiles } = await supabaseClient
-      .from("profiles")
-      .select("username, display_name, avatar_url, pins")
-      .not("pins", "is", null)
-      .limit(10);
-
-    if (profiles) {
-      profiles.forEach(profile => {
-        const pins = profile.pins || [];
-        pins.forEach((pin: any) => {
-          featuredProducts.push({
-            ...pin,
-            creatorUsername: profile.username,
-            creatorName: profile.display_name || profile.username,
-          });
-        });
-      });
-    }
-  } catch (e) {
-    console.error("Failed to fetch products for homepage:", e);
-  }
 
   return (
     <HomeContentClient 
       stats={stats} 
       latestNotes={latestNotes || []} 
       latestPosts={latestPosts || []} 
-      topCreators={topCreators || []}
-      featuredProducts={featuredProducts}
     />
   );
 }

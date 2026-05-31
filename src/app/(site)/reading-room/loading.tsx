@@ -1,6 +1,6 @@
 export default function ReadingRoomLoading() {
   return (
-    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-6xl mx-auto w-full pb-32">
+    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-7xl mx-auto w-full pb-32">
       {/* Header skeleton */}
       <div className="mb-12">
         <div className="h-4 w-32 bg-brand-card rounded-full mb-4 animate-pulse" />

@@ -1,11 +1,18 @@
+import { Fragment } from 'react';
 import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
 import { CategoryFilter } from "@/components/global/CategoryFilter";
 import { QuietAdCard, QuietAdBanner } from "@/components/global/QuietAd";
+import { Metadata } from "next";
 
 export const revalidate = 60; // revalidate this page every 60 seconds
+
+export const metadata: Metadata = {
+  title: "Quiet Thoughts — Essays & Blog | Quietly Humans",
+  description: "Read curated essays and quiet thoughts on emotional wellness, overthinking, and soft living."
+};
 
 export interface Post {
   _id: string;
@@ -62,8 +69,8 @@ export default async function BlogPage(props: {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         {filteredPosts.filter((post: Post) => post.slug).map((post: Post, index: number) => (
-          <>
-            <Link href={`/blog/${post.slug}`} key={post._id} className="group flex flex-col gap-4">
+          <Fragment key={post._id}>
+            <Link href={`/blog/${post.slug}`} className="group flex flex-col gap-4">
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-card rounded-xl border border-brand-border shadow-sm">
                 {post.mainImage ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
@@ -88,7 +95,7 @@ export default async function BlogPage(props: {
             </Link>
             {/* Inject a house ad card after the 3rd post */}
             {index === 2 && <QuietAdCard key="quiet-ad-card" tags={["book", "ebook", "tool"]} />}
-          </>
+          </Fragment>
         ))}
       </div>
 

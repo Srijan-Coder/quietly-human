@@ -3,14 +3,14 @@ import { groq } from "next-sanity";
 import { type Testimonial } from "@/components/global/TestimonialCarousel";
 import SubmitNoteForm from "@/components/global/SubmitNoteForm";
 
-export const revalidate = 0; // Set to 0 so new submissions show up instantly without caching delay
+export const revalidate = 30;
 export const metadata = { title: "Reader Notes — Quietly Humans" };
 
 export default async function TestimonialsPage() {
   let testimonials: Testimonial[] = [];
   try {
     testimonials = await client.fetch(groq`*[_type == "testimonial" && isApproved == true] | order(order asc, _createdAt desc)`);
-  } catch (error) { console.error(error); }
+  } catch { /* silently fail */ }
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-12">

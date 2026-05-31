@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
@@ -11,7 +11,7 @@ import { ExploreModal } from "./ExploreModal";
 
 export default function Navbar() {
   const { isLoaded, isSignedIn } = useAuth();
-  const pathname = usePathname();
+
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -97,7 +97,7 @@ export default function Navbar() {
               onMouseEnter={() => setActiveDropdown(category.name)}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="text-sm font-sans tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1 py-2">
+              <button className="text-sm font-sans tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1 py-2" aria-expanded={activeDropdown === category.name} aria-haspopup="true">
                 {category.name}
               </button>
               
@@ -149,7 +149,7 @@ export default function Navbar() {
 
           {isLoaded && !isSignedIn && (
             <SignInButton mode="modal">
-              <button className="hidden md:block text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all font-bold font-sans px-6 py-2 rounded-full">
+              <button className="hidden md:block text-[10px] uppercase tracking-widest bg-brand-text text-brand-bg hover:bg-white/80 transition-all font-bold font-sans px-6 py-2 rounded-full">
                 Log In
               </button>
             </SignInButton>
@@ -160,7 +160,7 @@ export default function Navbar() {
               <Link href="/dashboard" className="hidden md:block text-[10px] uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity font-sans font-bold">
                 Dashboard
               </Link>
-              <Link href="/write" className="hidden md:block text-[10px] uppercase tracking-widest text-black bg-white hover:bg-white/80 transition-all font-bold font-sans border border-brand-border px-6 py-2 rounded-full">
+              <Link href="/write" className="hidden md:block text-[10px] uppercase tracking-widest bg-brand-text text-brand-bg hover:bg-white/80 transition-all font-bold font-sans border border-brand-border px-6 py-2 rounded-full">
                 Write
               </Link>
 

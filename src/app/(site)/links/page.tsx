@@ -24,7 +24,7 @@ export default function LinksPage() {
           {/* We use a placeholder image or rely on the user to update it */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+            src="/icon.png" 
             alt="Quietly Humans"
             className="w-full h-full object-cover"
           />

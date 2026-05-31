@@ -200,7 +200,7 @@ export default function ProfileSettingsClient({ initialProfile }: ProfileSetting
         </div>
       </div>
 
-      <div className="h-px w-full bg-white/5 my-2" />
+      <div className="h-px w-full bg-brand-border/30 my-2" />
 
       {/* Name and Username Section */}
       <div className="grid md:grid-cols-2 gap-6">

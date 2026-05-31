@@ -61,6 +61,7 @@ export default function PilgrimSubmitForm({ onSuccess }: { onSuccess?: () => voi
         placeholder="Write your thought here..."
         className="w-full bg-transparent border-none outline-none resize-none text-xl text-brand-text font-serif placeholder:text-brand-soft/50 min-h-[100px]"
         maxLength={300}
+        aria-label="Your pilgrim note"
       />
       
       <div className="flex justify-between items-center border-t border-brand-border/50 pt-4 mt-2">

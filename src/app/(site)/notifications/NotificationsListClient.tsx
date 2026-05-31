@@ -1,10 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-export default function NotificationsListClient({ initialNotifications }: { initialNotifications: any[] }) {
+export default function NotificationsListClient({ initialNotifications, unreadIds }: { initialNotifications: any[]; unreadIds: string[] }) {
   const [filter, setFilter] = useState<"all" | "follow" | "candle" | "comment">("all");
+
+  // Mark unread notifications as read after a 2-second delay
+  useEffect(() => {
+    if (unreadIds.length === 0) return;
+    const timer = setTimeout(async () => {
+      try {
+        await fetch("/api/notifications/mark-read", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: unreadIds }),
+        });
+      } catch {
+        // silently fail
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [unreadIds]);
 
   const filteredNotifications = initialNotifications.filter((n) => {
     if (filter === "all") return true;
@@ -57,10 +75,12 @@ export default function NotificationsListClient({ initialNotifications }: { init
                 <div key={notif.id} className={`p-5 flex items-start gap-4 hover:bg-brand-bg/50 transition-colors ${!notif.is_read ? 'bg-brand-accent/5' : ''}`}>
                   {/* Actor avatar */}
                   {actor?.avatar_url ? (
-                    <img
+                    <Image
                       src={actor.avatar_url}
                       alt={actorName}
-                      className="w-9 h-9 rounded-full border border-brand-border/30 shrink-0 object-cover"
+                      width={32}
+                      height={32}
+                      className="rounded-full"
                     />
                   ) : (
                     <div className="w-9 h-9 rounded-full bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center text-sm font-serif text-brand-text shrink-0">

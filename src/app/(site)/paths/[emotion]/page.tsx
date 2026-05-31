@@ -2,11 +2,24 @@ import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import Link from "next/link";
 import { SaveButton } from "@/components/global/SaveButton";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 export const revalidate = 60;
 
-export default async function JourneyPath({ params }: { params: { emotion: string } }) {
-  const emotion = params.emotion.toLowerCase();
+export async function generateMetadata({ params }: { params: Promise<{ emotion: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const emotion = resolvedParams.emotion.toLowerCase();
+  const formatted = emotion.replace(/-/g, ' ');
+  return {
+    title: `The ${formatted.charAt(0).toUpperCase() + formatted.slice(1)} Path — Quietly Humans`,
+    description: `A curated journey of guides, letters, and books for when you feel ${formatted}.`,
+  };
+}
+
+export default async function JourneyPath({ params }: { params: Promise<{ emotion: string }> }) {
+  const resolvedParams = await params;
+  const emotion = resolvedParams.emotion.toLowerCase();
 
   // Fetch all content tagged with this emotion
   const query = groq`{
@@ -15,7 +28,13 @@ export default async function JourneyPath({ params }: { params: { emotion: strin
     "books": *[_type == "ebook" && $emotion in emotionTags] | order(_createdAt desc) { _id, title, "slug": slug.current, author }
   }`;
 
-  const data = await client.fetch(query, { emotion });
+  let data: any;
+  try {
+    data = await client.fetch(query, { emotion });
+  } catch (error) {
+    console.error("Failed to fetch path data:", error);
+    notFound();
+  }
 
   const isEmpty = data.guides.length === 0 && data.letters.length === 0 && data.books.length === 0;
 

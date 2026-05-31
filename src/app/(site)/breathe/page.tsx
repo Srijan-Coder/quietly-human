@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 type BreathingMode = "4-7-8" | "box" | "calm";
@@ -42,9 +42,14 @@ export default function BreathePage() {
   const [isBreathing, setIsBreathing] = useState(false);
   const [sequenceIndex, setSequenceIndex] = useState(0);
   const [countdown, setCountdown] = useState(0);
+  const sequenceIndexRef = useRef(0);
 
   const config = MODE_CONFIG[mode];
   const currentStep = config.sequence[sequenceIndex];
+
+  useEffect(() => {
+    sequenceIndexRef.current = sequenceIndex;
+  }, [sequenceIndex]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -55,7 +60,7 @@ export default function BreathePage() {
           if (prev > 1) return prev - 1;
 
           // Move to next phase in sequence
-          const nextIndex = (sequenceIndex + 1) % config.sequence.length;
+          const nextIndex = (sequenceIndexRef.current + 1) % config.sequence.length;
           setSequenceIndex(nextIndex);
           return config.sequence[nextIndex].duration;
         });
@@ -63,7 +68,7 @@ export default function BreathePage() {
     }
 
     return () => clearInterval(timer);
-  }, [isBreathing, sequenceIndex, config.sequence]);
+  }, [isBreathing, config.sequence]);
 
   const startBreathing = () => {
     setSequenceIndex(0);
@@ -154,17 +159,18 @@ export default function BreathePage() {
                 <span className="text-xl font-mono text-brand-accent opacity-80">{countdown}</span>
               </motion.div>
             ) : (
-              <motion.div
+              <motion.button
                 key="start"
+                type="button"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="absolute flex items-center justify-center cursor-pointer"
+                className="absolute flex items-center justify-center cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg rounded-full"
                 onClick={startBreathing}
               >
                 <div className="w-24 h-24 bg-brand-text rounded-full flex items-center justify-center hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.1)]">
                   <span className="text-brand-bg text-xs uppercase tracking-widest font-semibold">Begin</span>
                 </div>
-              </motion.div>
+              </motion.button>
             )}
           </AnimatePresence>
         </div>

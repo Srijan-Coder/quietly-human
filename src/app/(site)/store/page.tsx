@@ -9,6 +9,15 @@ export const metadata = {
 
 export const revalidate = 60; // Revalidate every minute
 
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export default async function StorePage() {
   // Fetch all profiles that have pins
   const { data: profiles } = await supabaseClient
@@ -34,7 +43,7 @@ export default async function StorePage() {
   }
 
   // Shuffle products for a fresh discovery feed
-  const shuffledProducts = allProducts.sort(() => 0.5 - Math.random());
+  const shuffledProducts = shuffle(allProducts);
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white pt-24 md:pt-32 px-6 md:px-12 w-full pb-32">

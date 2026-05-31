@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export default function NotificationClearClient({ userId }: { userId: string }) {
+export default function NotificationClearClient() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -14,8 +15,8 @@ export default function NotificationClearClient({ userId }: { userId: string }) 
       if (res.ok) {
         router.refresh();
       }
-    } catch (e) {
-      console.error(e);
+    } catch {
+      toast.error("Failed to clear notifications.");
     } finally {
       setLoading(false);
     }

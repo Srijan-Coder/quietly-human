@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from 'sonner';
 
 const ROOM_THEMES = [
   { id: "dark", name: "Classic Onyx", color: "bg-[#121212]" },
@@ -30,7 +31,7 @@ export default function RoomThemeSelectorClient({ initialTheme, userId }: { init
         router.refresh();
       }
     } catch (e) {
-      console.error(e);
+      toast.error("Failed to save theme");
     } finally {
       setIsSaving(false);
     }

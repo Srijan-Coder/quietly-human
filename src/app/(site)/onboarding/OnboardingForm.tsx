@@ -113,7 +113,7 @@ export default function OnboardingForm({ userId, fallbackName, fallbackAvatar }:
 
             <button 
               onClick={handleNext} disabled={!username}
-              className="mt-4 w-full bg-white text-black py-4 rounded-full text-[10px] uppercase tracking-widest hover:scale-105 transition-transform disabled:opacity-50 font-bold shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="mt-4 w-full bg-white text-black py-4 rounded-full text-[10px] uppercase tracking-widest hover:scale-105 transition-transform disabled:opacity-50 font-bold shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
             >
               Continue
             </button>
@@ -133,7 +133,8 @@ export default function OnboardingForm({ userId, fallbackName, fallbackAvatar }:
 
             <div className="grid grid-cols-1 gap-3">
               {themes.map(t => (
-                <div 
+                <button 
+                  type="button"
                   key={t.id} 
                   onClick={() => setRoomTheme(t.id)}
                   className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer border transition-all ${t.color} ${roomTheme === t.id ? t.border + ' shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'border-transparent hover:border-white/10'}`}
@@ -142,7 +143,7 @@ export default function OnboardingForm({ userId, fallbackName, fallbackAvatar }:
                     {roomTheme === t.id && <div className="w-3 h-3 rounded-full bg-brand-accent" />}
                   </div>
                   <span className={`font-serif ${roomTheme === t.id ? 'text-white' : 'text-brand-soft'}`}>{t.name}</span>
-                </div>
+                </button>
               ))}
             </div>
 
