@@ -30,7 +30,7 @@ export default async function ReadingRoomPage() {
   const { data: posts } = await supabaseClient
     .from("posts")
     .select(`
-      id, title, slug, type, content, published_at, candle_count, view_count, author_id,
+      id, title, slug, type, content, published_at, candle_count, author_id,
       profiles ( id, username, display_name, avatar_url )
     `)
     .eq("is_draft", false)

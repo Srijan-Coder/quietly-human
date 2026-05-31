@@ -8,10 +8,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ error: "Missing post id" }, { status: 400 });
     }
 
-    // Call Supabase RPC to safely increment view_count, or just read and update using admin
+    // Fetch the author profile ID and slug from the post
     const { data: post, error: fetchError } = await supabaseAdmin
       .from("posts")
-      .select("view_count")
+      .select("author_id, slug")
       .eq("id", postId)
       .maybeSingle();
 
@@ -19,12 +19,20 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    const { error: updateError } = await supabaseAdmin
-      .from("posts")
-      .update({ view_count: (post.view_count || 0) + 1 })
-      .eq("id", postId);
+    // Fetch the author's username to construct the path
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("username")
+      .eq("id", post.author_id)
+      .maybeSingle();
 
-    if (updateError) throw updateError;
+    // Log the view into the page_views table
+    const path = `/room/${profile?.username || "unknown"}/${post.slug || postId}`;
+    const { error: insertError } = await supabaseAdmin
+      .from("page_views")
+      .insert({ profile_id: post.author_id, path });
+
+    if (insertError) throw insertError;
 
     return NextResponse.json({ success: true });
   } catch (err: any) {

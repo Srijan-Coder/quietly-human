@@ -28,7 +28,7 @@ export default async function DashboardPage() {
   const { data: myOwnPosts } = await supabaseClient
     .from("posts")
     .select(`
-      id, title, slug, type, content, published_at, created_at, candle_count, view_count, author_id,
+      id, title, slug, type, content, published_at, created_at, candle_count, author_id,
       profiles ( id, username, display_name, avatar_url )
     `)
     .eq("author_id", user.id)
@@ -40,7 +40,7 @@ export default async function DashboardPage() {
   const { data: networkPosts } = await supabaseClient
     .from("posts")
     .select(`
-      id, title, slug, type, content, published_at, created_at, candle_count, view_count, author_id,
+      id, title, slug, type, content, published_at, created_at, candle_count, author_id,
       profiles ( id, username, display_name, avatar_url )
     `)
     .neq("author_id", user.id)
