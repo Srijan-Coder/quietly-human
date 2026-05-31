@@ -173,6 +173,33 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Book",
+            "name": title,
+            "author": {
+              "@type": "Person",
+              "name": author
+            },
+            "image": coverImage ? urlFor(coverImage)?.width(600).url() : undefined,
+            "publisher": {
+              "@type": "Organization",
+              "name": "Quietly Humans",
+              "url": "https://quietlyhumans.space"
+            },
+            "offers": ebookBook ? {
+              "@type": "Offer",
+              "price": ebookBook.bookFormat === 'premium' ? ebookBook.price || 0 : 0,
+              "priceCurrency": "USD",
+              "availability": "https://schema.org/InStock",
+              "url": `https://www.quietlyhumans.space/books/${baseSlug}`
+            } : undefined
+          })
+        }}
+      />
       <Link href="/books" className="text-xs uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mb-12 block">
         ← Back to Library
       </Link>
