@@ -91,6 +91,18 @@ export default async function CreatorRoomPage({ params }: Props) {
     .eq("is_draft", false)
     .order("candle_count", { ascending: false });
 
+  // Fetch incoming community letters addressed to this user
+  const { data: incomingLetters } = await supabaseClient
+    .from("posts")
+    .select(`
+      id, title, type, published_at, candle_count, slug, excerpt, author_id,
+      profiles ( id, username, display_name, avatar_url )
+    `)
+    .eq("type", "letter")
+    .eq("category", `Recipient: ${username}`)
+    .eq("is_draft", false)
+    .order("published_at", { ascending: false });
+
   const isOwnProfile = user?.id === profile.id;
   const totalCandles = posts?.reduce((sum, p) => sum + (p.candle_count || 0), 0) || 0;
   const totalPosts = posts?.length || 0;
@@ -422,9 +434,81 @@ export default async function CreatorRoomPage({ params }: Props) {
           )}
         </section>
 
-        {/* ══════════════════════════════════════
-            BOTTOM CTA BAND
-        ══════════════════════════════════════ */}
+      {/* ══════════════════════════════════════
+          INCOMING LETTERS FROM COMMUNITY
+      ══════════════════════════════════════ */}
+      {incomingLetters && incomingLetters.length > 0 && (
+        <section className="max-w-5xl mx-auto px-6 mt-20">
+          <div className="flex items-center gap-4 mb-12">
+            <div className="h-px flex-1 bg-white/6" />
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-sans">Letters from the Community</span>
+            <div className="h-px flex-1 bg-white/6" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {incomingLetters.map((post) => (
+              <Link
+                key={post.id}
+                href={`/room/${post.profiles?.[0]?.username || 'unknown'}/${post.slug || post.id}`}
+                className="group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
+                style={{
+                  background: "rgba(255,255,255,0.025)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                }}
+              >
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                  style={{ background: `radial-gradient(ellipse at 50% 0%, ${glowColor}, transparent 65%)` }}
+                />
+
+                <div className="p-7 flex flex-col flex-1 relative z-10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-[9px] uppercase tracking-[0.22em] font-bold px-3 py-1 rounded-full bg-brand-accent/20 border border-brand-accent/20 text-brand-accent">
+                      Letter
+                    </span>
+                    <div className="flex items-center gap-1.5 opacity-60">
+                      {post.profiles?.[0]?.avatar_url && (
+                        <Image src={post.profiles[0].avatar_url} alt="author" width={16} height={16} className="rounded-full" />
+                      )}
+                      <span className="text-[10px] text-white/60">From @{post.profiles?.[0]?.username || "unknown"}</span>
+                    </div>
+                  </div>
+
+                  <h3 className="font-serif text-xl md:text-2xl leading-snug text-white/85 group-hover:text-white transition-colors duration-300 mb-3 flex-1">
+                    {post.title || "Untitled Letter"}
+                  </h3>
+
+                  {post.excerpt && (
+                    <p className="text-sm text-white/35 font-serif italic line-clamp-2 mb-5 leading-relaxed">
+                      {post.excerpt}
+                    </p>
+                  )}
+
+                  <div className="flex items-center justify-between pt-5 border-t border-white/6 mt-auto">
+                    <span className="text-[10px] text-white/25 font-sans tracking-wider">
+                      {new Date(post.published_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                    <span
+                      className="flex items-center gap-1.5 text-[11px] text-white/40 px-3 py-1 rounded-full font-sans"
+                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
+                    >
+                      🕯️ {post.candle_count || 0}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ══════════════════════════════════════
+          BOTTOM CTA BAND
+      ══════════════════════════════════════ */}
         {!isOwnProfile && (
           <section className="max-w-2xl mx-auto px-6 mt-24 text-center">
             <p className="font-serif italic text-white/20 text-sm mb-4">

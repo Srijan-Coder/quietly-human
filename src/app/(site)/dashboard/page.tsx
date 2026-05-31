@@ -6,6 +6,7 @@ import DashboardPostActionsClient from "./DashboardPostActionsClient";
 import SubscriberListClient from "./SubscribersListClient";
 
 import DashboardFeedClient from "./DashboardFeedClient";
+import DashboardAnalyticsClient from "./DashboardAnalyticsClient";
 
 export const metadata = {
   title: "Creator Dashboard — Quietly Humans",
@@ -75,19 +76,31 @@ export default async function DashboardPage() {
     .eq("following_id", user.id);
 
   // Fetch page views
-  const { count: pageViewsCount } = await supabaseClient
+  const { data: pageViews } = await supabaseClient
     .from("page_views")
-    .select("*", { count: "exact", head: true })
+    .select("path, created_at")
     .eq("profile_id", user.id);
 
   // Fetch link clicks
-  const { count: linkClicksCount } = await supabaseClient
+  const { data: linkClicks } = await supabaseClient
     .from("link_clicks")
-    .select("*", { count: "exact", head: true })
+    .select("url, created_at")
     .eq("profile_id", user.id);
 
-  const myPosts = allPosts?.filter(p => p.author_id === user.id) || [];
+  const pageViewsCount = pageViews?.length || 0;
+  const linkClicksCount = linkClicks?.length || 0;
+
+  const myPosts = (allPosts?.filter(p => p.author_id === user.id) || []).map(post => {
+    const viewCount = pageViews?.filter(v => {
+      const parts = v.path.split("/");
+      const slug = parts[parts.length - 1] || "";
+      return slug === post.slug || slug === post.id;
+    }).length || 0;
+    return { ...post, view_count: viewCount };
+  });
+
   const totalCandles = myPosts.reduce((acc, post) => acc + (post.candle_count || 0), 0) || 0;
+  const feedPosts = [...myPosts, ...(networkPosts || [])];
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32 font-serif text-brand-text">
@@ -142,9 +155,16 @@ export default async function DashboardPage() {
         <SubscriberListClient subscribers={subscribers || []} />
       </div>
 
+      {/* Dashboard Analytics Section */}
+      <DashboardAnalyticsClient 
+        pageViews={pageViews || []} 
+        linkClicks={linkClicks || []} 
+        posts={myPosts} 
+      />
+
       {/* Advanced Network Feed & Writings */}
       <DashboardFeedClient 
-        initialPosts={allPosts || []}
+        initialPosts={feedPosts || []}
         currentUserId={user.id}
         currentUsername={profile.username}
         followingIds={followingIds}

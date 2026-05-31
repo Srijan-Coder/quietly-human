@@ -139,6 +139,24 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
   const [isPublishing, setIsPublishing] = useState(false);
   const [error, setError] = useState("");
   const [saveStatus, setSaveStatus] = useState("Draft saved locally");
+  const [creators, setCreators] = useState<{ username: string; display_name: string | null }[]>([]);
+  const initialRecipient = initialPost?.category?.startsWith("Recipient: ") 
+    ? initialPost.category.replace("Recipient: ", "") 
+    : "";
+  const [targetCreator, setTargetCreator] = useState(initialRecipient);
+
+  useEffect(() => {
+    async function fetchCreators() {
+      const { data } = await supabaseClient
+        .from("profiles")
+        .select("username, display_name")
+        .order("username", { ascending: true });
+      if (data) {
+        setCreators(data);
+      }
+    }
+    fetchCreators();
+  }, []);
 
   // Load draft on mount (only if NOT editing an existing post)
   useEffect(() => {
@@ -348,7 +366,7 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
         title: finalTitle, 
         content: finalContent, 
         type, 
-        category, 
+        category: type === "letter" && targetCreator ? `Recipient: ${targetCreator}` : category, 
         postTheme, 
         coverImageUrl: finalCoverImageUrl, 
         pdfFileUrl: type === 'ebook' ? pdfFileUrl : null 
@@ -564,6 +582,24 @@ export default function WriteEditorClient({ isPremium, pins, initialPost }: { is
                 onChange={e => setTitle(e.target.value)}
                 className="w-full bg-transparent border-b border-brand-border/40 focus:border-brand-accent outline-none text-3xl md:text-4xl text-brand-text font-serif placeholder:text-brand-soft/30 pb-2 transition-colors"
               />
+            </div>
+
+            {/* Address to Creator Space */}
+            <div>
+              <label className="text-[10px] uppercase tracking-widest text-brand-soft font-sans font-bold block mb-2">Address to Creator Space (Optional)</label>
+              <select
+                value={targetCreator}
+                onChange={e => setTargetCreator(e.target.value)}
+                className="w-full bg-brand-bg/30 border border-brand-border/40 rounded-xl px-4 py-3 text-sm font-sans outline-none focus:border-brand-accent transition-colors text-brand-text appearance-none cursor-pointer pr-10"
+                style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px top 50%', backgroundSize: '10px auto' }}
+              >
+                <option value="">Publicly to the Reading Room (Not addressed to anyone)</option>
+                {creators.map(c => (
+                  <option key={c.username} value={c.username}>
+                    Address to @{c.username} ({c.display_name || c.username})
+                  </option>
+                ))}
+              </select>
             </div>
             
             {/* Subject */}

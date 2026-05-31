@@ -11,6 +11,7 @@ export default function SanctuaryPassClient({ isPremium, userEmail }: { isPremiu
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [showRedeem, setShowRedeem] = useState(false);
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
 
   const handleRedeem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,9 +48,17 @@ export default function SanctuaryPassClient({ isPremium, userEmail }: { isPremiu
     ? `https://quietlyhumansspace.gumroad.com/l/soacp?email=${encodeURIComponent(userEmail)}`
     : "https://quietlyhumansspace.gumroad.com/l/soacp";
 
+  const annualCheckoutUrl = userEmail
+    ? `https://quietlyhumansspace.gumroad.com/l/soacp-annual?email=${encodeURIComponent(userEmail)}`
+    : "https://quietlyhumansspace.gumroad.com/l/soacp-annual";
+
+  const trialCheckoutUrl = userEmail
+    ? `https://quietlyhumansspace.gumroad.com/l/soacp-trial?email=${encodeURIComponent(userEmail)}`
+    : "https://quietlyhumansspace.gumroad.com/l/soacp-trial";
+
   return (
-    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-3xl mx-auto w-full pb-32 font-serif text-center">
-      <header className="mb-16 border-b border-brand-border pb-12">
+    <div className="min-h-screen pt-32 px-6 md:px-12 max-w-4xl mx-auto w-full pb-32 font-serif text-center">
+      <header className="mb-16 border-b border-brand-border/30 pb-12">
         <h1 className="text-5xl text-brand-text mb-4">The Sanctuary Pass</h1>
         <p className="text-brand-soft text-lg max-w-xl mx-auto italic">
           Unlock the deepest tools, expand your quiet collection, and support the sanctuary.
@@ -57,108 +66,170 @@ export default function SanctuaryPassClient({ isPremium, userEmail }: { isPremiu
       </header>
 
       {isPremium || success ? (
-        <div className="bg-[#121212] border border-brand-accent p-12 rounded-[2rem] shadow-[0_0_50px_rgba(252,163,17,0.1)] relative overflow-hidden group">
+        <div className="bg-brand-card border border-brand-accent p-12 rounded-[2rem] shadow-[0_0_50px_rgba(201,164,106,0.08)] relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/10 to-transparent opacity-50 pointer-events-none" />
           <h2 className="text-4xl text-brand-accent mb-4 relative z-10 font-serif">You are a Guardian.</h2>
-          <p className="text-brand-soft mb-8 text-lg relative z-10 font-sans">
+          <p className="text-brand-soft mb-8 text-lg relative z-10 font-sans leading-relaxed">
             Thank you for supporting Quietly Humans. Your Sanctuary Pass is active, granting you full access to all premium tools, quiet mode, and unlimited collection saves.
           </p>
-          <Link href="/toolkit" className="bg-white text-black px-8 py-3 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 transition-transform relative z-10 shadow-[0_0_20px_rgba(255,255,255,0.1)] inline-block">
+          <Link href="/toolkit" className="bg-brand-text text-brand-bg px-8 py-3.5 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 transition-transform relative z-10 shadow-lg inline-block cursor-pointer">
             Enter The Toolkit
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-12">
           
-          {/* Comparison Table */}
-          <div className="bg-[#121212] border border-white/5 rounded-[2rem] overflow-hidden">
-            <div className="grid grid-cols-3 border-b border-white/5 bg-black/40 text-[10px] uppercase tracking-widest text-brand-soft p-6 font-bold">
+          {/* Comparison Cards Grid */}
+          <div className="bg-brand-card border border-brand-border/40 rounded-[2rem] overflow-hidden">
+            <div className="grid grid-cols-3 border-b border-brand-border/30 bg-brand-bg/20 text-[10px] uppercase tracking-widest text-brand-soft p-6 font-bold">
               <div>Features</div>
               <div className="text-center">Free</div>
               <div className="text-center text-brand-accent">Guardian</div>
             </div>
             
-            <div className="divide-y divide-white/5 font-sans text-sm">
-              <div className="grid grid-cols-3 p-6 hover:bg-white/5 transition-colors">
-                <div className="text-left text-white">Basic Toolkit (10 Tools)</div>
-                <div className="text-center text-white/50">✓</div>
+            <div className="divide-y divide-brand-border/20 font-sans text-sm">
+              <div className="grid grid-cols-3 p-6 hover:bg-brand-bg/30 transition-colors">
+                <div className="text-left text-brand-text">Basic Toolkit (10 Tools)</div>
+                <div className="text-center text-brand-soft/70">✓</div>
                 <div className="text-center text-brand-accent">✓</div>
               </div>
-              <div className="grid grid-cols-3 p-6 hover:bg-white/5 transition-colors">
-                <div className="text-left text-white">Creator Room & Writing</div>
-                <div className="text-center text-white/50">✓</div>
+              <div className="grid grid-cols-3 p-6 hover:bg-brand-bg/30 transition-colors">
+                <div className="text-left text-brand-text">Creator Room & Writing</div>
+                <div className="text-center text-brand-soft/70">✓</div>
                 <div className="text-center text-brand-accent">✓</div>
               </div>
-              <div className="grid grid-cols-3 p-6 hover:bg-white/5 transition-colors">
-                <div className="text-left text-white">Premium Toolkit (20 Tools)</div>
-                <div className="text-center text-white/10">-</div>
+              <div className="grid grid-cols-3 p-6 hover:bg-brand-bg/30 transition-colors">
+                <div className="text-left text-brand-text">Premium Toolkit (20 Tools)</div>
+                <div className="text-center text-brand-soft/20">-</div>
                 <div className="text-center text-brand-accent">✓</div>
               </div>
-              <div className="grid grid-cols-3 p-6 hover:bg-white/5 transition-colors">
-                <div className="text-left text-white">Quiet Mode (Ad-Free)</div>
-                <div className="text-center text-white/10">-</div>
+              <div className="grid grid-cols-3 p-6 hover:bg-brand-bg/30 transition-colors">
+                <div className="text-left text-brand-text">Quiet Mode (Ad-Free)</div>
+                <div className="text-center text-brand-soft/20">-</div>
                 <div className="text-center text-brand-accent">✓</div>
               </div>
-              <div className="grid grid-cols-3 p-6 hover:bg-white/5 transition-colors">
-                <div className="text-left text-white">Guardian Profile Badge</div>
-                <div className="text-center text-white/10">-</div>
+              <div className="grid grid-cols-3 p-6 hover:bg-brand-bg/30 transition-colors">
+                <div className="text-left text-brand-text">Guardian Profile Badge</div>
+                <div className="text-center text-brand-soft/20">-</div>
                 <div className="text-center text-brand-accent">🌿</div>
               </div>
             </div>
           </div>
 
-          {/* Checkout Card */}
-          <div className="bg-[#121212] border border-white/10 p-8 md:p-12 rounded-[2rem] relative overflow-hidden text-center shadow-2xl">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-accent/5 rounded-full blur-3xl -ml-32 -mb-32"></div>
-            
-            <h2 className="text-4xl text-white mb-2 font-serif relative z-10">Become a Guardian</h2>
-            <div className="text-brand-accent text-xl font-sans mb-8 relative z-10">
-              <span className="text-5xl font-bold font-serif">$4.99</span> / month
+          {/* Billing Switcher */}
+          <div className="flex justify-center items-center gap-4 my-4">
+            <span className={`text-[10px] uppercase tracking-widest font-sans font-bold transition-colors ${billingPeriod === "monthly" ? "text-brand-text" : "text-brand-soft"}`}>Monthly Billing</span>
+            <button 
+              onClick={() => setBillingPeriod(prev => prev === "monthly" ? "annual" : "monthly")}
+              className="w-12 h-6 bg-brand-border/40 hover:bg-brand-border/60 rounded-full relative p-0.5 transition-colors focus:outline-none cursor-pointer"
+            >
+              <div className={`w-5 h-5 bg-brand-accent rounded-full shadow-md transform transition-transform duration-300 ${billingPeriod === "annual" ? "translate-x-6" : ""}`} />
+            </button>
+            <span className={`text-[10px] uppercase tracking-widest font-sans font-bold flex items-center gap-1.5 transition-colors ${billingPeriod === "annual" ? "text-brand-text" : "text-brand-soft"}`}>
+              Annual Billing <span className="bg-brand-accent/20 border border-brand-accent/30 text-brand-accent text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Save 33%</span>
+            </span>
+          </div>
+
+          {/* Choices Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+            {/* Trial pass card */}
+            <div className="bg-brand-card border border-brand-border/40 p-8 md:p-10 rounded-[2rem] flex flex-col justify-between h-full relative group">
+              <div>
+                <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-2 block font-bold">Sanctuary Trial</span>
+                <h3 className="text-2xl text-brand-text font-serif mb-2">7-Day Trial Pass</h3>
+                <p className="text-xs text-brand-soft font-sans mb-6 leading-relaxed">
+                  Try out the complete clinical toolkit, save thoughts, and explore quiet mode for a full week.
+                </p>
+                <div className="text-brand-accent font-sans mb-6">
+                  <span className="text-4xl font-serif font-bold">$0.00</span> <span className="text-xs text-brand-soft">for 7 days</span>
+                </div>
+                <ul className="text-xs text-brand-soft font-sans space-y-3 mb-8 border-t border-brand-border/20 pt-6">
+                  <li className="flex items-center gap-2">✓ Access all 20 mental health tools</li>
+                  <li className="flex items-center gap-2">✓ Bookmark unlimited writings</li>
+                  <li className="flex items-center gap-2">✓ Ad-free interface during trial</li>
+                </ul>
+              </div>
+              <a 
+                href={trialCheckoutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full text-center bg-brand-text text-brand-bg hover:scale-102 transition-transform px-6 py-3.5 rounded-full text-[10px] uppercase tracking-widest font-bold inline-block cursor-pointer shadow-md"
+              >
+                Start 7-Day Free Trial
+              </a>
             </div>
 
-            <a 
-              href={checkoutUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-brand-accent text-black px-12 py-4 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 transition-transform shadow-[0_0_30px_rgba(252,163,17,0.3)] inline-block relative z-10 mb-6"
-            >
-              Subscribe via Gumroad
-            </a>
-            
-            <div className="relative z-10">
-              {!showRedeem ? (
-                <button 
-                  onClick={() => setShowRedeem(true)}
-                  className="text-[10px] uppercase tracking-widest text-brand-soft hover:text-white transition-colors border-b border-transparent hover:border-white pb-0.5"
-                >
-                  Already purchased? Redeem License Key
-                </button>
-              ) : (
-                <form onSubmit={handleRedeem} className="mt-4 max-w-sm mx-auto flex flex-col gap-3 font-sans">
-                  <p className="text-xs text-brand-soft mb-2">Check your Gumroad email receipt for your license key.</p>
-                  <input
-                    type="text"
-                    value={licenseKey}
-                    onChange={(e) => setLicenseKey(e.target.value)}
-                    placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
-                    className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-sm text-center font-mono focus:outline-none focus:border-brand-accent text-white uppercase"
-                    required
-                  />
-                  {error && <p className="text-xs text-red-400">{error}</p>}
-                  <button 
-                    type="submit" 
-                    disabled={isVerifying}
-                    className="bg-white/10 hover:bg-white/20 border border-white/20 text-white py-3 rounded-lg text-xs uppercase tracking-widest transition-colors font-bold disabled:opacity-50"
-                  >
-                    {isVerifying ? "Verifying..." : "Unlock Sanctuary Pass"}
-                  </button>
-                </form>
-              )}
+            {/* Guardian Pass card */}
+            <div className="bg-brand-card border border-brand-accent/40 p-8 md:p-10 rounded-[2rem] flex flex-col justify-between h-full relative group shadow-[0_0_50px_rgba(201,164,106,0.03)]">
+              <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent pointer-events-none" />
+              <div>
+                <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block font-bold">Full Access</span>
+                <h3 className="text-2xl text-brand-text font-serif mb-2">Sanctuary Membership</h3>
+                <p className="text-xs text-brand-soft font-sans mb-6 leading-relaxed">
+                  Support independent, clinical mental wellness development and build your custom room.
+                </p>
+                <div className="text-brand-accent font-sans mb-6">
+                  {billingPeriod === "monthly" ? (
+                    <>
+                      <span className="text-4xl font-serif font-bold">$4.99</span> <span className="text-xs text-brand-soft">/ month</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-4xl font-serif font-bold">$3.33</span> <span className="text-xs text-brand-soft">/ month ($39.99/yr)</span>
+                    </>
+                  )}
+                </div>
+                <ul className="text-xs text-brand-soft font-sans space-y-3 mb-8 border-t border-brand-border/20 pt-6">
+                  <li className="flex items-center gap-2">✓ All 20 interactive clinical tools</li>
+                  <li className="flex items-center gap-2">✓ Complete Quiet Mode (100% ad-free)</li>
+                  <li className="flex items-center gap-2">✓ Upgraded Guardian profile badge (🌿)</li>
+                  <li className="flex items-center gap-2">✓ Attach up to 3 custom pins to your posts</li>
+                </ul>
+              </div>
+              <a 
+                href={billingPeriod === "monthly" ? checkoutUrl : annualCheckoutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full text-center bg-brand-accent text-white hover:scale-102 transition-transform px-6 py-3.5 rounded-full text-[10px] uppercase tracking-widest font-bold inline-block cursor-pointer shadow-[0_0_30px_rgba(201,164,106,0.15)]"
+              >
+                Become a Guardian
+              </a>
             </div>
+          </div>
+
+          {/* Redeem section */}
+          <div className="mt-8 text-center">
+            {!showRedeem ? (
+              <button 
+                onClick={() => setShowRedeem(true)}
+                className="text-[10px] uppercase tracking-widest text-brand-soft hover:text-brand-text transition-colors border-b border-transparent hover:border-brand-border/60 pb-0.5 cursor-pointer"
+              >
+                Already purchased? Redeem License Key
+              </button>
+            ) : (
+              <form onSubmit={handleRedeem} className="mt-4 max-w-sm mx-auto flex flex-col gap-3 font-sans">
+                <p className="text-xs text-brand-soft mb-2">Check your Gumroad email receipt for your license key.</p>
+                <input
+                  type="text"
+                  value={licenseKey}
+                  onChange={(e) => setLicenseKey(e.target.value)}
+                  placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
+                  className="w-full bg-brand-bg/40 border border-brand-border/40 rounded-lg px-4 py-3 text-sm text-center font-mono focus:outline-none focus:border-brand-accent text-brand-text uppercase placeholder:text-brand-soft/20"
+                  required
+                />
+                {error && <p className="text-xs text-red-400">{error}</p>}
+                <button 
+                  type="submit" 
+                  disabled={isVerifying}
+                  className="bg-brand-border/20 hover:bg-brand-border/40 border border-brand-border/30 text-brand-text py-3 rounded-lg text-xs uppercase tracking-widest transition-colors font-bold disabled:opacity-50 cursor-pointer"
+                >
+                  {isVerifying ? "Verifying..." : "Unlock Sanctuary Pass"}
+                </button>
+              </form>
+            )}
             
-            <p className="text-[10px] uppercase tracking-widest text-white/30 mt-8 relative z-10">
-              Secure payment processing. Cancel anytime.
+            <p className="text-[9px] uppercase tracking-[0.2em] text-brand-soft/50 mt-12">
+              Secure payment processing via Gumroad. Cancel anytime.
             </p>
           </div>
         </div>
