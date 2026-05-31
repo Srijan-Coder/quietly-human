@@ -85,6 +85,7 @@ export default async function RootLayout({
       >
         <head>
           <link rel="manifest" href="/manifest.json" />
+          <meta name="p:domain_verify" content="025eccd49b84b60e7aa23c302d7ec28d" />
           <meta name="theme-color" content="#0d0d0d" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
