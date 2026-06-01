@@ -19,10 +19,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const currentSlug = resolvedParams.slug;
   const baseSlug = currentSlug.endsWith("-ebook") ? currentSlug.replace(/-ebook$/, "") : currentSlug;
 
-  const book = await client.fetch(
-    groq`*[_type in ["ebook", "book", "product"] && slug.current == $baseSlug][0]{ title, author, coverImage }`,
-    { baseSlug }
-  );
+  let book = null;
+  try {
+    book = await client.fetch(
+      groq`*[_type in ["ebook", "book", "product"] && slug.current == $baseSlug][0]{ title, author, coverImage }`,
+      { baseSlug }
+    );
+  } catch (err) {
+    console.error("Metadata fetch failed:", err);
+  }
 
   if (!book) return {};
 
@@ -60,39 +65,48 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
 
   // If the user visits the -ebook URL, and the base book exists, redirect them to the consolidated base page
   if (isEbookSlug) {
-    const baseBookExists = await client.fetch(
-      groq`defined(*[_type in ["ebook", "book", "product"] && slug.current == $baseSlug][0]._id)`,
-      { baseSlug }
-    );
-    if (baseBookExists) {
-      redirect(`/books/${baseSlug}`);
+    try {
+      const baseBookExists = await client.fetch(
+        groq`defined(*[_type in ["ebook", "book", "product"] && slug.current == $baseSlug][0]._id)`,
+        { baseSlug }
+      );
+      if (baseBookExists) {
+        redirect(`/books/${baseSlug}`);
+      }
+    } catch (e) {
+      console.error("Sanity exists check failed:", e);
     }
   }
 
   // Fetch base book and ebook documents in a single query
-  const documents = await client.fetch(
-    groq`*[_type in ["ebook", "book", "product"] && (slug.current == $baseSlug || slug.current == $ebookSlug)]{
-      _id,
-      _type,
-      title,
-      "slug": slug.current,
-      author,
-      coverImage,
-      description,
-      "fileUrl": ebookFile.asset->url,
-      notionUrl,
-      emotionTags,
-      bookFormat,
-      price,
-      purchaseUrl,
-      "productLink": link,
-      whatsIncluded,
-      purchaseLinks,
-      demoChapter,
-      "hasChapters": defined(chapters)
-    }`,
-    { baseSlug, ebookSlug }
-);
+  let documents = [];
+  try {
+    documents = await client.fetch(
+      groq`*[_type in ["ebook", "book", "product"] && (slug.current == $baseSlug || slug.current == $ebookSlug)]{
+        _id,
+        _type,
+        title,
+        "slug": slug.current,
+        author,
+        coverImage,
+        description,
+        "fileUrl": ebookFile.asset->url,
+        notionUrl,
+        emotionTags,
+        bookFormat,
+        price,
+        purchaseUrl,
+        "productLink": link,
+        whatsIncluded,
+        purchaseLinks,
+        demoChapter,
+        "hasChapters": defined(chapters)
+      }`,
+      { baseSlug, ebookSlug }
+    );
+  } catch (sanityError) {
+    console.error("Sanity fetch error in book details:", sanityError);
+  }
 
   if (!documents || documents.length === 0) {
     notFound();
@@ -115,12 +129,37 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
   try {
     const { data: existingPost } = await supabaseAdmin
       .from("posts")
-      .select("id, author_id")
+      .select("id, author_id, content")
       .eq("slug", baseSlug)
       .maybeSingle();
 
+    // Helper to extract plain text description from Sanity PortableText
+    const getSanityDescription = () => {
+      const desc = baseBook.description || ebookBook?.description;
+      if (!desc) return "Sanity Ebook Sync";
+      if (typeof desc === 'string') return desc;
+      if (Array.isArray(desc)) {
+        return desc
+          .map(block => {
+            if (block._type !== 'block' || !block.children) return '';
+            return block.children.map((child: any) => child.text).join('');
+          })
+          .join('\n\n');
+      }
+      return "Sanity Ebook Sync";
+    };
+
+    const targetContent = getSanityDescription();
+
     if (existingPost) {
       supabasePost = existingPost;
+      // If the content is still a placeholder or empty, let's update it in Supabase
+      if (existingPost.content === "sanity_book_sync" || !existingPost.content || existingPost.content === "Sanity Ebook Sync") {
+        await supabaseAdmin
+          .from("posts")
+          .update({ content: targetContent, title: title })
+          .eq("id", existingPost.id);
+      }
     } else {
       // Find the first/earliest profile in the database (admin/creator)
       const { data: firstProfile } = await supabaseAdmin
@@ -138,7 +177,7 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
             type: "ebook",
             title: title,
             slug: baseSlug,
-            content: "sanity_book_sync",
+            content: targetContent,
             is_draft: false,
             published_at: new Date().toISOString()
           }])

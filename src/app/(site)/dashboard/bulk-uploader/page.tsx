@@ -20,6 +20,7 @@ export default async function BulkUploaderPage() {
     .single();
 
   if (!profile) redirect("/onboarding");
+  if (profile.username !== "srijan") redirect("/dashboard");
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-5xl mx-auto w-full pb-32 text-brand-text">

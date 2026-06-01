@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase";
 import { headers } from "next/headers";
@@ -12,14 +12,14 @@ export default async function UsernameCheck({ children }: { children: React.Reac
     return <>{children}</>;
   }
 
-  const user = await currentUser();
+  const { userId } = await auth();
   
-  if (user) {
+  if (userId) {
     // Check if user exists in Supabase profiles
     const { data: profile } = await supabaseClient
       .from("profiles")
       .select("id")
-      .eq("id", user.id)
+      .eq("id", userId)
       .single();
 
     if (!profile) {

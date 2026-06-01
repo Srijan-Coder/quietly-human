@@ -8,6 +8,10 @@ import CommentSectionClient from "@/components/global/CommentSectionClient";
 import ViewTracker from "./ViewTracker";
 import ShareButtons from "./ShareButtons";
 import type { Metadata } from "next";
+import { client } from "@/sanity/lib/client";
+import { groq } from "next-sanity";
+import { urlFor } from "@/sanity/lib/image";
+import { CustomPortableText } from "@/components/global/CustomPortableText";
 
 const BASE_URL = "https://www.quietlyhumans.space";
 
@@ -73,6 +77,35 @@ export default async function PostPage({ params }: Props) {
     .single();
 
   if (!post) notFound();
+
+  // Fetch book from Sanity if it's a synced ebook
+  let sanityBook = null;
+  if (post.type === "ebook" || post.content === "sanity_book_sync") {
+    try {
+      sanityBook = await client.fetch(
+        groq`*[_type in ["ebook", "book", "product"] && slug.current == $bookSlug][0]{
+          _id,
+          title,
+          "slug": slug.current,
+          author,
+          coverImage,
+          description,
+          "fileUrl": ebookFile.asset->url,
+          notionUrl,
+          emotionTags,
+          bookFormat,
+          price,
+          purchaseUrl,
+          "productLink": link,
+          purchaseLinks,
+          "hasChapters": defined(chapters)
+        }`,
+        { bookSlug: post.slug }
+      );
+    } catch (e) {
+      console.error("Sanity fetch error in room post:", e);
+    }
+  }
 
   // Fetch 2 other posts from same author for "Read Next"
   const { data: otherPosts } = await supabaseClient
@@ -198,10 +231,91 @@ export default async function PostPage({ params }: Props) {
         </header>
 
         {/* Content Render: we use prose adaptive classes */}
-        <div 
-          className="prose dark:prose-invert prose-lg md:prose-xl max-w-none mb-16 leading-relaxed font-serif text-brand-text"
-          dangerouslySetInnerHTML={{ __html: post.content || '' }}
-        />
+        {sanityBook ? (
+          <div className="mb-16">
+            {/* Book Info Box */}
+            <div className="bg-brand-card border border-brand-border/40 p-8 rounded-3xl mb-12 flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
+              {sanityBook.coverImage && (
+                <div className="w-32 h-48 shrink-0 relative rounded-xl overflow-hidden shadow-xl border border-brand-border/30">
+                  <Image
+                    src={urlFor(sanityBook.coverImage).url()}
+                    alt={sanityBook.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <div className="flex-grow">
+                <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block font-sans font-bold">
+                  {sanityBook.bookFormat === "premium" ? "Premium Ebook" : "Community Ebook"}
+                </span>
+                <h2 className="text-3xl font-serif text-brand-text mb-2">{sanityBook.title}</h2>
+                <p className="text-brand-soft text-sm font-sans mb-6">By {sanityBook.author || "Srijan Pandey"}</p>
+                
+                {/* Actions */}
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                  {sanityBook.bookFormat === "premium" ? (
+                    <a
+                      href={sanityBook.purchaseUrl || sanityBook.productLink || `/books/${sanityBook.slug}`}
+                      className="px-6 py-3 bg-brand-accent text-white rounded-full text-xs uppercase tracking-widest font-sans font-bold hover:bg-brand-text transition-colors shadow-lg cursor-pointer"
+                    >
+                      Buy Ebook (${sanityBook.price || 0})
+                    </a>
+                  ) : (
+                    <>
+                      {sanityBook.hasChapters && (
+                        <Link
+                          href={`/read/${sanityBook.slug}`}
+                          className="px-6 py-3 bg-brand-text text-brand-bg rounded-full text-xs uppercase tracking-widest font-sans font-bold hover:bg-brand-accent transition-colors shadow-lg"
+                        >
+                          Read Online
+                        </Link>
+                      )}
+                      {sanityBook.fileUrl && (
+                        <a
+                          href={sanityBook.fileUrl}
+                          download
+                          className="px-6 py-3 bg-brand-card border border-brand-border text-brand-text rounded-full text-xs uppercase tracking-widest font-sans font-bold hover:border-brand-accent transition-colors"
+                        >
+                          Download PDF
+                        </a>
+                      )}
+                      {sanityBook.notionUrl && (
+                        <a
+                          href={sanityBook.notionUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-6 py-3 bg-brand-card border border-brand-border text-brand-text rounded-full text-xs uppercase tracking-widest font-sans font-bold hover:border-brand-accent transition-colors"
+                        >
+                          Notion Hub
+                        </a>
+                      )}
+                    </>
+                  )}
+                  <Link
+                    href={`/books/${sanityBook.slug}`}
+                    className="px-6 py-3 bg-brand-card border border-brand-border text-brand-soft rounded-full text-xs uppercase tracking-widest font-sans font-bold hover:text-brand-text transition-colors"
+                  >
+                    View Product Details
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Book Description from Sanity */}
+            {sanityBook.description && (
+              <div className="prose dark:prose-invert prose-lg max-w-none leading-relaxed font-serif text-brand-text mb-12">
+                <h3 className="text-xs uppercase tracking-widest text-brand-soft mb-6 font-sans">About this Ebook</h3>
+                <CustomPortableText value={sanityBook.description} />
+              </div>
+            )}
+          </div>
+        ) : (
+          <div 
+            className="prose dark:prose-invert prose-lg md:prose-xl max-w-none mb-16 leading-relaxed font-serif text-brand-text"
+            dangerouslySetInnerHTML={{ __html: post.content || '' }}
+          />
+        )}
 
         {/* Embedded Premium Product Cards (Up to 3) */}
         {post.attached_pins && post.attached_pins.length > 0 && (

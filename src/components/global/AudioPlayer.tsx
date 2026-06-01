@@ -2,7 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import YouTube from "react-youtube";
+import dynamic from "next/dynamic";
+
+const YouTube = dynamic(() => import("react-youtube").then((mod) => mod.default), {
+  ssr: false,
+  loading: () => null,
+});
 
 type Track = {
   id: string;

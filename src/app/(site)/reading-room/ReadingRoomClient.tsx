@@ -212,7 +212,7 @@ export default function ReadingRoomClient({
                 <div className="flex items-center gap-3 mb-6 relative z-10 shrink-0">
                   <Link href={`/room/${post.profiles?.username}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity z-20">
                     {post.profiles?.avatar_url ? (
-                      <Image src={post.profiles.avatar_url} alt={post.profiles.username} width={32} height={32} className="rounded-full border border-brand-border/20" />
+                      <Image src={post.profiles.avatar_url} alt={post.profiles?.username || "avatar"} width={32} height={32} className="rounded-full border border-brand-border/20" />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-brand-bg/50 border border-brand-border/20 flex items-center justify-center text-[10px] font-bold text-brand-text">
                         {post.profiles?.display_name?.charAt(0) || post.profiles?.username?.charAt(0) || '?'}

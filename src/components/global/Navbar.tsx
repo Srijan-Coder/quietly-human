@@ -6,8 +6,14 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
-import { GlobalSearchModal } from "./GlobalSearchModal";
-import { ExploreModal } from "./ExploreModal";
+import dynamic from "next/dynamic";
+
+const GlobalSearchModal = dynamic(() => import("./GlobalSearchModal").then((m) => m.GlobalSearchModal), {
+  ssr: false,
+});
+const ExploreModal = dynamic(() => import("./ExploreModal").then((m) => m.ExploreModal), {
+  ssr: false,
+});
 
 export default function Navbar() {
   const { isLoaded, isSignedIn } = useAuth();
