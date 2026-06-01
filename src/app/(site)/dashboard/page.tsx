@@ -113,9 +113,11 @@ export default async function DashboardPage() {
           </p>
         </div>
         <div className="flex gap-4 flex-wrap">
-          <Link href="/dashboard/bulk-uploader" className="border border-brand-border/60 text-brand-text px-6 py-3 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 hover:bg-brand-card transition-all shadow-sm cursor-pointer">
-            Bulk AI Uploader
-          </Link>
+          {profile?.username === "srijan" && (
+            <Link href="/dashboard/bulk-uploader" className="border border-brand-border/60 text-brand-text px-6 py-3 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 hover:bg-brand-card transition-all shadow-sm cursor-pointer">
+              Bulk AI Uploader
+            </Link>
+          )}
           <Link href="/write" className="bg-brand-text text-brand-bg px-6 py-3 rounded-full uppercase tracking-widest text-xs font-bold hover:scale-105 transition-transform shadow-lg cursor-pointer">
             + Write New
           </Link>

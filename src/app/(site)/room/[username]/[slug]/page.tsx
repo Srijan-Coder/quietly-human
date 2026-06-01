@@ -1,5 +1,4 @@
 import { supabaseClient } from "@/lib/supabase";
-import DOMPurify from 'isomorphic-dompurify';
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -201,7 +200,7 @@ export default async function PostPage({ params }: Props) {
         {/* Content Render: we use prose adaptive classes */}
         <div 
           className="prose dark:prose-invert prose-lg md:prose-xl max-w-none mb-16 leading-relaxed font-serif text-brand-text"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }}
+          dangerouslySetInnerHTML={{ __html: post.content || '' }}
         />
 
         {/* Embedded Premium Product Cards (Up to 3) */}

@@ -52,9 +52,6 @@ export default function SanctuaryPassClient({ isPremium, userEmail }: { isPremiu
     ? `https://quietlyhumansspace.gumroad.com/l/soacp-annual?email=${encodeURIComponent(userEmail)}`
     : "https://quietlyhumansspace.gumroad.com/l/soacp-annual";
 
-  const trialCheckoutUrl = userEmail
-    ? `https://quietlyhumansspace.gumroad.com/l/soacp-trial?email=${encodeURIComponent(userEmail)}`
-    : "https://quietlyhumansspace.gumroad.com/l/soacp-trial";
 
   return (
     <div className="min-h-screen pt-32 px-6 md:px-12 max-w-4xl mx-auto w-full pb-32 font-serif text-center">
@@ -131,36 +128,9 @@ export default function SanctuaryPassClient({ isPremium, userEmail }: { isPremiu
           </div>
 
           {/* Choices Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-            {/* Trial pass card */}
-            <div className="bg-brand-card border border-brand-border/40 p-8 md:p-10 rounded-[2rem] flex flex-col justify-between h-full relative group">
-              <div>
-                <span className="text-[10px] uppercase tracking-widest text-brand-soft mb-2 block font-bold">Sanctuary Trial</span>
-                <h3 className="text-2xl text-brand-text font-serif mb-2">7-Day Trial Pass</h3>
-                <p className="text-xs text-brand-soft font-sans mb-6 leading-relaxed">
-                  Try out the complete clinical toolkit, save thoughts, and explore quiet mode for a full week.
-                </p>
-                <div className="text-brand-accent font-sans mb-6">
-                  <span className="text-4xl font-serif font-bold">$0.00</span> <span className="text-xs text-brand-soft">for 7 days</span>
-                </div>
-                <ul className="text-xs text-brand-soft font-sans space-y-3 mb-8 border-t border-brand-border/20 pt-6">
-                  <li className="flex items-center gap-2">✓ Access all 20 mental health tools</li>
-                  <li className="flex items-center gap-2">✓ Bookmark unlimited writings</li>
-                  <li className="flex items-center gap-2">✓ Ad-free interface during trial</li>
-                </ul>
-              </div>
-              <a 
-                href={trialCheckoutUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full text-center bg-brand-text text-brand-bg hover:scale-102 transition-transform px-6 py-3.5 rounded-full text-[10px] uppercase tracking-widest font-bold inline-block cursor-pointer shadow-md"
-              >
-                Start 7-Day Free Trial
-              </a>
-            </div>
-
+          <div className="flex justify-center text-left">
             {/* Guardian Pass card */}
-            <div className="bg-brand-card border border-brand-accent/40 p-8 md:p-10 rounded-[2rem] flex flex-col justify-between h-full relative group shadow-[0_0_50px_rgba(201,164,106,0.03)]">
+            <div className="bg-brand-card border border-brand-accent/40 p-8 md:p-10 rounded-[2rem] flex flex-col justify-between h-full relative group shadow-[0_0_50px_rgba(201,164,106,0.03)] max-w-md w-full">
               <div className="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent pointer-events-none" />
               <div>
                 <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block font-bold">Full Access</span>
