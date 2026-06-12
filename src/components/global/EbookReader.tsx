@@ -22,6 +22,7 @@ export function EbookReader({ ebook }: { ebook: Ebook }) {
   const [currentChapter, setCurrentChapter] = useState(0);
   const [fontSize, setFontSize] = useState<"normal" | "large" | "xlarge">("normal");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [readTheme, setReadTheme] = useState<"default" | "ivory" | "sepia" | "night">("default");
 
   const chapters = ebook.chapters || [];
   const activeChapter = chapters[currentChapter];
@@ -31,6 +32,41 @@ export function EbookReader({ ebook }: { ebook: Ebook }) {
     large: "prose-xl",
     xlarge: "prose-2xl",
   };
+
+  const themeStyles: Record<string, React.CSSProperties> = {
+    default: {},
+    ivory: {
+      '--color-bg': '#FAF7F2',
+      '--color-text': '#1A1613',
+      '--color-soft': '#5C5249',
+      '--color-border': '#E0D6CA',
+      '--color-card': '#FFFFFF',
+      '--color-accent': '#A0724A',
+    } as React.CSSProperties,
+    sepia: {
+      '--color-bg': '#F4ECD8',
+      '--color-text': '#433422',
+      '--color-soft': '#705A42',
+      '--color-border': '#DBCFBA',
+      '--color-card': '#EADFCA',
+      '--color-accent': '#8B6914',
+    } as React.CSSProperties,
+    night: {
+      '--color-bg': '#121212',
+      '--color-text': '#E0E0E0',
+      '--color-soft': '#888888',
+      '--color-border': '#2D2D2D',
+      '--color-card': '#1E1E1E',
+      '--color-accent': '#C9A46A',
+    } as React.CSSProperties,
+  };
+
+  const themeIndicators = [
+    { key: 'default' as const, color: 'bg-brand-bg border-brand-border', label: 'Default' },
+    { key: 'ivory' as const, color: 'bg-[#FAF7F2] border-[#E0D6CA]', label: 'Ivory' },
+    { key: 'sepia' as const, color: 'bg-[#F4ECD8] border-[#DBCFBA]', label: 'Sepia' },
+    { key: 'night' as const, color: 'bg-[#121212] border-[#2D2D2D]', label: 'Night' },
+  ];
 
   if (chapters.length === 0) {
     if (ebook.fileUrl || ebook.notionUrl) {
@@ -74,7 +110,7 @@ export function EbookReader({ ebook }: { ebook: Ebook }) {
   }
 
   return (
-    <div className="relative min-h-screen bg-brand-bg text-brand-text flex overflow-hidden">
+    <div className="relative min-h-screen bg-brand-bg text-brand-text flex overflow-hidden transition-colors duration-500" style={themeStyles[readTheme]}>
       
       {/* Sidebar Navigation (Desktop) / Slide-out (Mobile) */}
       <AnimatePresence>
@@ -94,7 +130,7 @@ export function EbookReader({ ebook }: { ebook: Ebook }) {
             </div>
 
             <div className="flex flex-col gap-4">
-              <span className="text-[10px] uppercase tracking-widest opacity-40 mb-2">Chapters</span>
+              <span className="text-xs uppercase tracking-widest opacity-40 mb-2">Chapters</span>
               {chapters.map((ch: Chapter, idx: number) => (
                 <button
                   key={ch._key || idx}
@@ -134,6 +170,16 @@ export function EbookReader({ ebook }: { ebook: Ebook }) {
             <button onClick={() => setFontSize("normal")} className={`text-xs opacity-60 hover:opacity-100 ${fontSize === "normal" && "text-brand-accent opacity-100"}`}>A</button>
             <button onClick={() => setFontSize("large")} className={`text-sm opacity-60 hover:opacity-100 ${fontSize === "large" && "text-brand-accent opacity-100"}`}>A</button>
             <button onClick={() => setFontSize("xlarge")} className={`text-base opacity-60 hover:opacity-100 ${fontSize === "xlarge" && "text-brand-accent opacity-100"}`}>A</button>
+            <span className="w-px h-4 bg-brand-border mx-1" />
+            {themeIndicators.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setReadTheme(t.key)}
+                title={t.label}
+                aria-label={`${t.label} reading theme`}
+                className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${t.color} ${readTheme === t.key ? 'ring-2 ring-brand-accent ring-offset-1 scale-110' : 'opacity-60 hover:opacity-100'}`}
+              />
+            ))}
           </div>
         </header>
 

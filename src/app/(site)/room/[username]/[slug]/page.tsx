@@ -168,11 +168,11 @@ export default async function PostPage({ params }: Props) {
 
         <header className="mb-12 border-b border-brand-border/30 pb-12 text-center">
           <div className="flex justify-center gap-3 mb-6">
-            <span className="text-[10px] uppercase tracking-widest text-brand-accent bg-brand-accent/10 border border-brand-accent/20 px-3 py-1 rounded-full">
+            <span className="text-xs uppercase tracking-widest text-brand-accent bg-brand-accent/10 border border-brand-accent/20 px-3 py-1 rounded-full">
               {post.type}
             </span>
             {post.category && post.category !== "Uncategorized" && (
-              <span className="text-[10px] uppercase tracking-widest text-brand-soft border border-brand-border px-3 py-1 rounded-full">
+              <span className="text-xs uppercase tracking-widest text-brand-soft border border-brand-border px-3 py-1 rounded-full">
                 {post.category}
               </span>
             )}
@@ -234,9 +234,9 @@ export default async function PostPage({ params }: Props) {
         {sanityBook ? (
           <div className="mb-16">
             {/* Book Info Box */}
-            <div className="bg-brand-card border border-brand-border/40 p-8 rounded-3xl mb-12 flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
+            <div className="group bg-brand-card/60 backdrop-blur-md border border-brand-border/40 hover:border-brand-accent/30 p-8 rounded-3xl mb-12 flex flex-col md:flex-row gap-8 items-center text-center md:text-left transition-all duration-300 hover:shadow-[0_0_40px_rgba(201,164,106,0.08)]">
               {sanityBook.coverImage && (
-                <div className="w-32 h-48 shrink-0 relative rounded-xl overflow-hidden shadow-xl border border-brand-border/30">
+                <div className="w-32 h-48 shrink-0 relative rounded-xl overflow-hidden shadow-xl border border-brand-border/30 transition-all duration-500 group-hover:scale-105 group-hover:shadow-2xl">
                   <Image
                     src={urlFor(sanityBook.coverImage).url()}
                     alt={sanityBook.title}
@@ -246,7 +246,7 @@ export default async function PostPage({ params }: Props) {
                 </div>
               )}
               <div className="flex-grow">
-                <span className="text-[10px] uppercase tracking-widest text-brand-accent mb-2 block font-sans font-bold">
+                <span className="text-xs uppercase tracking-widest text-brand-accent mb-2 block font-sans font-bold">
                   {sanityBook.bookFormat === "premium" ? "Premium Ebook" : "Community Ebook"}
                 </span>
                 <h2 className="text-3xl font-serif text-brand-text mb-2">{sanityBook.title}</h2>
@@ -375,10 +375,10 @@ export default async function PostPage({ params }: Props) {
             <Link href={`/room/${username}`} className="font-serif text-lg text-brand-text hover:text-brand-accent transition-colors">
               {profile.display_name || username}
             </Link>
-            <p className="text-[10px] uppercase tracking-widest text-brand-soft font-sans mb-2">@{username}</p>
+            <p className="text-xs uppercase tracking-widest text-brand-soft font-sans mb-2">@{username}</p>
             {profile.bio && <p className="text-sm text-brand-soft leading-relaxed font-serif italic line-clamp-2">{profile.bio}</p>}
           </div>
-          <Link href={`/room/${username}`} className="shrink-0 px-5 py-2.5 rounded-full text-[10px] uppercase tracking-widest font-bold transition-all hover:scale-105 bg-brand-text text-brand-bg">
+          <Link href={`/room/${username}`} className="shrink-0 px-5 py-2.5 rounded-full text-xs uppercase tracking-widest font-bold transition-all hover:scale-105 bg-brand-text text-brand-bg">
             Visit Room
           </Link>
         </div>
@@ -386,7 +386,7 @@ export default async function PostPage({ params }: Props) {
         {/* Read Next */}
         {otherPosts && otherPosts.length > 0 && (
           <div className="mb-16">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-brand-soft font-sans mb-4 flex items-center gap-3">
+            <p className="text-xs uppercase tracking-[0.25em] text-brand-soft font-sans mb-4 flex items-center gap-3">
               <span className="w-6 h-px bg-brand-border inline-block" />
               More from {profile.display_name || username}
             </p>
@@ -394,9 +394,9 @@ export default async function PostPage({ params }: Props) {
               {otherPosts.map((p) => (
                 <Link key={p.id} href={`/room/${username}/${p.slug || p.id}`}
                   className="group p-5 rounded-xl bg-brand-card border border-brand-border hover:border-brand-accent/50 transition-all">
-                  <span className="text-[9px] uppercase tracking-widest text-brand-accent font-bold block mb-2">{p.type}</span>
+                  <span className="text-xs uppercase tracking-widest text-brand-accent font-bold block mb-2">{p.type}</span>
                   <h3 className="font-serif text-brand-text group-hover:text-brand-accent transition-colors leading-snug line-clamp-2">{p.title}</h3>
-                  <p className="text-[10px] text-brand-soft mt-2">🕯️ {p.candle_count || 0}</p>
+                  <p className="text-xs text-brand-soft mt-2">🕯️ {p.candle_count || 0}</p>
                 </Link>
               ))}
             </div>

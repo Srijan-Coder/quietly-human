@@ -31,29 +31,29 @@ export default function Navbar() {
 
   const navItems = [
     {
-      name: "Read",
+      name: "Essays & Books",
       items: [
-        { title: "The Reading Room", path: "/reading-room", desc: "Network feed & Creator discovery." },
-        { title: "The Quiet Store", path: "/store", desc: "Books, journals & digital products." },
-        { title: "Books & Ebooks", path: "/books", desc: "Free ebooks, premium & physical books." },
-        { title: "The Library", path: "/library", desc: "Full archive of published writings." },
+        { title: "Community Reading Feed", path: "/reading-room", desc: "Network feed & creator discovery." },
+        { title: "Quiet Store & Templates", path: "/store", desc: "Notion templates & calming journals." },
+        { title: "Ebook Library", path: "/books", desc: "Calming ebooks & guides." },
+        { title: "Writings Archive", path: "/library", desc: "Full archive of quiet essays." },
       ]
     },
     {
-      name: "Heal",
+      name: "Calming Tools",
       items: [
-        { title: "Soft Toolkit", path: "/toolkit", desc: "20 interactive clinical tools." },
-        { title: "Breathing Room", path: "/breathe", desc: "Guided deep breathing exercises." },
-        { title: "Deep Focus", path: "/focus", desc: "Pomodoro timer with soundscapes." },
-        { title: "The 3AM Room", path: "/3am", desc: "Late night sanctuary for insomniacs." },
+        { title: "Interactive Self-Care Tools", path: "/toolkit", desc: "20 clinically-backed tools for anxiety & focus." },
+        { title: "Guided Breathing Exercise", path: "/breathe", desc: "Calm your heart rate with guided breathing." },
+        { title: "Ambient Focus Timer", path: "/focus", desc: "Pomodoro timer with nature sounds." },
+        { title: "Late Night Insomnia Room", path: "/3am", desc: "A safe space when you can't sleep." },
       ]
     },
     {
-      name: "Upgrade",
+      name: "Membership & About",
       items: [
-        { title: "Sanctuary Pass", path: "/sanctuary-pass", desc: "Unlock premium tools & quiet mode." },
-        { title: "Digital Products", path: "/products", desc: "Notion templates, ebooks & more." },
-        { title: "Start Here", path: "/start", desc: "New? Learn what QH is about." },
+        { title: "Premium Pass ($4.99/mo)", path: "/sanctuary-pass", desc: "Unlock all tools & support us." },
+        { title: "Self-Care Notion Templates", path: "/products", desc: "Notion planners & trackers." },
+        { title: "Our Story & Guide", path: "/start", desc: "Learn how Quietly Humans works." },
       ]
     }
   ];
@@ -85,7 +85,7 @@ export default function Navbar() {
           {/* Explore Button */}
           <button 
             onClick={() => setIsExploreOpen(true)} 
-            className="hidden md:flex items-center gap-1.5 text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity font-sans font-bold"
+            className="hidden md:flex items-center gap-1.5 text-xs uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity font-sans font-bold"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -103,7 +103,19 @@ export default function Navbar() {
               onMouseEnter={() => setActiveDropdown(category.name)}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="text-sm font-sans tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1 py-2" aria-expanded={activeDropdown === category.name} aria-haspopup="true">
+              <button 
+                className="text-sm font-sans tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1 py-2" 
+                aria-expanded={activeDropdown === category.name} 
+                aria-haspopup="true"
+                onClick={() => setActiveDropdown(activeDropdown === category.name ? null : category.name)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setActiveDropdown(activeDropdown === category.name ? null : category.name);
+                  }
+                  if (e.key === 'Escape') setActiveDropdown(null);
+                }}
+              >
                 {category.name}
               </button>
               
@@ -126,7 +138,7 @@ export default function Navbar() {
                         <p className="text-sm text-brand-text font-bold group-hover/link:text-brand-accent transition-colors">
                           {item.title}
                         </p>
-                        <p className="text-[10px] text-brand-soft uppercase tracking-widest mt-1">
+                        <p className="text-xs text-brand-soft uppercase tracking-widest mt-1">
                           {item.desc}
                         </p>
                       </Link>
@@ -155,7 +167,7 @@ export default function Navbar() {
 
           {isLoaded && !isSignedIn && (
             <SignInButton mode="modal">
-              <button className="hidden md:block text-[10px] uppercase tracking-widest bg-brand-text text-brand-bg hover:bg-white/80 transition-all font-bold font-sans px-6 py-2 rounded-full">
+               <button className="hidden md:block text-xs uppercase tracking-widest bg-brand-text text-brand-bg hover:bg-white/80 transition-all font-bold font-sans px-6 py-2 rounded-full">
                 Log In
               </button>
             </SignInButton>
@@ -163,10 +175,10 @@ export default function Navbar() {
 
           {isLoaded && isSignedIn && (
             <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="hidden md:block text-[10px] uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity font-sans font-bold">
+              <Link href="/dashboard" className="hidden md:block text-xs uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity font-sans font-bold">
                 Dashboard
               </Link>
-              <Link href="/write" className="hidden md:block text-[10px] uppercase tracking-widest bg-brand-text text-brand-bg hover:bg-white/80 transition-all font-bold font-sans border border-brand-border px-6 py-2 rounded-full">
+              <Link href="/write" className="hidden md:block text-xs uppercase tracking-widest bg-brand-text text-brand-bg hover:bg-white/80 transition-all font-bold font-sans border border-brand-border px-6 py-2 rounded-full">
                 Write
               </Link>
 

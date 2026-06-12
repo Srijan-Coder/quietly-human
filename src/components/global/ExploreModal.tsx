@@ -5,40 +5,40 @@ import Link from "next/link";
 
 const sections = [
   {
-    label: "Read & Discover",
+    label: "Essays & Books",
     items: [
-      { title: "The Reading Room", path: "/reading-room", emoji: "📖", desc: "Network feed, curated posts & creator profiles." },
+      { title: "Community Reading Feed", path: "/reading-room", emoji: "📖", desc: "Network feed, curated posts & creator profiles." },
       { title: "Discover Creators", path: "/creators", emoji: "✨", desc: "Find quiet writers and thinkers sharing their rooms." },
-      { title: "The Quiet Store", path: "/store", emoji: "🏷️", desc: "Books, journals, Notion templates & digital products." },
-      { title: "The Library", path: "/library", emoji: "📚", desc: "Browse the full archive of published writings." },
+      { title: "Quiet Store & Templates", path: "/store", emoji: "🏷️", desc: "Notion templates, calming journals & digital products." },
+      { title: "Writings Archive", path: "/library", emoji: "📚", desc: "Browse the full archive of published quiet essays." },
       { title: "Quotes", path: "/quotes", emoji: "💬", desc: "A collection of quiet words from quiet minds." },
-      { title: "Books", path: "/books", emoji: "📕", desc: "Free ebooks, premium editions & physical books." },
+      { title: "Ebook Library", path: "/books", emoji: "📕", desc: "Calming ebooks, guides & premium editions." },
     ]
   },
   {
-    label: "Heal & Focus",
+    label: "Calming Tools",
     items: [
-      { title: "Soft Toolkit", path: "/toolkit", emoji: "🧰", desc: "20 interactive clinical tools for anxiety, ADHD & overthinking." },
-      { title: "Breathing Room", path: "/breathe", emoji: "🌬️", desc: "Guided deep breathing exercises." },
-      { title: "Deep Focus Timer", path: "/focus", emoji: "⏳", desc: "Pomodoro timer with ambient soundscapes." },
-      { title: "The 3AM Room", path: "/3am", emoji: "🌙", desc: "For when the world is asleep but your mind isn't." },
+      { title: "Interactive Self-Care Tools", path: "/toolkit", emoji: "🧰", desc: "20 clinically-backed tools for anxiety, ADHD & overthinking." },
+      { title: "Guided Breathing Exercise", path: "/breathe", emoji: "🌬️", desc: "Calm your heart rate with guided deep breathing." },
+      { title: "Ambient Focus Timer", path: "/focus", emoji: "⏳", desc: "Pomodoro timer with calming nature sounds." },
+      { title: "Late Night Insomnia Room", path: "/3am", emoji: "🌙", desc: "A safe space for when you can't sleep." },
     ]
   },
   {
     label: "Create & Build",
     items: [
       { title: "Creator Dashboard", path: "/dashboard", emoji: "📊", desc: "Manage your posts, followers & analytics." },
-      { title: "Write", path: "/write", emoji: "✍️", desc: "Publish Quiet Thoughts, Letters, Guides & Books." },
-      { title: "Pilgrim Wall", path: "/pilgrim", emoji: "🕯️", desc: "Leave an anonymous note on the community wall." },
+      { title: "Write", path: "/write", emoji: "✍️", desc: "Publish essays, letters, guides & ebooks." },
+      { title: "Pilgrim Wall", path: "/pilgrim", emoji: "🕯️", desc: "Leave an anonymous reflection on the community wall." },
       { title: "Settings", path: "/settings", emoji: "⚙️", desc: "Customize your profile, bio, links & theme." },
-      { title: "Start Here", path: "/start", emoji: "🧭", desc: "New? Learn what Quietly Humans is all about." },
+      { title: "Our Story & Guide", path: "/start", emoji: "🧭", desc: "Learn how Quietly Humans works." },
     ]
   },
   {
-    label: "Upgrade",
+    label: "Membership",
     items: [
-      { title: "Sanctuary Pass", path: "/sanctuary-pass", emoji: "🌿", desc: "$4.99/mo — unlock all premium tools and quiet mode." },
-      { title: "Digital Products", path: "/products", emoji: "📦", desc: "Notion dashboards, ebooks & journals for sale." },
+      { title: "Premium Pass ($4.99/mo)", path: "/sanctuary-pass", emoji: "🌿", desc: "Unlock all premium tools, quiet mode & ad-free reading." },
+      { title: "Self-Care Notion Templates", path: "/products", emoji: "📦", desc: "Notion planners, trackers & journals." },
     ]
   },
 ];
